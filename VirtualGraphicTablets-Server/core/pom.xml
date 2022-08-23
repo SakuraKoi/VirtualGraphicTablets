@@ -32,6 +32,16 @@
             <artifactId>forms_rt</artifactId>
             <version>7.0.3</version>
         </dependency>
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>sakura.kooi</groupId>
+            <artifactId>swing-components</artifactId>
+            <version>1.1</version>
+        </dependency>
 
         <dependency>
             <groupId>com.sunnysidesoft</groupId>
