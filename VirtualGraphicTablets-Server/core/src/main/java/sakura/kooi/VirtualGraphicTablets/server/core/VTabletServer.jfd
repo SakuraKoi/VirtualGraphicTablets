@@ -19,27 +19,27 @@ new FormModel {
 					name: "panel4"
 					"border": new javax.swing.border.CompoundBorder( new javax.swing.border.TitledBorder( "控制台" ), &EmptyBorder0 new javax.swing.border.EmptyBorder( 5, 5, 5, 5 ) )
 					add( new FormComponent( "javax.swing.JButton" ) {
-						name: "button1"
+						name: "btnConnectUpstream"
 						"text": "连接 VirtualTablet Server"
 					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 						"fill": 3
 					} )
 					add( new FormComponent( "javax.swing.JButton" ) {
-						name: "button3"
+						name: "btnDisconnectUpstream"
 						"text": "断开 VirtualTablet Server"
 					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 						"fill": 3
 						"row": 1
 					} )
 					add( new FormComponent( "javax.swing.JButton" ) {
-						name: "button2"
+						name: "btnStartServer"
 						"text": "启动 Graphic Server"
 					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 						"fill": 3
 						"row": 2
 					} )
 					add( new FormComponent( "javax.swing.JButton" ) {
-						name: "button4"
+						name: "btnStopServer"
 						"text": "停止 Graphic Server"
 					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 						"fill": 3
@@ -53,39 +53,61 @@ new FormModel {
 					} )
 					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.intellij.uiDesigner.core.GridLayoutManager ) {
 						"$columnCount": 2
-						"$rowCount": 3
+						"$rowCount": 4
 					} ) {
 						name: "panel5"
-						add( new FormComponent( "javax.swing.JSpinner" ) {
-							name: "spinner2"
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "label13"
+							"text": "Pos X"
 						}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 							"fill": 3
 						} )
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "label14"
+							"text": "Pos Y"
+						}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
+							"column": 1
+							"fill": 3
+						} )
 						add( new FormComponent( "javax.swing.JSpinner" ) {
-							name: "spinner1"
+							name: "numCanvaPosX"
+						}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
+							"fill": 3
+							"row": 1
+						} )
+						add( new FormComponent( "javax.swing.JSpinner" ) {
+							name: "numCanvaPosY"
 						}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 							"column": 1
 							"fill": 3
-						} )
-						add( new FormComponent( "javax.swing.JSpinner" ) {
-							name: "spinner3"
-						}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 							"row": 1
-							"fill": 3
 						} )
-						add( new FormComponent( "javax.swing.JSpinner" ) {
-							name: "spinner4"
-						}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
-							"column": 1
-							"row": 1
-							"fill": 3
-						} )
-						add( new FormComponent( "javax.swing.JButton" ) {
-							name: "button5"
-							"text": "设置绘制区尺寸"
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "label15"
+							"text": "Width"
 						}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 							"row": 2
-							"colSpan": 2
+							"fill": 3
+						} )
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "label16"
+							"text": "Height"
+						}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
+							"column": 1
+							"row": 2
+							"fill": 3
+						} )
+						add( new FormComponent( "javax.swing.JSpinner" ) {
+							name: "numCanvaWidth"
+						}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
+							"row": 3
+							"fill": 3
+						} )
+						add( new FormComponent( "javax.swing.JSpinner" ) {
+							name: "numCanvaHeight"
+						}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
+							"column": 1
+							"row": 3
 							"fill": 3
 						} )
 					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
@@ -111,7 +133,7 @@ new FormModel {
 					name: "panel6"
 					"border": new javax.swing.border.EtchedBorder( 1, null, null )
 					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "label12"
+						name: "canvas"
 					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 						"fill": 3
 					} )
@@ -132,7 +154,7 @@ new FormModel {
 						"fill": 3
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "label2"
+						name: "lblUpstreamConnectStatus"
 						"text": "未连接"
 					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 						"column": 1
@@ -147,7 +169,7 @@ new FormModel {
 						"fill": 3
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "label10"
+						name: "lblUpstreamVersion"
 						"text": "114514"
 					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 						"column": 1
@@ -162,7 +184,7 @@ new FormModel {
 				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 					name: "scrollPane1"
 					add( new FormComponent( "sakura.kooi.lib.swing.view.ColoredTextPane" ) {
-						name: "coloredTextPane1"
+						name: "txtLogs"
 					} )
 				}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 					"column": 1
@@ -184,7 +206,7 @@ new FormModel {
 						"fill": 3
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "label5"
+						name: "lblServerRunningStatus"
 						"text": "未启动"
 					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 						"column": 1
@@ -199,7 +221,7 @@ new FormModel {
 						"fill": 3
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "label7"
+						name: "lblServerListenPort"
 						"text": "23372"
 					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 						"column": 1
@@ -215,7 +237,7 @@ new FormModel {
 						"fill": 3
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "label9"
+						name: "lblServerConnectStatus"
 						"text": "未连接"
 					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 						"column": 1
