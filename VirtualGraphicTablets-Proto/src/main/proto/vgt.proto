@@ -1,4 +1,5 @@
 syntax = "proto3";
+package sakura.kooi.VirtualGraphicTablets.protocol;
 
 message PacketContainer {
   int32 packet_id = 1;
