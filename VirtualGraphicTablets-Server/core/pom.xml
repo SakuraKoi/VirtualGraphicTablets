@@ -36,4 +36,7 @@
             <systemPath>${project.basedir}/libs/classes-dex2jar.jar</systemPath>
         </dependency>
     </dependencies>
+    <build>
+        <finalName>vgt-core</finalName>
+    </build>
 </project>
