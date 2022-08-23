@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+message PacketContainer {
+  int32 packet_id = 1;
+  bytes payload = 2;
+}
+
+// 握手
+message C01PacketHandshake {
+  // 板子屏幕信息 用于确定绘制区比例
+  int32 screen_width = 1;
+  int32 screen_height = 2;
+}
+
+// 握手
+message S02PacketServerInfo {
+  // 电脑屏幕信息
+  int32 screen_width = 1;
+  int32 screen_height = 2;
+}
+
+// 图传
+message S03PacketScreen {
+  // 绘制区尺寸
+  int32 width = 3;
+  int32 height = 4;
+  // 图传数据
+  bytes screen_image = 1;
+}
+
+// SPen 悬浮
+message C04PacketHover {
+  int32 pos_x = 1;
+  int32 pos_y = 2;
+}
+
+// 按下
+message C05PacketTouchDown {
+  int32 pos_x = 1;
+  int32 pos_y = 2;
+  float pressure = 3;
+}
+
+// 移动
+message C06PacketTouchMove {
+  int32 pos_x = 1;
+  int32 pos_y = 2;
+  float pressure = 3;
+}
+
+// 释放
+message C07PacketTouchUp {
+  int32 pos_x = 1;
+  int32 pos_y = 2;
+  float pressure = 3;
+}
