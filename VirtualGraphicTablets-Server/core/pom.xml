@@ -33,7 +33,7 @@
             <artifactId>virtualtablet-lite</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/classes-dex2jar.jar</systemPath>
+            <systemPath>${project.basedir}/libs/classes-enjarify.jar</systemPath>
         </dependency>
     </dependencies>
     <build>
