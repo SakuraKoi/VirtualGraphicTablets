@@ -2,3 +2,5 @@
 把Android手机当数位屏用的实验性项目
 
 这玩意只是加了个图传, 数位板功能需要VirtualTablet Server
+
+为避免dmca, VirtualTablet Server的thrift协议需要自行把VirtualTablet Lite版的apk跑dex2jar之后扔进classpath
