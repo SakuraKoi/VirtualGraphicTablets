@@ -4,12 +4,14 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 @Slf4j
 public class Bootstrap {
-    public static void main(String[] args) throws MalformedURLException {
+    public static void main(String[] args) {
         log.info("Checking classpath...");
         File libsDir = new File("libs");
         File coreJar = new File(libsDir, "vgt-core.jar");
@@ -23,10 +25,16 @@ public class Bootstrap {
             return;
         }
 
-        OpenURLClassLoader coreLoader = new OpenURLClassLoader(new URL[] {coreJar.toURL()}, Bootstrap.class.getClassLoader());
-        // TODO create a hybrid class loader
-        // TODO first lookup core then VirtualTablets apk
-        // aim: maven thrift artifact packed with core module instead of dex2jared thrift from apk
+        try {
+            OpenURLClassLoader coreClassLoader = new OpenURLClassLoader(new URL[]{coreJar.toURI().toURL()}, Bootstrap.class.getClassLoader());
+            LimitedClassLoader hybridClassLoader = new LimitedClassLoader(new URL[]{protocolJar.toURI().toURL()}, coreClassLoader);
 
+            Class<?> launcher = hybridClassLoader.findClass("sakura.kooi.VirtualGraphicTablets.server.core.Launch");
+        } catch (ReflectiveOperationException | MalformedURLException e) {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            JOptionPane.showMessageDialog(null, "An error occurred while loading\n" + sw.toString(), "Launch failed", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
