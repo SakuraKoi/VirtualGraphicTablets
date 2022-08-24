@@ -14,12 +14,12 @@ public class Logger {
 		this.module = module;
 	}
 
-	private static final String TAG_INFO = "§f [INFO] \t§r";
-	private static final String TAG_DEBUG = "§8 [DEBUG] \t§r";
-	private static final String TAG_SUCC = "§a [SUCC] \t";
-	private static final String TAG_WARN = "§e [WARN] \t";
-	private static final String TAG_ERROR = "§c [ERROR] \t";
-	private static final String TAG_CRITICAL = "§4 [CRIT] \t";
+	private static final String TAG_INFO = "§f [INFO] §r";
+	private static final String TAG_DEBUG = "§8 [DEBUG] §r";
+	private static final String TAG_SUCC = "§a [SUCC] ";
+	private static final String TAG_WARN = "§e [WARN] ";
+	private static final String TAG_ERROR = "§c [ERROR] ";
+	private static final String TAG_CRITICAL = "§4 [CRIT] ";
 	@Setter
 	private static PrintStream out = null;
 	@Setter

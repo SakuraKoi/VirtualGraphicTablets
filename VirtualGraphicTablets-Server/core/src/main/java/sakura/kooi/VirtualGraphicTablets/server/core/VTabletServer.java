@@ -8,6 +8,7 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import sakura.kooi.VirtualGraphicTablets.server.bootstrap.logger.Logger;
+import sakura.kooi.VirtualGraphicTablets.server.core.networking.UpstreamWorker;
 import sakura.kooi.lib.swing.view.ColoredTextPane;
 
 import javax.swing.*;
@@ -16,7 +17,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
@@ -26,7 +26,6 @@ import java.io.PrintStream;
 public class VTabletServer extends JFrame {
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - unknown
         var panel1 = new JPanel();
         var panel4 = new JPanel();
         btnConnectUpstream = new JButton();
@@ -43,6 +42,8 @@ public class VTabletServer extends JFrame {
         var label16 = new JLabel();
         numCanvaWidth = new JSpinner();
         numCanvaHeight = new JSpinner();
+        var label5 = new JLabel();
+        numFps = new JSpinner();
         var vSpacer2 = new Spacer();
         var panel6 = new JPanel();
         canvas = new JLabel();
@@ -69,12 +70,6 @@ public class VTabletServer extends JFrame {
         //======== panel1 ========
         {
             panel1.setBorder(new EmptyBorder(5, 5, 5, 5));
-            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border.
-            EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder. CENTER, javax. swing //NON-NLS
-            . border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), //NON-NLS
-            java. awt. Color. red) ,panel1. getBorder( )) ); panel1. addPropertyChangeListener (new java. beans. PropertyChangeListener( )
-            { @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .getPropertyName () )) //NON-NLS
-            throw new RuntimeException( ); }} );
             panel1.setLayout(new GridLayoutManager(3, 2, new Insets(0, 0, 0, 0), -1, -1));
 
             //======== panel4 ========
@@ -82,7 +77,7 @@ public class VTabletServer extends JFrame {
                 panel4.setBorder(new CompoundBorder(
                     new TitledBorder("\u63a7\u5236\u53f0"), //NON-NLS
                     new EmptyBorder(5, 5, 5, 5)));
-                panel4.setLayout(new GridLayoutManager(7, 1, new Insets(0, 0, 0, 0), -1, -1));
+                panel4.setLayout(new GridLayoutManager(9, 1, new Insets(0, 0, 0, 0), -1, -1));
 
                 //---- btnConnectUpstream ----
                 btnConnectUpstream.setText("\u8fde\u63a5 VirtualTablet Server"); //NON-NLS
@@ -94,6 +89,7 @@ public class VTabletServer extends JFrame {
 
                 //---- btnDisconnectUpstream ----
                 btnDisconnectUpstream.setText("\u65ad\u5f00 VirtualTablet Server"); //NON-NLS
+                btnDisconnectUpstream.setEnabled(false);
                 panel4.add(btnDisconnectUpstream, new GridConstraints(1, 0, 1, 1,
                     GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                     GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
@@ -110,6 +106,7 @@ public class VTabletServer extends JFrame {
 
                 //---- btnStopServer ----
                 btnStopServer.setText("\u505c\u6b62 Graphic Server"); //NON-NLS
+                btnStopServer.setEnabled(false);
                 panel4.add(btnStopServer, new GridConstraints(3, 0, 1, 1,
                     GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                     GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
@@ -143,11 +140,17 @@ public class VTabletServer extends JFrame {
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         null, null, null));
+
+                    //---- numCanvaPosX ----
+                    numCanvaPosX.setModel(new SpinnerNumberModel(0, 0, null, 1));
                     panel5.add(numCanvaPosX, new GridConstraints(1, 0, 1, 1,
                         GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         null, null, null));
+
+                    //---- numCanvaPosY ----
+                    numCanvaPosY.setModel(new SpinnerNumberModel(0, 0, null, 1));
                     panel5.add(numCanvaPosY, new GridConstraints(1, 1, 1, 1,
                         GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
@@ -169,11 +172,17 @@ public class VTabletServer extends JFrame {
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         null, null, null));
+
+                    //---- numCanvaWidth ----
+                    numCanvaWidth.setModel(new SpinnerNumberModel(0, 0, null, 1));
                     panel5.add(numCanvaWidth, new GridConstraints(3, 0, 1, 1,
                         GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         null, null, null));
+
+                    //---- numCanvaHeight ----
+                    numCanvaHeight.setModel(new SpinnerNumberModel(0, 0, null, 1));
                     panel5.add(numCanvaHeight, new GridConstraints(3, 1, 1, 1,
                         GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
@@ -185,7 +194,23 @@ public class VTabletServer extends JFrame {
                     GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                     GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                     null, null, null));
-                panel4.add(vSpacer2, new GridConstraints(6, 0, 1, 1,
+
+                //---- label5 ----
+                label5.setText("FPS"); //NON-NLS
+                panel4.add(label5, new GridConstraints(6, 0, 1, 1,
+                    GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                    GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                    GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                    null, null, null));
+
+                //---- numFps ----
+                numFps.setModel(new SpinnerNumberModel(30, 1, 144, 1));
+                panel4.add(numFps, new GridConstraints(7, 0, 1, 1,
+                    GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                    GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                    GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                    null, null, null));
+                panel4.add(vSpacer2, new GridConstraints(8, 0, 1, 1,
                     GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL,
                     GridConstraints.SIZEPOLICY_CAN_SHRINK,
                     GridConstraints.SIZEPOLICY_CAN_GROW | GridConstraints.SIZEPOLICY_WANT_GROW,
@@ -336,7 +361,6 @@ public class VTabletServer extends JFrame {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - unknown
     private JButton btnConnectUpstream;
     private JButton btnDisconnectUpstream;
     private JButton btnStartServer;
@@ -345,6 +369,7 @@ public class VTabletServer extends JFrame {
     private JSpinner numCanvaPosY;
     private JSpinner numCanvaWidth;
     private JSpinner numCanvaHeight;
+    private JSpinner numFps;
     private JLabel canvas;
     private JLabel lblUpstreamConnectStatus;
     private JLabel lblUpstreamVersion;
@@ -354,7 +379,12 @@ public class VTabletServer extends JFrame {
     private JLabel lblServerListenPort;
     private JLabel lblServerConnectStatus;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
-    
+
+    private int screenMaxWidth;
+    private int screenMaxHeight;
+
+    private UpstreamWorker upstreamWorker;
+
     public VTabletServer() {
         initComponents();
         setPreferredSize(new Dimension(875, 580));
@@ -363,6 +393,7 @@ public class VTabletServer extends JFrame {
         numCanvaPosY.setEditor(new JSpinner.NumberEditor(numCanvaPosY, "#"));
         numCanvaWidth.setEditor(new JSpinner.NumberEditor(numCanvaWidth, "#"));
         numCanvaHeight.setEditor(new JSpinner.NumberEditor(numCanvaHeight, "#"));
+        txtLogs.setEditable(false);
         Logger.setOut(new PrintStream(new OutputStream() {
             @Override
             public void write(int b) { }
@@ -379,5 +410,33 @@ public class VTabletServer extends JFrame {
                 txtLogs.setCaretPosition(txtLogs.getDocument().getLength());
             }
         });
+        btnConnectUpstream.addActionListener(e -> {
+            upstreamWorker = new UpstreamWorker(this);
+            upstreamWorker.start();
+            btnDisconnectUpstream.setEnabled(true);
+        });
+
+        btnDisconnectUpstream.addActionListener(e -> {
+            upstreamWorker.interrupt();
+            btnDisconnectUpstream.setEnabled(false);
+        });
+    }
+
+    public void onUpstreamConnected(String version, int width, int height) {
+        lblUpstreamConnectStatus.setText("已连接");
+        lblUpstreamVersion.setText(version);
+        this.screenMaxWidth = width;
+        this.screenMaxHeight = height;
+        numCanvaPosX.setModel(new SpinnerNumberModel(0, 0, width, 1));
+        numCanvaPosY.setModel(new SpinnerNumberModel(0, 0, height, 1));
+        numCanvaWidth.setModel(new SpinnerNumberModel(0, 0, width, 1));
+        numCanvaWidth.setValue(width);
+        numCanvaHeight.setModel(new SpinnerNumberModel(0, 0, height, 1));
+        numCanvaHeight.setValue(height);
+    }
+
+    public void onUpstreamDisconnected() {
+        lblUpstreamConnectStatus.setText("未连接");
+        lblUpstreamVersion.setText("");
     }
 }

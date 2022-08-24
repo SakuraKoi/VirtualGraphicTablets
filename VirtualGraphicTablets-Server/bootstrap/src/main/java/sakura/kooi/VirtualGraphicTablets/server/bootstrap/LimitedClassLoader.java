@@ -4,20 +4,19 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 public class LimitedClassLoader extends URLClassLoader {
-    private OpenURLClassLoader parent;
-    public LimitedClassLoader(URL[] urls, OpenURLClassLoader parent) {
+    public LimitedClassLoader(URL[] urls, ClassLoader parent) {
         super(urls, parent);
-        this.parent = parent;
     }
 
-    protected Class<?> findClass(final String name) throws ClassNotFoundException {
+    @Override
+    protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
         if (name == null)
             throw new NullPointerException("name");
 
         if (name.startsWith("com.sunnysidesoft.VirtualTablet.core.VTService.") ||
                 name.equals("com.facebook.GraphResponse"))
-            return super.findClass(name);
+            return super.loadClass(name, resolve);
 
-        return parent.findClass(name);
+        return getParent().loadClass(name);
     }
 }

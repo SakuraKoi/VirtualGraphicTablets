@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.7.0.1134" Java: "11.0.11" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.4.0.360" Java: "11.0.11" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -17,7 +17,7 @@ new FormModel {
 				}
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.intellij.uiDesigner.core.GridLayoutManager ) {
 					"$columnCount": 1
-					"$rowCount": 7
+					"$rowCount": 9
 				} ) {
 					name: "panel4"
 					"border": new javax.swing.border.CompoundBorder( new javax.swing.border.TitledBorder( "控制台" ), &EmptyBorder0 new javax.swing.border.EmptyBorder( 5, 5, 5, 5 ) )
@@ -33,6 +33,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "btnDisconnectUpstream"
 						"text": "断开 VirtualTablet Server"
+						"enabled": false
 					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 						"fill": 3
 						"row": 1
@@ -47,6 +48,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "btnStopServer"
 						"text": "停止 Graphic Server"
+						"enabled": false
 					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 						"fill": 3
 						"row": 3
@@ -89,12 +91,18 @@ new FormModel {
 						} )
 						add( new FormComponent( "javax.swing.JSpinner" ) {
 							name: "numCanvaPosX"
+							"model": new javax.swing.SpinnerNumberModel {
+								minimum: 0
+							}
 						}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 							"fill": 3
 							"row": 1
 						} )
 						add( new FormComponent( "javax.swing.JSpinner" ) {
 							name: "numCanvaPosY"
+							"model": new javax.swing.SpinnerNumberModel {
+								minimum: 0
+							}
 						}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 							"column": 1
 							"fill": 3
@@ -123,12 +131,18 @@ new FormModel {
 						} )
 						add( new FormComponent( "javax.swing.JSpinner" ) {
 							name: "numCanvaWidth"
+							"model": new javax.swing.SpinnerNumberModel {
+								minimum: 0
+							}
 						}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 							"row": 3
 							"fill": 3
 						} )
 						add( new FormComponent( "javax.swing.JSpinner" ) {
 							name: "numCanvaHeight"
+							"model": new javax.swing.SpinnerNumberModel {
+								minimum: 0
+							}
 						}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 							"column": 1
 							"row": 3
@@ -138,13 +152,30 @@ new FormModel {
 						"row": 5
 						"fill": 3
 					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label5"
+						"text": "FPS"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
+						"row": 6
+						"fill": 3
+					} )
+					add( new FormComponent( "javax.swing.JSpinner" ) {
+						name: "numFps"
+						"model": new javax.swing.SpinnerNumberModel( 30, 1, 144, 1 )
+					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
+						"row": 7
+						"fill": 3
+					} )
 					add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
 						name: "vSpacer2"
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": true
 						}
 					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
-						"row": 6
+						"row": 8
 					} )
 				}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 					"fill": 3

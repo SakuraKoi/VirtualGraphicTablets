@@ -1,7 +1,6 @@
 package sakura.kooi.VirtualGraphicTablets.server.bootstrap;
 
 import lombok.CustomLog;
-import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.io.File;
@@ -10,6 +9,7 @@ import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLClassLoader;
 
 @CustomLog
 public class Bootstrap {
@@ -30,13 +30,11 @@ public class Bootstrap {
         }
 
         try {
-            log.i("Creating core module classloader...");
-            OpenURLClassLoader coreClassLoader = new OpenURLClassLoader(new URL[]{coreJar.toURI().toURL()}, Bootstrap.class.getClassLoader());
-            log.i("Creating protocol hybrid classloader...");
-            LimitedClassLoader hybridClassLoader = new LimitedClassLoader(new URL[]{protocolJar.toURI().toURL()}, coreClassLoader);
+            log.i("Creating hybrid classloader...");
+            URLClassLoader hybridClassLoader = new URLClassLoader(new URL[]{coreJar.toURI().toURL(), protocolJar.toURI().toURL()}, Bootstrap.class.getClassLoader());
 
             log.i("Initializing core module...");
-            Class<?> launcher = hybridClassLoader.findClass("sakura.kooi.VirtualGraphicTablets.server.core.Launch");
+            Class<?> launcher = Class.forName("sakura.kooi.VirtualGraphicTablets.server.core.Launch", true, hybridClassLoader);
             Method start = launcher.getMethod("start");
             log.s("Invoking Launch.start() ...");
             start.invoke(null);
