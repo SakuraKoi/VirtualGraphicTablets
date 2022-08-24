@@ -7,6 +7,8 @@ package sakura.kooi.VirtualGraphicTablets.server.core;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import lombok.CustomLog;
+import sakura.kooi.VirtualGraphicTablets.protocol.Vgt;
 import sakura.kooi.VirtualGraphicTablets.server.bootstrap.logger.Logger;
 import sakura.kooi.VirtualGraphicTablets.server.core.networking.GraphicServer;
 import sakura.kooi.VirtualGraphicTablets.server.core.networking.UpstreamWorker;
@@ -21,9 +23,7 @@ import java.awt.*;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-/**
- * @author SakuraKooi
- */
+@CustomLog
 public class VTabletServer extends JFrame {
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
@@ -366,12 +366,12 @@ public class VTabletServer extends JFrame {
     private JButton btnDisconnectUpstream;
     private JButton btnStartServer;
     private JButton btnStopServer;
-    private JSpinner numCanvaPosX;
-    private JSpinner numCanvaPosY;
-    private JSpinner numCanvaWidth;
-    private JSpinner numCanvaHeight;
-    private JSpinner numFps;
-    private JLabel canvas;
+    public JSpinner numCanvaPosX;
+    public JSpinner numCanvaPosY;
+    public JSpinner numCanvaWidth;
+    public JSpinner numCanvaHeight;
+    public JSpinner numFps;
+    public JLabel canvas;
     private JLabel lblUpstreamConnectStatus;
     private JLabel lblUpstreamVersion;
     private JScrollPane scrollPane1;
@@ -383,6 +383,9 @@ public class VTabletServer extends JFrame {
 
     private int screenMaxWidth;
     private int screenMaxHeight;
+
+    private int tabletWidth;
+    private int tabletHeight;
 
     private UpstreamWorker upstreamWorker;
     private GraphicServer graphicServer;
@@ -459,7 +462,22 @@ public class VTabletServer extends JFrame {
         lblUpstreamVersion.setText("");
     }
 
-    public void onPacketReceived(Object packet) {
+    public void onPacketReceived(Object pkt) {
+        if (pkt instanceof Vgt.C01PacketHandshake) {
+            Vgt.C01PacketHandshake packet = (Vgt.C01PacketHandshake) pkt;
+            tabletWidth = packet.getScreenWidth();
+            tabletHeight = packet.getScreenHeight();
+            log.s("Client handshake with canvas size {}x{}", tabletWidth, tabletHeight);
+            graphicServer.startScreenWorker();
+        } else if (pkt instanceof Vgt.C04PacketHover) {
+
+        } else if (pkt instanceof Vgt.C05PacketTouchDown) {
+
+        } else if (pkt instanceof Vgt.C06PacketTouchMove) {
+
+        } else if (pkt instanceof Vgt.C07PacketTouchUp) {
+
+        }
         // TODO handle client request
     }
 

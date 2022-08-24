@@ -37,6 +37,11 @@ public class GraphicServer extends Thread {
         } catch (IOException ignored) { }
     }
 
+    public void startScreenWorker() {
+        if (screenWorker != null)
+            screenWorker.start();
+    }
+
     @Override
     public void run() {
         try {
@@ -65,7 +70,6 @@ public class GraphicServer extends Thread {
                 packetWriter = new PacketWriter(client, dos);
                 packetWriter.start();
                 screenWorker = new ScreenWorker(parent, packetWriter);
-                screenWorker.start();
                 while (!isInterrupted()) {
                     int size = dis.readInt();
                     byte[] data = dis.readNBytes(size);
