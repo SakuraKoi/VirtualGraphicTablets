@@ -7,6 +7,8 @@ package sakura.kooi.VirtualGraphicTablets.server.core;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import com.sunnysidesoft.VirtualTablet.core.VTService.VTPenEvent;
+import com.sunnysidesoft.VirtualTablet.core.VTService.VTPenStatusMask;
 import lombok.CustomLog;
 import sakura.kooi.VirtualGraphicTablets.protocol.Vgt;
 import sakura.kooi.VirtualGraphicTablets.server.bootstrap.logger.Logger;
@@ -470,15 +472,31 @@ public class VTabletServer extends JFrame {
             log.s("Client handshake with canvas size {}x{}", tabletWidth, tabletHeight);
             graphicServer.startScreenWorker();
         } else if (pkt instanceof Vgt.C04PacketHover) {
+            Vgt.C04PacketHover packet = (Vgt.C04PacketHover) pkt;
 
-        } else if (pkt instanceof Vgt.C05PacketTouchDown) {
+            upstreamWorker.getMQueue().add(createPenEvent((int)numCanvaPosX.getValue() + packet.getPosX(),
+                    (int)numCanvaPosY.getValue() + packet.getPosY(),
+                    0f, false));
 
-        } else if (pkt instanceof Vgt.C06PacketTouchMove) {
+        } else if (pkt instanceof Vgt.C05PacketTouch) {
+            Vgt.C05PacketTouch packet = (Vgt.C05PacketTouch) pkt;
+            upstreamWorker.getMQueue().add(createPenEvent((int)numCanvaPosX.getValue() + packet.getPosX(),
+                    (int)numCanvaPosY.getValue() + packet.getPosY(),
+                    0f, true));
 
-        } else if (pkt instanceof Vgt.C07PacketTouchUp) {
-
+        } else if (pkt instanceof Vgt.C06PacketExit) {
+            Vgt.C06PacketExit packet = (Vgt.C06PacketExit) pkt;
+            upstreamWorker.getMQueue().add(new VTPenEvent((byte) VTPenStatusMask.HOVER_EXIT.getValue(), (short) 0, (short) 0, (short) 0));
         }
-        // TODO handle client request
+    }
+
+    public VTPenEvent createPenEvent(int realX, int realY, float pressureV, boolean pressed) {
+        short pressure = (short) (pressureV * 10000.0f);
+        int value = VTPenStatusMask.IN_RANGE.getValue();
+        if (pressed) {
+            value |= VTPenStatusMask.TIPSWITCH.getValue();;
+        }
+        return new VTPenEvent((byte)value, (short)Math.abs(realX), (short)Math.abs(realY), pressure);
     }
 
     public void setGraphicServerRunning(boolean b) {

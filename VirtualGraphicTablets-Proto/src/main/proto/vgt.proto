@@ -29,28 +29,21 @@ message S03PacketScreen {
   bytes screen_image = 1;
 }
 
-// SPen 悬浮
+// 悬浮
 message C04PacketHover {
   int32 pos_x = 1;
   int32 pos_y = 2;
 }
 
-// 按下
-message C05PacketTouchDown {
+// 绘制
+message C05PacketTouch {
   int32 pos_x = 1;
   int32 pos_y = 2;
   float pressure = 3;
 }
 
-// 移动
-message C06PacketTouchMove {
-  int32 pos_x = 1;
-  int32 pos_y = 2;
-  float pressure = 3;
-}
-
-// 释放
-message C07PacketTouchUp {
+// 离开
+message C06PacketExit {
   int32 pos_x = 1;
   int32 pos_y = 2;
   float pressure = 3;

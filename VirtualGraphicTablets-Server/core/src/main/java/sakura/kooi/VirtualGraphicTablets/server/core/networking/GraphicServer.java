@@ -85,15 +85,11 @@ public class GraphicServer extends Thread {
                             break;
                         }
                         case 5: {
-                            packet = Vgt.C05PacketTouchDown.parseFrom(container.getPayload().toByteArray());
+                            packet = Vgt.C05PacketTouch.parseFrom(container.getPayload().toByteArray());
                             break;
                         }
                         case 6: {
-                            packet = Vgt.C06PacketTouchMove.parseFrom(container.getPayload().toByteArray());
-                            break;
-                        }
-                        case 7: {
-                            packet = Vgt.C07PacketTouchUp.parseFrom(container.getPayload().toByteArray());
+                            packet = Vgt.C06PacketExit.parseFrom(container.getPayload().toByteArray());
                             break;
                         }
                         default: {
