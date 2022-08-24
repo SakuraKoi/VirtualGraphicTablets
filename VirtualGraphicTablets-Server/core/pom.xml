@@ -24,6 +24,12 @@
         </dependency>
         <dependency>
             <groupId>sakura.kooi</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>sakura.kooi</groupId>
             <artifactId>virtualgraphictablets-proto</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>

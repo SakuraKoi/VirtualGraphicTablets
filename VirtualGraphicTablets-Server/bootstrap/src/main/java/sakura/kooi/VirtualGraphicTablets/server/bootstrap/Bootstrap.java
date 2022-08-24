@@ -1,5 +1,6 @@
 package sakura.kooi.VirtualGraphicTablets.server.bootstrap;
 
+import lombok.CustomLog;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -9,10 +10,10 @@ import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-@Slf4j
+@CustomLog
 public class Bootstrap {
     public static void main(String[] args) {
-        log.info("Checking classpath...");
+        log.i("Checking classpath...");
         File libsDir = new File("libs");
         File coreJar = new File(libsDir, "vgt-core.jar");
         if (!coreJar.exists()) {

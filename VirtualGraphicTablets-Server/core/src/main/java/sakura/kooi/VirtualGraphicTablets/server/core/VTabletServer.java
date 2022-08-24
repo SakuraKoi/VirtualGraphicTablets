@@ -7,6 +7,7 @@ package sakura.kooi.VirtualGraphicTablets.server.core;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import sakura.kooi.VirtualGraphicTablets.server.bootstrap.logger.Logger;
 import sakura.kooi.lib.swing.view.ColoredTextPane;
 
 import javax.swing.*;
@@ -15,6 +16,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 /**
  * @author SakuraKooi
@@ -359,10 +363,21 @@ public class VTabletServer extends JFrame {
         numCanvaPosY.setEditor(new JSpinner.NumberEditor(numCanvaPosY, "#"));
         numCanvaWidth.setEditor(new JSpinner.NumberEditor(numCanvaWidth, "#"));
         numCanvaHeight.setEditor(new JSpinner.NumberEditor(numCanvaHeight, "#"));
-    }
+        Logger.setOut(new PrintStream(new OutputStream() {
+            @Override
+            public void write(int b) { }
+        }) {
+            @Override
+            public void println(String str) {
+                txtLogs.appendANSI(str + "\n");
+                txtLogs.setCaretPosition(txtLogs.getDocument().getLength());
+            }
 
-
-    public void appendLog(String message) {
-
+            @Override
+            public void print(String str) {
+                txtLogs.appendANSI(str);
+                txtLogs.setCaretPosition(txtLogs.getDocument().getLength());
+            }
+        });
     }
 }
