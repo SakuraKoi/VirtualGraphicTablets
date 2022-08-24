@@ -22,7 +22,9 @@ public class GraphicServer extends Thread {
     private Socket client;
     private DataInputStream dis;
     private DataOutputStream dos;
+
     private PacketWriter packetWriter;
+    private ScreenWorker screenWorker;
 
     public GraphicServer(VTabletServer parent) {
         this.parent = parent;
@@ -62,6 +64,8 @@ public class GraphicServer extends Thread {
                 dos = new DataOutputStream(client.getOutputStream());
                 packetWriter = new PacketWriter(client, dos);
                 packetWriter.start();
+                screenWorker = new ScreenWorker(parent, packetWriter);
+                screenWorker.start();
                 while (!isInterrupted()) {
                     int size = dis.readInt();
                     byte[] data = dis.readNBytes(size);
@@ -108,6 +112,10 @@ public class GraphicServer extends Thread {
             if (packetWriter != null) {
                 packetWriter.interrupt();
                 packetWriter = null;
+            }
+            if (screenWorker != null) {
+                screenWorker.interrupt();
+                screenWorker = null;
             }
             if (client != null) {
                 try {
