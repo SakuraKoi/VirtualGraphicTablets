@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.4.0.360" Java: "11.0.11" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.7.0.1134" Java: "11.0.11" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -12,12 +12,18 @@ new FormModel {
 			} ) {
 				name: "panel1"
 				"border": new javax.swing.border.EmptyBorder( 5, 5, 5, 5 )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": true
+				}
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.intellij.uiDesigner.core.GridLayoutManager ) {
 					"$columnCount": 1
 					"$rowCount": 7
 				} ) {
 					name: "panel4"
 					"border": new javax.swing.border.CompoundBorder( new javax.swing.border.TitledBorder( "控制台" ), &EmptyBorder0 new javax.swing.border.EmptyBorder( 5, 5, 5, 5 ) )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "btnConnectUpstream"
 						"text": "连接 VirtualTablet Server"
@@ -48,6 +54,9 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label11"
 						"text": " "
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
 					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 						"row": 4
 					} )
@@ -56,15 +65,24 @@ new FormModel {
 						"$rowCount": 4
 					} ) {
 						name: "panel5"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
 						add( new FormComponent( "javax.swing.JLabel" ) {
 							name: "label13"
 							"text": "Pos X"
+							auxiliary() {
+								"JavaCodeGenerator.variableLocal": true
+							}
 						}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 							"fill": 3
 						} )
 						add( new FormComponent( "javax.swing.JLabel" ) {
 							name: "label14"
 							"text": "Pos Y"
+							auxiliary() {
+								"JavaCodeGenerator.variableLocal": true
+							}
 						}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 							"column": 1
 							"fill": 3
@@ -85,6 +103,9 @@ new FormModel {
 						add( new FormComponent( "javax.swing.JLabel" ) {
 							name: "label15"
 							"text": "Width"
+							auxiliary() {
+								"JavaCodeGenerator.variableLocal": true
+							}
 						}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 							"row": 2
 							"fill": 3
@@ -92,6 +113,9 @@ new FormModel {
 						add( new FormComponent( "javax.swing.JLabel" ) {
 							name: "label16"
 							"text": "Height"
+							auxiliary() {
+								"JavaCodeGenerator.variableLocal": true
+							}
 						}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 							"column": 1
 							"row": 2
@@ -132,6 +156,9 @@ new FormModel {
 				} ) {
 					name: "panel6"
 					"border": new javax.swing.border.EtchedBorder( 1, null, null )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "canvas"
 					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
@@ -147,9 +174,15 @@ new FormModel {
 				} ) {
 					name: "panel2"
 					"border": new javax.swing.border.CompoundBorder( new javax.swing.border.TitledBorder( "Upstream" ), #EmptyBorder0 )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label1"
 						"text": "连接状态"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
 					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 						"fill": 3
 					} )
@@ -164,6 +197,9 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label3"
 						"text": "服务端版本"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
 					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 						"row": 1
 						"fill": 3
@@ -199,9 +235,15 @@ new FormModel {
 				} ) {
 					name: "panel3"
 					"border": new javax.swing.border.CompoundBorder( new javax.swing.border.TitledBorder( "Server" ), #EmptyBorder0 )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label4"
 						"text": "运行状态"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
 					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 						"fill": 3
 					} )
@@ -216,6 +258,9 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label6"
 						"text": "监听端口"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
 					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 						"row": 1
 						"fill": 3
@@ -232,6 +277,9 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label8"
 						"text": "连接状态"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
 					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 						"row": 2
 						"fill": 3
