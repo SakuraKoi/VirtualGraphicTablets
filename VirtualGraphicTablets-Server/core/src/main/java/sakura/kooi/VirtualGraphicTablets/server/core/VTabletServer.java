@@ -460,6 +460,7 @@ public class VTabletServer extends JFrame {
     }
 
     public void onPacketReceived(Object packet) {
+        // TODO handle client request
     }
 
     public void setGraphicServerRunning(boolean b) {
