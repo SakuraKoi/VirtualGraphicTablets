@@ -8,6 +8,7 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import sakura.kooi.VirtualGraphicTablets.server.bootstrap.logger.Logger;
+import sakura.kooi.VirtualGraphicTablets.server.core.networking.GraphicServer;
 import sakura.kooi.VirtualGraphicTablets.server.core.networking.UpstreamWorker;
 import sakura.kooi.lib.swing.view.ColoredTextPane;
 
@@ -384,6 +385,7 @@ public class VTabletServer extends JFrame {
     private int screenMaxHeight;
 
     private UpstreamWorker upstreamWorker;
+    private GraphicServer graphicServer;
 
     public VTabletServer() {
         initComponents();
@@ -414,11 +416,28 @@ public class VTabletServer extends JFrame {
             upstreamWorker = new UpstreamWorker(this);
             upstreamWorker.start();
             btnDisconnectUpstream.setEnabled(true);
+            btnConnectUpstream.setEnabled(false);
         });
 
         btnDisconnectUpstream.addActionListener(e -> {
             upstreamWorker.interrupt();
+            upstreamWorker = null;
             btnDisconnectUpstream.setEnabled(false);
+            btnConnectUpstream.setEnabled(true);
+        });
+
+        btnStartServer.addActionListener(e -> {
+            graphicServer = new GraphicServer(this);
+            graphicServer.start();
+            btnStopServer.setEnabled(true);
+            btnStartServer.setEnabled(false);
+        });
+
+        btnStopServer.addActionListener(e -> {
+            graphicServer.close();
+            graphicServer = null;
+            btnStopServer.setEnabled(false);
+            btnStartServer.setEnabled(true);
         });
     }
 
@@ -438,5 +457,16 @@ public class VTabletServer extends JFrame {
     public void onUpstreamDisconnected() {
         lblUpstreamConnectStatus.setText("未连接");
         lblUpstreamVersion.setText("");
+    }
+
+    public void onPacketReceived(Object packet) {
+    }
+
+    public void setGraphicServerRunning(boolean b) {
+        lblServerRunningStatus.setText(b ? "运行中" : "未运行");
+    }
+
+    public void setGraphicServerConnected(boolean b) {
+        lblServerConnectStatus.setText(b ? "已连接" : "未连接");
     }
 }

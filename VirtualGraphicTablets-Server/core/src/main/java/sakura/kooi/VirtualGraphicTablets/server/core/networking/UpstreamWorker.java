@@ -19,7 +19,6 @@ public class UpstreamWorker extends Thread {
     protected LinkedBlockingQueue<VTPenEvent> mQueue = new LinkedBlockingQueue<>();
     private VTService.Client mClient;
 
-
     public UpstreamWorker(VTabletServer parent) {
         this.parent = parent;
     }
@@ -33,12 +32,12 @@ public class UpstreamWorker extends Thread {
             this.mClient = new VTService.Client(new TBinaryProtocol(mTransport));
                 VTServerInfo checkVersion = this.mClient.checkVersion(VTServiceConstants.SERVICE_VERSION);
                 if (!checkVersion.isVersionMatched) {
-                    log.e("VirtualTablet Server 连接失败: 协议版本不匹配");
+                    log.e("Connect VirtualTablet Server failed: protocol version mismatch");
                     mTransport.close();
                     parent.onUpstreamDisconnected();
                 } else if (this.isInterrupted()) {
                 } else {
-                    log.s("VirtualTablet Server 连接成功", checkVersion.serverVersion, checkVersion.getScreenWidth(), checkVersion.getScreenHeight());
+                    log.s("VirtualTablet Server connected!", checkVersion.serverVersion, checkVersion.getScreenWidth(), checkVersion.getScreenHeight());
                     parent.onUpstreamConnected(checkVersion.serverVersion, checkVersion.getScreenWidth(), checkVersion.getScreenHeight());
                     while (!this.isInterrupted()) {
                         VTPenEvent vTPenEvent;
@@ -54,18 +53,18 @@ public class UpstreamWorker extends Thread {
                                 this.mClient.sendPenHoverExit();
                             }
                         } catch (TException e) {
-                            log.w("向 Upstream 发送轨迹出错" , e);
+                            log.w("An error occurred while sending packet to upstream" , e);
                         }
                     }
 
                     try {
                         this.mClient.closeConnection();
                         mTransport.close();
-                        log.w("VirtualTablet Server 断开连接");
+                        log.w("VirtualTablet Server disconnected");
                         parent.onUpstreamDisconnected();
                     } catch (TException e2) {
                         mTransport.close();
-                        log.e("VirtualTablet Server 断开连接", e2);
+                        log.e("VirtualTablet Server disconnected due to exception", e2);
                         parent.onUpstreamDisconnected();
                     }
                 }
