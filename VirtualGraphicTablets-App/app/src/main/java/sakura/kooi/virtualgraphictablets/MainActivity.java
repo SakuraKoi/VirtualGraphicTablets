@@ -3,6 +3,7 @@ package sakura.kooi.virtualgraphictablets;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,7 +37,11 @@ public class MainActivity extends AppCompatActivity {
                 dialog.show();
                 return;
             }
-            // TODO start tablet activity
+
+            Intent i = new Intent(MainActivity.this, TabletActivity.class);
+            i.putExtra("server", serverAddress);
+            i.putExtra("port", serverPort);
+            startActivity(i);
         });
     }
 }
