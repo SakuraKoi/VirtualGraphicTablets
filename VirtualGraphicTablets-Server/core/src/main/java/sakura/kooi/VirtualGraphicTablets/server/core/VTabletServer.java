@@ -474,19 +474,29 @@ public class VTabletServer extends JFrame {
         } else if (pkt instanceof Vgt.C04PacketHover) {
             Vgt.C04PacketHover packet = (Vgt.C04PacketHover) pkt;
 
-            upstreamWorker.getMQueue().add(createPenEvent((int)numCanvaPosX.getValue() + packet.getPosX(),
-                    (int)numCanvaPosY.getValue() + packet.getPosY(),
-                    0f, false));
-
+            if (upstreamWorker != null) {
+                upstreamWorker.getMQueue().add(createPenEvent((int) numCanvaPosX.getValue() + packet.getPosX(),
+                        (int) numCanvaPosY.getValue() + packet.getPosY(),
+                        0f, false));
+            } else {
+                log.i("Received hover at {} {}", (int) numCanvaPosX.getValue() + packet.getPosX(), (int) numCanvaPosY.getValue() + packet.getPosY());
+            }
         } else if (pkt instanceof Vgt.C05PacketTouch) {
             Vgt.C05PacketTouch packet = (Vgt.C05PacketTouch) pkt;
+            if (upstreamWorker != null) {
             upstreamWorker.getMQueue().add(createPenEvent((int)numCanvaPosX.getValue() + packet.getPosX(),
                     (int)numCanvaPosY.getValue() + packet.getPosY(),
-                    0f, true));
-
+                    packet.getPressure(), true));
+            } else {
+                log.i("Received press at {} {} {}", (int) numCanvaPosX.getValue() + packet.getPosX(), (int) numCanvaPosY.getValue() + packet.getPosY(), packet.getPressure());
+            }
         } else if (pkt instanceof Vgt.C06PacketExit) {
             Vgt.C06PacketExit packet = (Vgt.C06PacketExit) pkt;
-            upstreamWorker.getMQueue().add(new VTPenEvent((byte) VTPenStatusMask.HOVER_EXIT.getValue(), (short) 0, (short) 0, (short) 0));
+            if (upstreamWorker != null) {
+                upstreamWorker.getMQueue().add(new VTPenEvent((byte) VTPenStatusMask.HOVER_EXIT.getValue(), (short) 0, (short) 0, (short) 0));
+            } else {
+                log.i("Received release");
+            }
         }
     }
 
