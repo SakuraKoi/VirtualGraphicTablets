@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="sakura.kooi.virtualgraphictablets">
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -26,5 +27,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

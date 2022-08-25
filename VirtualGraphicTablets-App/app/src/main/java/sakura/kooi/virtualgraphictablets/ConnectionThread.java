@@ -38,7 +38,6 @@ public class ConnectionThread extends Thread {
             parent.onNetworkError(e);
             return;
         }
-        parent.onClientConnected();
 
         boolean error = false;
         try {
@@ -46,6 +45,7 @@ public class ConnectionThread extends Thread {
             dos = new DataOutputStream(client.getOutputStream());
             packetWriter = new PacketWriter(client, dos);
             packetWriter.start();
+            parent.onClientConnected();
             while (!isInterrupted()) {
                 int size = dis.readInt();
                 byte[] data = new byte[size];

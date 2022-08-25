@@ -2,21 +2,19 @@ package sakura.kooi.virtualgraphictablets;
 
 import static android.view.MotionEvent.TOOL_TYPE_STYLUS;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -48,9 +46,9 @@ public class TabletActivity extends AppCompatActivity {
         canvas = findViewById(R.id.canvas);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            server = extras.getString("server", savedInstanceState.getString("server"));
-            port = extras.getInt("port", savedInstanceState.getInt("port"));
-        } else {
+            server = extras.getString("server", savedInstanceState == null ? null : savedInstanceState.getString("server"));
+            port = extras.getInt("port", savedInstanceState == null ? 0 : savedInstanceState.getInt("port"));
+        } else if (savedInstanceState != null) {
             server = savedInstanceState.getString("server");
             port = savedInstanceState.getInt("port");
         }
@@ -103,21 +101,26 @@ public class TabletActivity extends AppCompatActivity {
 
     @SuppressWarnings("deprecation")
     public void onClientConnected() {
-        waitingDialog.setMessage("Handshaking...");
+        runOnUiThread(() -> {
+            waitingDialog.setMessage("Handshaking...");
+        });
+
+        Vgt.C01PacketHandshake resp = Vgt.C01PacketHandshake.newBuilder()
+                .setScreenWidth(canvas.getWidth())
+                .setScreenHeight(canvas.getHeight())
+                .build();
+        Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder()
+                .setPacketId(1)
+                .setPayload(resp.toByteString())
+                .build();
+        connectionThread.packetWriter.sendQueue.add(container);
     }
 
     public void onPacketReceived(Object pkt) {
         if (pkt instanceof Vgt.S02PacketServerInfo) {
-            Vgt.C01PacketHandshake resp = Vgt.C01PacketHandshake.newBuilder()
-                    .setScreenWidth(canvas.getWidth())
-                    .setScreenHeight(canvas.getHeight())
-                    .build();
-            Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder()
-                    .setPacketId(1)
-                    .setPayload(resp.toByteString())
-                    .build();
-            connectionThread.packetWriter.sendQueue.add(container);
-            waitingDialog.dismiss();
+            runOnUiThread(() -> {
+                waitingDialog.dismiss();
+            });
         } else if (pkt instanceof Vgt.S03PacketScreen) {
             Vgt.S03PacketScreen packet = (Vgt.S03PacketScreen) pkt;
             canvasWidth = packet.getWidth();
@@ -133,10 +136,12 @@ public class TabletActivity extends AppCompatActivity {
     public void onDisconnected(boolean error) {
         if (error)
             return;
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setMessage("Server disconnected");
-        dialog.setOnDismissListener(e -> TabletActivity.this.finish());
-        dialog.show();
+        runOnUiThread(() -> {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setMessage("Server disconnected");
+            dialog.setOnDismissListener(e -> TabletActivity.this.finish());
+            dialog.show();
+        });
     }
 
     public void onNetworkError(IOException e) {
@@ -144,11 +149,13 @@ public class TabletActivity extends AppCompatActivity {
         PrintWriter pw = new PrintWriter(sw);
         e.printStackTrace(pw);
 
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("Error occurred");
-        dialog.setMessage(sw.toString());
-        dialog.setOnDismissListener(ex -> TabletActivity.this.finish());
-        dialog.show();
+        runOnUiThread(() -> {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setTitle("Error occurred");
+            dialog.setMessage(sw.toString());
+            dialog.setOnDismissListener(ex -> TabletActivity.this.finish());
+            dialog.show();
+        });
     }
 
     @SuppressLint("ClickableViewAccessibility")
