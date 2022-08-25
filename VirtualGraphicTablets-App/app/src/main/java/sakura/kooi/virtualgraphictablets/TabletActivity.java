@@ -4,11 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -30,6 +34,8 @@ public class TabletActivity extends AppCompatActivity {
     private ImageView canvas;
     private int canvasWidth;
     private int canvasHeight;
+
+    private float convertRatio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,8 +121,10 @@ public class TabletActivity extends AppCompatActivity {
             canvasWidth = packet.getWidth();
             canvasHeight = packet.getHeight();
 
-            byte[] image = packet.toByteArray();
-            canvas.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length));
+            byte[] imageData = packet.toByteArray();
+            Bitmap image = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+            convertRatio = canvasWidth / (float) image.getWidth();
+            canvas.setImageBitmap(image);
         }
     }
 
@@ -140,7 +148,42 @@ public class TabletActivity extends AppCompatActivity {
         dialog.setOnDismissListener(ex -> TabletActivity.this.finish());
         dialog.show();
     }
-    
+
+    @SuppressLint("ClickableViewAccessibility")
     private void initializeTablet() {
+        canvas.setOnTouchListener((view, motionEvent) -> {
+            handleMotionEvent(motionEvent, (x, y, pressure) -> {
+                Vgt.C05PacketTouch pkt = Vgt.C05PacketTouch.newBuilder().setPosX(x).setPosY(y).setPressure(pressure).build();
+                Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder().setPacketId(5).setPayload(pkt.toByteString()).build();
+                connectionThread.packetWriter.sendQueue.add(container);
+            });
+            return true;
+        });
+        canvas.setOnHoverListener((view, motionEvent) -> {
+            if (motionEvent.getAction() == MotionEvent.ACTION_HOVER_EXIT) {
+                Vgt.C06PacketExit pkt = Vgt.C06PacketExit.newBuilder().setPosX(0).setPosY(0).setPressure(0f).build();
+                Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder().setPacketId(6).setPayload(pkt.toByteString()).build();
+                connectionThread.packetWriter.sendQueue.add(container);
+            } else {
+                handleMotionEvent(motionEvent, (x, y, pressure) -> {
+                    Vgt.C04PacketHover pkt = Vgt.C04PacketHover.newBuilder().setPosX(x).setPosY(y).build();
+                    Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder().setPacketId(4).setPayload(pkt.toByteString()).build();
+                    connectionThread.packetWriter.sendQueue.add(container);
+                });
+            }
+            return true;
+        });
+    }
+
+    private void handleMotionEvent(MotionEvent motionEvent, TriConsumer<Integer, Integer, Float> callback) {
+        int historySize = motionEvent.getHistorySize();
+        for (int i = 0; i < historySize; i++) {
+            callback.apply((int) (motionEvent.getHistoricalX(i) * convertRatio),
+                    (int) (motionEvent.getHistoricalY(i) * convertRatio),
+                    motionEvent.getHistoricalPressure(i));
+        }
+        callback.apply((int) (motionEvent.getX(0) * convertRatio),
+                (int) (motionEvent.getY(0) * convertRatio),
+                motionEvent.getPressure(0));
     }
 }
