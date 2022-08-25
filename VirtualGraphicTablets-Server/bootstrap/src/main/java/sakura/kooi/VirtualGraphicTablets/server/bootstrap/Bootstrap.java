@@ -1,6 +1,7 @@
 package sakura.kooi.VirtualGraphicTablets.server.bootstrap;
 
 import lombok.CustomLog;
+import org.fusesource.jansi.AnsiConsole;
 
 import javax.swing.*;
 import java.io.File;
@@ -14,6 +15,7 @@ import java.net.URLClassLoader;
 @CustomLog
 public class Bootstrap {
     public static void main(String[] args) {
+        AnsiConsole.systemInstall();
         log.i("Checking classpath...");
         File libsDir = new File("libs");
         File coreJar = new File(libsDir, "vgt-core.jar");
