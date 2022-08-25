@@ -1,5 +1,7 @@
 package sakura.kooi.virtualgraphictablets;
 
+import static android.view.MotionEvent.TOOL_TYPE_STYLUS;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -180,10 +182,10 @@ public class TabletActivity extends AppCompatActivity {
         for (int i = 0; i < historySize; i++) {
             callback.apply((int) (motionEvent.getHistoricalX(i) * convertRatio),
                     (int) (motionEvent.getHistoricalY(i) * convertRatio),
-                    motionEvent.getHistoricalPressure(i));
+                    motionEvent.getToolType(0) == TOOL_TYPE_STYLUS ? motionEvent.getHistoricalPressure(i) : 1);
         }
         callback.apply((int) (motionEvent.getX(0) * convertRatio),
                 (int) (motionEvent.getY(0) * convertRatio),
-                motionEvent.getPressure(0));
+                motionEvent.getToolType(0) == TOOL_TYPE_STYLUS ? motionEvent.getPressure(0) : 1);
     }
 }
