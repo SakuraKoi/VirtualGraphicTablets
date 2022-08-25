@@ -10,11 +10,12 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+
         maven {
             url = uri("https://maven.pkg.github.com/SakuraKoi/VirtualGraphicTablets")
             credentials {
-                username = System.getenv("USERNAME")
-                password = System.getenv("TOKEN")
+                username = System.getProperty("gpr_user")
+                password = System.getProperty("gpr_key")
             }
         }
     }
