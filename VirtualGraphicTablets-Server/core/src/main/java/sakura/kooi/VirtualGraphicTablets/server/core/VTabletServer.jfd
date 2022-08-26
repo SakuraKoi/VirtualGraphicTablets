@@ -7,8 +7,10 @@ new FormModel {
 			name: "this"
 			"title": "VirtualGraphicTablet Server"
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.intellij.uiDesigner.core.GridLayoutManager ) {
-				"$columnCount": 2
-				"$rowCount": 3
+				"$columnCount": 3
+				"$rowCount": 4
+				"hGap": 4
+				"vGap": 4
 			} ) {
 				name: "panel1"
 				"border": new javax.swing.border.EmptyBorder( 5, 5, 5, 5 )
@@ -18,6 +20,8 @@ new FormModel {
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.intellij.uiDesigner.core.GridLayoutManager ) {
 					"$columnCount": 1
 					"$rowCount": 9
+					"hGap": 4
+					"vGap": 4
 				} ) {
 					name: "panel4"
 					"border": new javax.swing.border.CompoundBorder( new javax.swing.border.TitledBorder( "控制台" ), &EmptyBorder0 new javax.swing.border.EmptyBorder( 5, 5, 5, 5 ) )
@@ -219,9 +223,20 @@ new FormModel {
 					"fill": 3
 					"rowSpan": 2
 				} )
+				add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+					name: "vSpacer1"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
+				}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
+					"column": 2
+					"rowSpan": 2
+				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.intellij.uiDesigner.core.GridLayoutManager ) {
 					"$columnCount": 2
 					"$rowCount": 2
+					"hGap": 4
+					"vGap": 4
 				} ) {
 					name: "panel2"
 					"border": new javax.swing.border.CompoundBorder( new javax.swing.border.TitledBorder( "Upstream" ), #EmptyBorder0 )
@@ -268,20 +283,11 @@ new FormModel {
 					"fill": 3
 					"row": 1
 				} )
-				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
-					name: "scrollPane1"
-					add( new FormComponent( "sakura.kooi.lib.swing.view.ColoredTextPane" ) {
-						name: "txtLogs"
-					} )
-				}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
-					"column": 1
-					"row": 2
-					"fill": 3
-					"hSizePolicy": 7
-				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.intellij.uiDesigner.core.GridLayoutManager ) {
 					"$columnCount": 2
 					"$rowCount": 6
+					"hGap": 4
+					"vGap": 4
 				} ) {
 					name: "panel3"
 					"border": new javax.swing.border.CompoundBorder( new javax.swing.border.TitledBorder( "Server" ), #EmptyBorder0 )
@@ -460,13 +466,34 @@ new FormModel {
 				}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 					"fill": 3
 					"row": 2
+					"vSizePolicy": 0
+					"indent": 0
+				} )
+				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+					name: "scrollPane1"
+					add( new FormComponent( "sakura.kooi.lib.swing.view.ColoredTextPane" ) {
+						name: "txtLogs"
+					} )
+				}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
+					"row": 2
+					"fill": 3
+					"column": 1
+				} )
+				add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
+					name: "hSpacer1"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
+				}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
+					"column": 1
+					"row": 3
 				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "Center"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 810, 705 )
+			"size": new java.awt.Dimension( 905, 690 )
 		} )
 	}
 }

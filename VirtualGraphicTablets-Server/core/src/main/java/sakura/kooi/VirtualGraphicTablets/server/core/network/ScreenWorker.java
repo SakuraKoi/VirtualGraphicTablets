@@ -4,7 +4,6 @@ import com.google.protobuf.ByteString;
 import lombok.CustomLog;
 import sakura.kooi.VirtualGraphicTablets.protocol.Vgt;
 import sakura.kooi.VirtualGraphicTablets.server.core.VTabletServer;
-import sakura.kooi.VirtualGraphicTablets.server.core.utils.GZipUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
