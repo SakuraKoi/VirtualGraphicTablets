@@ -15,6 +15,7 @@ import sakura.kooi.VirtualGraphicTablets.server.bootstrap.logger.Logger;
 import sakura.kooi.VirtualGraphicTablets.server.core.network.GraphicServer;
 import sakura.kooi.VirtualGraphicTablets.server.core.network.TrafficCounter;
 import sakura.kooi.VirtualGraphicTablets.server.core.network.UpstreamWorker;
+import sakura.kooi.VirtualGraphicTablets.server.core.utils.RobotUtils;
 import sakura.kooi.lib.swing.view.ColoredTextPane;
 
 import javax.swing.*;
@@ -23,6 +24,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.OutputStream;
@@ -632,7 +634,11 @@ public class VTabletServer extends JFrame {
             }
         } else if (pkt instanceof Vgt.C07PacketSetEraseMode) {
             Vgt.C07PacketSetEraseMode packet = (Vgt.C07PacketSetEraseMode) pkt;
-            // TODO not works, use hotkey to switch between pen and eraser
+            if (packet.getIsErase()) {
+                RobotUtils.keyPress(KeyEvent.VK_E);
+            } else {
+                RobotUtils.keyPress(KeyEvent.VK_P);
+            }
         } else if (pkt instanceof Vgt.C08PacketTriggerCustomHotkey) {
             // TODO unimplemented
         }
