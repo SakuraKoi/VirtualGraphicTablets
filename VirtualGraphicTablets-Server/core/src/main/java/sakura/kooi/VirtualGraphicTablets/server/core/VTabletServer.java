@@ -400,6 +400,9 @@ public class VTabletServer extends JFrame {
         numCanvaPosY.setEditor(new JSpinner.NumberEditor(numCanvaPosY, "#"));
         numCanvaWidth.setEditor(new JSpinner.NumberEditor(numCanvaWidth, "#"));
         numCanvaHeight.setEditor(new JSpinner.NumberEditor(numCanvaHeight, "#"));
+        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+        numCanvaWidth.setValue(size.getWidth());
+        numCanvaHeight.setValue(size.getHeight());
         txtLogs.setEditable(false);
         Logger.setOut(new PrintStream(new OutputStream() {
             @Override
@@ -453,9 +456,9 @@ public class VTabletServer extends JFrame {
         this.screenMaxHeight = height;
         numCanvaPosX.setModel(new SpinnerNumberModel(0, 0, width, 1));
         numCanvaPosY.setModel(new SpinnerNumberModel(0, 0, height, 1));
-        numCanvaWidth.setModel(new SpinnerNumberModel(0, 0, width, 1));
+        numCanvaWidth.setModel(new SpinnerNumberModel(1, 1, width, 1));
         numCanvaWidth.setValue(width);
-        numCanvaHeight.setModel(new SpinnerNumberModel(0, 0, height, 1));
+        numCanvaHeight.setModel(new SpinnerNumberModel(1, 1, height, 1));
         numCanvaHeight.setValue(height);
     }
 
@@ -470,6 +473,16 @@ public class VTabletServer extends JFrame {
             tabletWidth = packet.getScreenWidth();
             tabletHeight = packet.getScreenHeight();
             log.s("Client handshake with canvas size {}x{}", tabletWidth, tabletHeight);
+
+            Vgt.S02PacketServerInfo resp = Vgt.S02PacketServerInfo.newBuilder()
+                    .setScreenHeight(1000)
+                    .setScreenWidth(100)
+                    .build();
+            Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder()
+                    .setPacketId(2)
+                    .setPayload(resp.toByteString()).build();
+
+            graphicServer.packetWriter.getSendQueue().add(container);
             graphicServer.startScreenWorker();
         } else if (pkt instanceof Vgt.C04PacketHover) {
             Vgt.C04PacketHover packet = (Vgt.C04PacketHover) pkt;

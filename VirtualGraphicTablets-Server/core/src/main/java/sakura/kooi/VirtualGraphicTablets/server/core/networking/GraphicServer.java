@@ -23,7 +23,7 @@ public class GraphicServer extends Thread {
     private DataInputStream dis;
     private DataOutputStream dos;
 
-    private PacketWriter packetWriter;
+    public PacketWriter packetWriter;
     private ScreenWorker screenWorker;
 
     public GraphicServer(VTabletServer parent) {
