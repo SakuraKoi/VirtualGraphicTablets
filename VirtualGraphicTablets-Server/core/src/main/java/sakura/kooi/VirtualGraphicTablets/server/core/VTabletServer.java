@@ -407,6 +407,9 @@ public class VTabletServer extends JFrame {
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         numCanvaWidth.setValue((int)size.getWidth());
         numCanvaHeight.setValue((int)size.getHeight());
+
+        this.screenMaxWidth = (int)size.getWidth();
+        this.screenMaxHeight = (int)size.getHeight();
         txtLogs.setEditable(false);
         Logger.setOut(new PrintStream(new OutputStream() {
             @Override
@@ -523,7 +526,10 @@ public class VTabletServer extends JFrame {
         if (pressed) {
             value |= VTPenStatusMask.TIPSWITCH.getValue();;
         }
-        return new VTPenEvent((byte)value, (short)Math.abs(realX), (short)Math.abs(realY), pressure);
+
+        float percentX = (realX / (float)screenMaxWidth) * 10000.0f;
+        float percentY = (realY / (float)screenMaxHeight) * 10000.0f;
+        return new VTPenEvent((byte)value, (short)Math.abs(percentX), (short)Math.abs(percentY), pressure);
     }
 
     public void setGraphicServerRunning(boolean b) {

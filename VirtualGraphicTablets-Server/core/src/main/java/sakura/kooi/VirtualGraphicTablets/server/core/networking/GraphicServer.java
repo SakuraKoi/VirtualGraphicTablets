@@ -70,48 +70,52 @@ public class GraphicServer extends Thread {
             parent.setGraphicServerConnected(true);
             log.i("Client {} connected", clientAddr.getHostAddress());
             try {
-                dis = new DataInputStream(client.getInputStream());
-                dos = new DataOutputStream(client.getOutputStream());
-                packetWriter = new PacketWriter(client, dos);
-                packetWriter.start();
-                screenWorker = new ScreenWorker(parent, packetWriter);
-                while (!isInterrupted()) {
-                    int size = dis.readInt();
-                    byte[] data = dis.readNBytes(size);
-                    Vgt.PacketContainer container = Vgt.PacketContainer.parseFrom(data);
-                    Object packet;
-                    switch (container.getPacketId()) {
-                        case 1: {
-                            packet = Vgt.C01PacketHandshake.parseFrom(container.getPayload().toByteArray());
-                            break;
+                try {
+                    dis = new DataInputStream(client.getInputStream());
+                    dos = new DataOutputStream(client.getOutputStream());
+                    packetWriter = new PacketWriter(client, dos);
+                    packetWriter.start();
+                    screenWorker = new ScreenWorker(parent, packetWriter);
+                    while (!isInterrupted()) {
+                        int size = dis.readInt();
+                        byte[] data = dis.readNBytes(size);
+                        Vgt.PacketContainer container = Vgt.PacketContainer.parseFrom(data);
+                        Object packet;
+                        switch (container.getPacketId()) {
+                            case 1: {
+                                packet = Vgt.C01PacketHandshake.parseFrom(container.getPayload().toByteArray());
+                                break;
+                            }
+                            case 4: {
+                                packet = Vgt.C04PacketHover.parseFrom(container.getPayload().toByteArray());
+                                break;
+                            }
+                            case 5: {
+                                packet = Vgt.C05PacketTouch.parseFrom(container.getPayload().toByteArray());
+                                break;
+                            }
+                            case 6: {
+                                packet = Vgt.C06PacketExit.parseFrom(container.getPayload().toByteArray());
+                                break;
+                            }
+                            default: {
+                                log.e("Unknown packet {} received from client", container.getPacketId());
+                                continue;
+                            }
                         }
-                        case 4: {
-                            packet = Vgt.C04PacketHover.parseFrom(container.getPayload().toByteArray());
-                            break;
-                        }
-                        case 5: {
-                            packet = Vgt.C05PacketTouch.parseFrom(container.getPayload().toByteArray());
-                            break;
-                        }
-                        case 6: {
-                            packet = Vgt.C06PacketExit.parseFrom(container.getPayload().toByteArray());
-                            break;
-                        }
-                        default: {
-                            log.e("Unknown packet {} received from client", container.getPacketId());
-                            continue;
-                        }
-                    }
 
-                    if (packet != null) {
-                        parent.onPacketReceived(packet);
+                        if (packet != null) {
+                            parent.onPacketReceived(packet);
+                        }
+                    }
+                } catch (IOException e) {
+                    if (e instanceof EOFException) {
+                    } else if (!e.getMessage().contains("Socket closed")) {
+                        log.e("Invalid packet received from client", e);
                     }
                 }
-            } catch (IOException e) {
-                if (e instanceof EOFException) {
-                } else if (!e.getMessage().contains("Socket closed")) {
-                    log.e("Invalid packet received from client", e);
-                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
             if (packetWriter != null) {
