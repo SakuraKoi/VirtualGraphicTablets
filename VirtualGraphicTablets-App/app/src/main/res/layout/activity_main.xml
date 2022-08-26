@@ -39,7 +39,7 @@
             android:ems="10"
             android:hint="Port"
             android:inputType="number"
-            android:text="25572" />
+            android:text="23372" />
     </LinearLayout>
 
     <Button
