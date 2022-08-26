@@ -194,9 +194,11 @@ public class TabletActivity extends AppCompatActivity {
         if (error)
             return;
         runOnUiThread(() -> {
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-            dialog.setMessage("Server disconnected");
-            dialog.show();
+            if(!isFinishing() && !isDestroyed()) {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                dialog.setMessage("Server disconnected");
+                dialog.show();
+            }
         });
     }
 
