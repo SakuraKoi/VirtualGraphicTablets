@@ -637,7 +637,7 @@ public class VTabletServer extends JFrame {
             if (packet.getIsErase()) {
                 RobotUtils.keyPress(KeyEvent.VK_E);
             } else {
-                RobotUtils.keyPress(KeyEvent.VK_P);
+                RobotUtils.keyPress(KeyEvent.VK_B);
             }
         } else if (pkt instanceof Vgt.C08PacketTriggerCustomHotkey) {
             Vgt.C08PacketTriggerCustomHotkey packet = (Vgt.C08PacketTriggerCustomHotkey) pkt;
