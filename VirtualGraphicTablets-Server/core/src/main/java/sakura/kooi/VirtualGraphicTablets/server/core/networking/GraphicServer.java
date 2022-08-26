@@ -32,6 +32,11 @@ public class GraphicServer extends Thread {
 
     public void close() {
         interrupt();
+        if (client != null) {
+            try {
+                client.close();
+            } catch (IOException ignored) { }
+        }
         try {
             server.close();
         } catch (IOException ignored) { }
