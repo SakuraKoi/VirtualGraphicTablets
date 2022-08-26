@@ -49,19 +49,21 @@ public class ScreenWorker extends Thread {
                             Image.SCALE_FAST)
             ));
 
-            Image sendToClient = scaleToFit(originalImage, width, height, Image.SCALE_SMOOTH);
+            Image sendToClient = scaleToFit(originalImage, parent.tabletWidth, parent.tabletHeight, Image.SCALE_SMOOTH);
+            BufferedImage transcodedImage = toBufferedImage(sendToClient);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             try {
-                ImageIO.write(toBufferedImage(sendToClient), "jpg", baos);
+                ImageIO.write(transcodedImage, "jpg", baos);
             } catch (IOException e) {
                 log.w("Encode screen image failed, skip 1 frame", e);
                 continue;
             }
 
+            byte[] imageData = baos.toByteArray();
             Vgt.S03PacketScreen packetScreen = Vgt.S03PacketScreen.newBuilder()
                     .setWidth(width)
                     .setHeight(height)
-                    .setScreenImage(ByteString.copyFrom(baos.toByteArray()))
+                    .setScreenImage(ByteString.copyFrom(imageData))
                     .build();
             Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder()
                     .setPacketId(3)
@@ -74,6 +76,8 @@ public class ScreenWorker extends Thread {
                 break;
             }
         }
+        parent.removePreview();
+        log.i("Screen stream end");
     }
 
     public static BufferedImage toBufferedImage(Image img) {
@@ -81,7 +85,7 @@ public class ScreenWorker extends Thread {
             return (BufferedImage) img;
         }
 
-        BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+        BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
 
         Graphics2D bGr = bimage.createGraphics();
         bGr.drawImage(img, 0, 0, null);

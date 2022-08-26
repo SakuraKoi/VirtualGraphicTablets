@@ -200,13 +200,14 @@ new FormModel {
 					"$columnCount": 1
 					"$rowCount": 1
 				} ) {
-					name: "panel6"
+					name: "canvasContainer"
 					"border": new javax.swing.border.EtchedBorder( 1, null, null )
 					auxiliary() {
-						"JavaCodeGenerator.variableLocal": true
+						"JavaCodeGenerator.variableModifiers": 1
 					}
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "canvas"
+						"horizontalAlignment": 0
 						auxiliary() {
 							"JavaCodeGenerator.variableModifiers": 1
 						}

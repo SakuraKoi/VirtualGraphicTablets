@@ -11,8 +11,10 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -40,8 +42,8 @@ public class TabletActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+       // setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_tablet);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         if (this.getSupportActionBar() != null)
             this.getSupportActionBar().hide();
         canvas = findViewById(R.id.canvas);
@@ -102,19 +104,18 @@ public class TabletActivity extends AppCompatActivity {
 
     @SuppressWarnings("deprecation")
     public void onClientConnected() {
-        runOnUiThread(() -> {
+        canvas.post(() -> {
             waitingDialog.setMessage("Handshaking...");
+            Vgt.C01PacketHandshake resp = Vgt.C01PacketHandshake.newBuilder()
+                    .setScreenWidth(canvas.getWidth())
+                    .setScreenHeight(canvas.getHeight())
+                    .build();
+            Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder()
+                    .setPacketId(1)
+                    .setPayload(resp.toByteString())
+                    .build();
+            connectionThread.packetWriter.sendQueue.add(container);
         });
-
-        Vgt.C01PacketHandshake resp = Vgt.C01PacketHandshake.newBuilder()
-                .setScreenWidth(canvas.getWidth())
-                .setScreenHeight(canvas.getHeight())
-                .build();
-        Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder()
-                .setPacketId(1)
-                .setPayload(resp.toByteString())
-                .build();
-        connectionThread.packetWriter.sendQueue.add(container);
     }
 
     public void onPacketReceived(Object pkt) {
@@ -124,13 +125,20 @@ public class TabletActivity extends AppCompatActivity {
             });
         } else if (pkt instanceof Vgt.S03PacketScreen) {
             Vgt.S03PacketScreen packet = (Vgt.S03PacketScreen) pkt;
-            canvasWidth = packet.getWidth();
-            canvasHeight = packet.getHeight();
 
-            byte[] imageData = packet.toByteArray();
-            Bitmap image = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
-            convertRatio = canvasWidth / (float) image.getWidth();
-            canvas.setImageBitmap(image);
+            byte[] imageData = packet.getScreenImage().toByteArray();
+            @Nullable Bitmap image = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+            if (image != null) {
+                canvasWidth = packet.getWidth();
+                canvasHeight = packet.getHeight();
+                convertRatio = canvasWidth / (float) image.getWidth();
+
+                runOnUiThread(() -> {
+                    canvas.setImageBitmap(image);
+                });
+            } else {
+                Toast.makeText(this, "Null image received", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -185,12 +193,12 @@ public class TabletActivity extends AppCompatActivity {
     }
 
     private void handleMotionEvent(MotionEvent motionEvent, TriConsumer<Integer, Integer, Float> callback) {
-        int historySize = motionEvent.getHistorySize();
+        /*int historySize = motionEvent.getHistorySize();
         for (int i = 0; i < historySize; i++) {
             callback.apply((int) (motionEvent.getHistoricalX(i) * convertRatio),
                     (int) (motionEvent.getHistoricalY(i) * convertRatio),
                     motionEvent.getToolType(0) == TOOL_TYPE_STYLUS ? motionEvent.getHistoricalPressure(i) : 1);
-        }
+        }*/
         callback.apply((int) (motionEvent.getX(0) * convertRatio),
                 (int) (motionEvent.getY(0) * convertRatio),
                 motionEvent.getToolType(0) == TOOL_TYPE_STYLUS ? motionEvent.getPressure(0) : 1);

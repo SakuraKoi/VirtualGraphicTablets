@@ -31,6 +31,11 @@ public class ConnectionThread extends Thread {
 
     @Override
     public void run() {
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            return;
+        }
         client = new Socket();
         try {
             client.connect(new InetSocketAddress(InetAddress.getByName(server), port), 5000);

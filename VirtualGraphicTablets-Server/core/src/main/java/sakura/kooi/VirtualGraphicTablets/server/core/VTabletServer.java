@@ -48,7 +48,7 @@ public class VTabletServer extends JFrame {
         var label5 = new JLabel();
         numFps = new JSpinner();
         var vSpacer2 = new Spacer();
-        var panel6 = new JPanel();
+        canvasContainer = new JPanel();
         canvas = new JLabel();
         var panel2 = new JPanel();
         var label1 = new JLabel();
@@ -225,17 +225,20 @@ public class VTabletServer extends JFrame {
                 GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW | GridConstraints.SIZEPOLICY_WANT_GROW,
                 null, null, null));
 
-            //======== panel6 ========
+            //======== canvasContainer ========
             {
-                panel6.setBorder(new EtchedBorder());
-                panel6.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-                panel6.add(canvas, new GridConstraints(0, 0, 1, 1,
+                canvasContainer.setBorder(new EtchedBorder());
+                canvasContainer.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+
+                //---- canvas ----
+                canvas.setHorizontalAlignment(SwingConstants.CENTER);
+                canvasContainer.add(canvas, new GridConstraints(0, 0, 1, 1,
                     GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                     GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                     GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                     null, null, null));
             }
-            panel1.add(panel6, new GridConstraints(0, 1, 1, 1,
+            panel1.add(canvasContainer, new GridConstraints(0, 1, 1, 1,
                 GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                 GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                 GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
@@ -373,6 +376,7 @@ public class VTabletServer extends JFrame {
     public JSpinner numCanvaWidth;
     public JSpinner numCanvaHeight;
     public JSpinner numFps;
+    public JPanel canvasContainer;
     public JLabel canvas;
     private JLabel lblUpstreamConnectStatus;
     private JLabel lblUpstreamVersion;
@@ -386,8 +390,8 @@ public class VTabletServer extends JFrame {
     private int screenMaxWidth;
     private int screenMaxHeight;
 
-    private int tabletWidth;
-    private int tabletHeight;
+    public int tabletWidth;
+    public int tabletHeight;
 
     private UpstreamWorker upstreamWorker;
     private GraphicServer graphicServer;
@@ -401,8 +405,8 @@ public class VTabletServer extends JFrame {
         numCanvaWidth.setEditor(new JSpinner.NumberEditor(numCanvaWidth, "#"));
         numCanvaHeight.setEditor(new JSpinner.NumberEditor(numCanvaHeight, "#"));
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-        numCanvaWidth.setValue(size.getWidth());
-        numCanvaHeight.setValue(size.getHeight());
+        numCanvaWidth.setValue((int)size.getWidth());
+        numCanvaHeight.setValue((int)size.getHeight());
         txtLogs.setEditable(false);
         Logger.setOut(new PrintStream(new OutputStream() {
             @Override
@@ -528,5 +532,9 @@ public class VTabletServer extends JFrame {
 
     public void setGraphicServerConnected(boolean b) {
         lblServerConnectStatus.setText(b ? "已连接" : "未连接");
+    }
+
+    public void removePreview() {
+        canvas.setIcon(null);
     }
 }
