@@ -623,6 +623,7 @@ public class VTabletServer extends JFrame {
         } else if (pkt instanceof Vgt.C07PacketSetEraseMode) {
             Vgt.C07PacketSetEraseMode packet = (Vgt.C07PacketSetEraseMode) pkt;
             eraserEnabled = packet.getIsErase();
+            log.i("Eraser mode {}", eraserEnabled ? "Enabled" : "Disabled");
         } else if (pkt instanceof Vgt.C08PacketTriggerCustomHotkey) {
             // TODO unimplemented
         }
