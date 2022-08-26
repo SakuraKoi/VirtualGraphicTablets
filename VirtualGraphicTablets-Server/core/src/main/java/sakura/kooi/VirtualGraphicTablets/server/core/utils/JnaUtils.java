@@ -51,7 +51,7 @@ public class JnaUtils {
                 throw new Win32Exception(Native.getLastError());
             }
 
-            if (!GDI32.INSTANCE.BitBlt(hdcTargetMem, capture.x, capture.y, windowWidth, windowHeight, hdcTarget, 0, 0, GDI32.SRCCOPY)) {
+            if (!GDI32.INSTANCE.BitBlt(hdcTargetMem, capture.x, capture.y, windowWidth - capture.x, windowHeight - capture.y, hdcTarget, 0, 0, GDI32.SRCCOPY)) {
                 throw new Win32Exception(Native.getLastError());
             }
 
@@ -62,7 +62,7 @@ public class JnaUtils {
             bmi.bmiHeader.biBitCount = 32;
             bmi.bmiHeader.biCompression = BI_RGB;
 
-            Memory buffer = new Memory(windowWidth * windowHeight * 4);
+            Memory buffer = new Memory((long) windowWidth * windowHeight * 4);
             int resultOfDrawing = GDI32.INSTANCE.GetDIBits(hdcTarget, hBitmap, 0, windowHeight, buffer, bmi,
                     DIB_RGB_COLORS);
             if (resultOfDrawing == 0 || resultOfDrawing == WinError.ERROR_INVALID_PARAMETER) {
@@ -120,6 +120,6 @@ public class JnaUtils {
         if (we != null) {
             throw we;
         }
-        return image;
+        return image;//.getSubimage(0, 0, capture.width, capture.height);
     }
 }

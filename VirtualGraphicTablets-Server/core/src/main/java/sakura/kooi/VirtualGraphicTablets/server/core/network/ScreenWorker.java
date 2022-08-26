@@ -46,7 +46,7 @@ public class ScreenWorker extends Thread {
     }
 
     private void sendPacket(int posX, int posY, int width, int height) {
-        Rectangle capture = new Rectangle(posX, posY, width, height);
+        Rectangle capture = new Rectangle(-posX, -posY, width, height);
         BufferedImage originalImage = JnaUtils.bitbltRegion(capture);
 
         parent.canvas.setIcon(new ImageIcon(

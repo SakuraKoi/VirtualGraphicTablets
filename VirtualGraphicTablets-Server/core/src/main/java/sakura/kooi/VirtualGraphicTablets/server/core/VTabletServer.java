@@ -519,6 +519,17 @@ public class VTabletServer extends JFrame {
         numCanvaWidth.setValue((int) size.getWidth());
         numCanvaHeight.setValue((int) size.getHeight());
 
+        numCanvaPosX.addChangeListener(e -> {
+            if ((int)numCanvaPosX.getValue() + (int)numCanvaWidth.getValue() > screenMaxWidth) {
+                numCanvaWidth.setValue(screenMaxWidth - (int)numCanvaPosX.getValue());
+            }
+        });
+        numCanvaPosY.addChangeListener(e -> {
+            if ((int)numCanvaPosY.getValue() + (int)numCanvaHeight.getValue() > screenMaxHeight) {
+                numCanvaHeight.setValue(screenMaxHeight - (int)numCanvaPosY.getValue());
+            }
+        });
+
         this.screenMaxWidth = (int) size.getWidth();
         this.screenMaxHeight = (int) size.getHeight();
         txtLogs.setEditable(false);
