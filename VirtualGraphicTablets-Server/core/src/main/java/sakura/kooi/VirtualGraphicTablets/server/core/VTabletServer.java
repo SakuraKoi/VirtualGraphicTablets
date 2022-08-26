@@ -640,7 +640,34 @@ public class VTabletServer extends JFrame {
                 RobotUtils.keyPress(KeyEvent.VK_P);
             }
         } else if (pkt instanceof Vgt.C08PacketTriggerCustomHotkey) {
-            // TODO unimplemented
+            Vgt.C08PacketTriggerCustomHotkey packet = (Vgt.C08PacketTriggerCustomHotkey) pkt;
+            switch(packet.getCustomHotkeyIndex()) {
+                case 1: { // undo
+                    RobotUtils.action(robot -> {
+                        robot.keyPress(KeyEvent.VK_ALT);
+                        robot.keyPress(KeyEvent.VK_CONTROL);
+                        robot.keyPress(KeyEvent.VK_Z);
+                        robot.keyRelease(KeyEvent.VK_Z);
+                        robot.keyRelease(KeyEvent.VK_CONTROL);
+                        robot.keyRelease(KeyEvent.VK_ALT);
+                    });
+                    break;
+                }
+                case 2: { // redo
+                    RobotUtils.action(robot -> {
+                        robot.keyPress(KeyEvent.VK_SHIFT);
+                        robot.keyPress(KeyEvent.VK_CONTROL);
+                        robot.keyPress(KeyEvent.VK_Z);
+                        robot.keyRelease(KeyEvent.VK_Z);
+                        robot.keyRelease(KeyEvent.VK_CONTROL);
+                        robot.keyRelease(KeyEvent.VK_SHIFT);
+                    });
+                    break;
+                }
+                default: {
+                    log.w("Unknown custom hotkey {} triggered", packet.getCustomHotkeyIndex());
+                }
+            }
         }
     }
 

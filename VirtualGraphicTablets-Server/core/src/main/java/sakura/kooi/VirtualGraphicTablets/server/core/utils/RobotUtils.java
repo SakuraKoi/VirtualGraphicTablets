@@ -3,6 +3,7 @@ package sakura.kooi.VirtualGraphicTablets.server.core.utils;
 import lombok.CustomLog;
 
 import java.awt.*;
+import java.util.function.Consumer;
 
 @CustomLog
 public class RobotUtils {
@@ -19,5 +20,9 @@ public class RobotUtils {
     public static void keyPress(int keyCode) {
         robot.keyPress(keyCode);
         robot.keyRelease(keyCode);
+    }
+
+    public static void action(Consumer<Robot> robotConsumer) {
+        robotConsumer.accept(robot);
     }
 }
