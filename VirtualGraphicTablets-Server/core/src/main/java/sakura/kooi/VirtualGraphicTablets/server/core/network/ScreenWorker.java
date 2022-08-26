@@ -25,6 +25,7 @@ public class ScreenWorker extends Thread {
 
     @Override
     public void run() {
+        ImageIO.setUseCache(false);
         log.i("Screen stream started...");
         while (!isInterrupted()) {
             int posX = (int) parent.numCanvaPosX.getValue();
