@@ -60,7 +60,7 @@ public class ScreenWorker extends Thread {
                 continue;
             }
 
-            byte[] imageData = GZipUtils.compress(baos.toByteArray());
+            byte[] imageData = baos.toByteArray();
 
             Vgt.S03PacketScreen packetScreen = Vgt.S03PacketScreen.newBuilder()
                     .setWidth(width)

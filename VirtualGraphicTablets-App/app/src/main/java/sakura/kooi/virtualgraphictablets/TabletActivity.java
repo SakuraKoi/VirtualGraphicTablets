@@ -25,7 +25,6 @@ import java.io.StringWriter;
 
 import sakura.kooi.VirtualGraphicTablets.protocol.Vgt;
 import sakura.kooi.virtualgraphictablets.network.ConnectionThread;
-import sakura.kooi.virtualgraphictablets.utils.GZipUtils;
 import sakura.kooi.virtualgraphictablets.utils.TriConsumer;
 
 public class TabletActivity extends AppCompatActivity {
@@ -150,7 +149,7 @@ public class TabletActivity extends AppCompatActivity {
         } else if (pkt instanceof Vgt.S03PacketScreen) {
             Vgt.S03PacketScreen packet = (Vgt.S03PacketScreen) pkt;
 
-            byte[] imageData = GZipUtils.decompress(packet.getScreenImage().toByteArray());
+            byte[] imageData = packet.getScreenImage().toByteArray();
             @Nullable Bitmap image = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
             if (image != null) {
                 canvasWidth = packet.getWidth();
