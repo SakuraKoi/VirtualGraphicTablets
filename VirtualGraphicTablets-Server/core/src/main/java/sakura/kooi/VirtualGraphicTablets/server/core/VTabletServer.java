@@ -612,7 +612,7 @@ public class VTabletServer extends JFrame {
 
             graphicServer.packetWriter.getSendQueue().add(container);
             graphicServer.startScreenWorker();
-        } else if (pkt instanceof Vgt.C04PacketHover && false) { // FIXME: hover is not needed with graphic?
+        } else if (pkt instanceof Vgt.C04PacketHover) {
             Vgt.C04PacketHover packet = (Vgt.C04PacketHover) pkt;
 
             if (upstreamWorker != null) {
@@ -627,7 +627,7 @@ public class VTabletServer extends JFrame {
                         (int) numCanvaPosY.getValue() + packet.getPosY(),
                         packet.getPressure(), true));
             }
-        } else if (pkt instanceof Vgt.C06PacketExit && false) { // FIXME: hover is not needed with graphic?
+        } else if (pkt instanceof Vgt.C06PacketExit) {
             Vgt.C06PacketExit packet = (Vgt.C06PacketExit) pkt;
             if (upstreamWorker != null) {
                 upstreamWorker.getMQueue().add(new VTPenEvent((byte) VTPenStatusMask.HOVER_EXIT.getValue(), (short) 0, (short) 0, (short) 0));

@@ -24,7 +24,7 @@ public class ScreenWorker extends Thread {
 
     @Override
     public void run() {
-        Robot r = null;
+        Robot r;
         try {
             r = new Robot();
         } catch (AWTException e) {
@@ -38,40 +38,8 @@ public class ScreenWorker extends Thread {
             int width = (int) parent.numCanvaWidth.getValue();
             int height = (int) parent.numCanvaHeight.getValue();
 
-            Rectangle capture = new Rectangle(posX, posY, width, height);
-            BufferedImage originalImage = r.createScreenCapture(capture);
+            sendPacked(r, posX, posY, width, height);
 
-
-            parent.canvas.setIcon(new ImageIcon(
-                    scaleToFit(originalImage,
-                            parent.canvas.getWidth(),
-                            parent.canvas.getHeight(),
-                            Image.SCALE_FAST)
-            ));
-
-            Image sendToClient = scaleToFit(originalImage, parent.tabletWidth, parent.tabletHeight, Image.SCALE_SMOOTH);
-            BufferedImage transcodedImage = toBufferedImage(sendToClient);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            try {
-                ImageIO.write(transcodedImage, "jpg", baos);
-            } catch (IOException e) {
-                log.w("Encode screen image failed, skip 1 frame", e);
-                continue;
-            }
-
-            byte[] imageData = baos.toByteArray();
-
-            Vgt.S03PacketScreen packetScreen = Vgt.S03PacketScreen.newBuilder()
-                    .setWidth(width)
-                    .setHeight(height)
-                    .setScreenImage(ByteString.copyFrom(imageData))
-                    .build();
-            Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder()
-                    .setPacketId(3)
-                    .setPayload(packetScreen.toByteString()).build();
-
-            packetWriter.sendQueue.add(container);
-            TrafficCounter.getCounterFrame().incrementAndGet();
             try {
                 Thread.sleep(1000 / (int) parent.numFps.getValue());
             } catch (InterruptedException e) {
@@ -80,6 +48,43 @@ public class ScreenWorker extends Thread {
         }
         parent.removePreview();
         log.i("Screen stream end");
+    }
+
+    private void sendPacked(Robot r, int posX, int posY, int width, int height) {
+        Rectangle capture = new Rectangle(posX, posY, width, height);
+        BufferedImage originalImage = r.createScreenCapture(capture);
+
+        parent.canvas.setIcon(new ImageIcon(
+                scaleToFit(originalImage,
+                        parent.canvas.getWidth(),
+                        parent.canvas.getHeight(),
+                        Image.SCALE_FAST)
+        ));
+
+        Image sendToClient = scaleToFit(originalImage, parent.tabletWidth, parent.tabletHeight, Image.SCALE_FAST);
+        BufferedImage transcodedImage = toBufferedImage(sendToClient);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            ImageIO.write(transcodedImage, "jpg", baos);
+        } catch (IOException e) {
+            log.w("Encode screen image failed, skip 1 frame", e);
+            return;
+        }
+
+        byte[] imageData = baos.toByteArray();
+
+        Vgt.S03PacketScreen packetScreen = Vgt.S03PacketScreen.newBuilder()
+                .setWidth(width)
+                .setHeight(height)
+                .setScreenImage(ByteString.copyFrom(imageData))
+                .build();
+        Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder()
+                .setPacketId(3)
+                .setPayload(packetScreen.toByteString()).build();
+
+        packetWriter.sendQueue.add(container);
+        TrafficCounter.getCounterFrame().incrementAndGet();
+        return;
     }
 
     public static BufferedImage toBufferedImage(Image img) {

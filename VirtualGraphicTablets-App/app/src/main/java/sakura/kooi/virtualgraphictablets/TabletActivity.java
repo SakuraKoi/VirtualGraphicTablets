@@ -1,5 +1,9 @@
 package sakura.kooi.virtualgraphictablets;
 
+import static android.view.MotionEvent.ACTION_DOWN;
+import static android.view.MotionEvent.ACTION_MOVE;
+import static android.view.MotionEvent.ACTION_OUTSIDE;
+import static android.view.MotionEvent.ACTION_UP;
 import static android.view.MotionEvent.TOOL_TYPE_STYLUS;
 
 import android.annotation.SuppressLint;
@@ -192,11 +196,22 @@ public class TabletActivity extends AppCompatActivity {
     @SuppressLint("ClickableViewAccessibility")
     private void initializeTablet() {
         canvas.setOnTouchListener((view, motionEvent) -> {
-            handleMotionEvent(motionEvent, (x, y, pressure) -> {
-                Vgt.C05PacketTouch pkt = Vgt.C05PacketTouch.newBuilder().setPosX(x).setPosY(y).setPressure(pressure).build();
-                Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder().setPacketId(5).setPayload(pkt.toByteString()).build();
-                connectionThread.packetWriter.sendQueue.add(container);
-            });
+            switch (motionEvent.getAction()) {
+                case ACTION_DOWN:
+                case ACTION_MOVE:
+                    handleMotionEvent(motionEvent, (x, y, pressure) -> {
+                        Vgt.C05PacketTouch pkt = Vgt.C05PacketTouch.newBuilder().setPosX(x).setPosY(y).setPressure(pressure).build();
+                        Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder().setPacketId(5).setPayload(pkt.toByteString()).build();
+                        connectionThread.packetWriter.sendQueue.add(container);
+                    });
+                    break;
+                case ACTION_UP:
+                case ACTION_OUTSIDE:
+                    Vgt.C06PacketExit pkt = Vgt.C06PacketExit.newBuilder().build();
+                    Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder().setPacketId(6).setPayload(pkt.toByteString()).build();
+                    connectionThread.packetWriter.sendQueue.add(container);
+                    break;
+            }
             return true;
         });
         canvas.setOnHoverListener((view, motionEvent) -> {
@@ -216,12 +231,12 @@ public class TabletActivity extends AppCompatActivity {
     }
 
     private void handleMotionEvent(MotionEvent motionEvent, TriConsumer<Integer, Integer, Float> callback) {
-        /*int historySize = motionEvent.getHistorySize();
+        int historySize = motionEvent.getHistorySize();
         for (int i = 0; i < historySize; i++) {
             callback.apply((int) (motionEvent.getHistoricalX(i) * convertRatio),
                     (int) (motionEvent.getHistoricalY(i) * convertRatio),
                     motionEvent.getToolType(0) == TOOL_TYPE_STYLUS ? motionEvent.getHistoricalPressure(i) : 1);
-        }*/
+        }
         callback.apply((int) (motionEvent.getX(0) * convertRatio),
                 (int) (motionEvent.getY(0) * convertRatio),
                 motionEvent.getToolType(0) == TOOL_TYPE_STYLUS ? motionEvent.getPressure(0) : 1);
