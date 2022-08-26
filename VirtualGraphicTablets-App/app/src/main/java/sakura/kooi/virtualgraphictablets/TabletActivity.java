@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,16 +43,33 @@ public class TabletActivity extends AppCompatActivity {
     private int canvasHeight;
 
     private float convertRatio;
+    private boolean eraserEnabled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        // setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_tablet);
         if (this.getSupportActionBar() != null)
             this.getSupportActionBar().hide();
+
         canvas = findViewById(R.id.canvas);
         canvasContainer = findViewById(R.id.canvasContainer);
+        ImageView btnEraser = findViewById(R.id.btnEraser);
+
+        btnEraser.setOnClickListener(e -> {
+            eraserEnabled = !eraserEnabled;
+            btnEraser.setBackgroundColor(eraserEnabled ? Color.rgb(0x66, 0x99, 0x00) : Color.TRANSPARENT);
+            Vgt.C07PacketSetEraseMode resp = Vgt.C07PacketSetEraseMode.newBuilder()
+                    .setIsErase(eraserEnabled)
+                    .build();
+            Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder()
+                    .setPacketId(7)
+                    .setPayload(resp.toByteString())
+                    .build();
+            connectionThread.packetWriter.sendQueue.add(container);
+        });
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             server = extras.getString("server", savedInstanceState == null ? null : savedInstanceState.getString("server"));
@@ -60,6 +78,7 @@ public class TabletActivity extends AppCompatActivity {
             server = savedInstanceState.getString("server");
             port = savedInstanceState.getInt("port");
         }
+
         initializeTablet();
     }
 
@@ -183,7 +202,7 @@ public class TabletActivity extends AppCompatActivity {
         });
         canvas.setOnHoverListener((view, motionEvent) -> {
             if (motionEvent.getAction() == MotionEvent.ACTION_HOVER_EXIT) {
-                Vgt.C06PacketExit pkt = Vgt.C06PacketExit.newBuilder().setPosX(0).setPosY(0).setPressure(0f).build();
+                Vgt.C06PacketExit pkt = Vgt.C06PacketExit.newBuilder().build();
                 Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder().setPacketId(6).setPayload(pkt.toByteString()).build();
                 connectionThread.packetWriter.sendQueue.add(container);
             } else {

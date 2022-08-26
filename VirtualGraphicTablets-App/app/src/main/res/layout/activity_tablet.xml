@@ -13,13 +13,20 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/button"
+        <com.andexert.library.RippleView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#212121"
-            android:text="Dumy"
-            android:textSize="12sp" />
+            rv_centered="true">
+
+            <ImageView
+                android:id="@+id/btnEraser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@android:color/transparent"
+                android:padding="8dp"
+                app:srcCompat="@drawable/ic_erase" />
+        </com.andexert.library.RippleView>
     </LinearLayout>
 
     <LinearLayout
