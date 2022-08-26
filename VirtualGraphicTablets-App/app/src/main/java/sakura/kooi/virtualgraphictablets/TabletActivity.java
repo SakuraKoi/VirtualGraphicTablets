@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,6 +35,7 @@ public class TabletActivity extends AppCompatActivity {
     private ProgressDialog waitingDialog;
 
     private ImageView canvas;
+    private LinearLayout canvasContainer;
     private int canvasWidth;
     private int canvasHeight;
 
@@ -47,6 +49,7 @@ public class TabletActivity extends AppCompatActivity {
         if (this.getSupportActionBar() != null)
             this.getSupportActionBar().hide();
         canvas = findViewById(R.id.canvas);
+        canvasContainer = findViewById(R.id.canvasContainer);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             server = extras.getString("server", savedInstanceState == null ? null : savedInstanceState.getString("server"));
@@ -107,8 +110,8 @@ public class TabletActivity extends AppCompatActivity {
         canvas.post(() -> {
             waitingDialog.setMessage("Handshaking...");
             Vgt.C01PacketHandshake resp = Vgt.C01PacketHandshake.newBuilder()
-                    .setScreenWidth(canvas.getWidth())
-                    .setScreenHeight(canvas.getHeight())
+                    .setScreenWidth(canvasContainer.getWidth())
+                    .setScreenHeight(canvasContainer.getHeight())
                     .build();
             Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder()
                     .setPacketId(1)

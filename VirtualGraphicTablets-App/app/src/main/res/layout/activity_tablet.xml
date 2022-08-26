@@ -27,14 +27,25 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="#212121"
+        android:gravity="center"
         android:orientation="horizontal"
         android:padding="4dp">
 
-        <ImageView
-            android:id="@+id/canvas"
+        <LinearLayout
+            android:id="@+id/canvasContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="matrix"
-            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/canvas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:cropToPadding="false"
+                android:scaleType="matrix"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

@@ -37,10 +37,13 @@ public class PacketWriter extends Thread {
                 dos.writeInt(data.length);
                 dos.write(data);
             } catch (IOException e) {
-                log.e("An error occurred while writing packet", e);
-                try {
-                    socket.close();
-                } catch (IOException ignored) { }
+                if (!e.getMessage().contains("Socket closed")) {
+                    log.e("An error occurred while writing packet", e);
+                    try {
+                        socket.close();
+                    } catch (IOException ignored) {
+                    }
+                }
                 break;
             }
         }
