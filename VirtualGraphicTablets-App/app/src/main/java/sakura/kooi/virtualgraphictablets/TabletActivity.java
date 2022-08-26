@@ -70,8 +70,8 @@ public class TabletActivity extends AppCompatActivity {
 
     @Override
     @SuppressWarnings("deprecation")
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         if (server == null || port == 0) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setMessage("Server address is null");
@@ -89,8 +89,8 @@ public class TabletActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
         if (connectionThread != null) {
             connectionThread.interrupt();
         }
@@ -139,7 +139,6 @@ public class TabletActivity extends AppCompatActivity {
         runOnUiThread(() -> {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setMessage("Server disconnected");
-            dialog.setOnDismissListener(e -> TabletActivity.this.finish());
             dialog.show();
         });
     }
