@@ -489,6 +489,8 @@ public class VTabletServer extends JFrame {
     public int tabletWidth;
     public int tabletHeight;
 
+    private boolean eraserEnabled = false;
+
     private UpstreamWorker upstreamWorker;
     private GraphicServer graphicServer;
     private TrafficCounter trafficCounter;
@@ -619,7 +621,8 @@ public class VTabletServer extends JFrame {
                 upstreamWorker.getMQueue().add(new VTPenEvent((byte) VTPenStatusMask.HOVER_EXIT.getValue(), (short) 0, (short) 0, (short) 0));
             }
         } else if (pkt instanceof Vgt.C07PacketSetEraseMode) {
-            // TODO unimplemented
+            Vgt.C07PacketSetEraseMode packet = (Vgt.C07PacketSetEraseMode) pkt;
+            eraserEnabled = packet.getIsErase();
         } else if (pkt instanceof Vgt.C08PacketTriggerCustomHotkey) {
             // TODO unimplemented
         }
@@ -630,7 +633,9 @@ public class VTabletServer extends JFrame {
         int value = VTPenStatusMask.IN_RANGE.getValue();
         if (pressed) {
             value |= VTPenStatusMask.TIPSWITCH.getValue();
-            ;
+        }
+        if (pressed & eraserEnabled) {
+            value |= VTPenStatusMask.ERASER.getValue();
         }
 
         float percentX = (realX / (float) screenMaxWidth) * 10000.0f;
