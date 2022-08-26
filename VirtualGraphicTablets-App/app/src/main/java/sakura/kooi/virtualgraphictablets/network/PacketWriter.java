@@ -1,19 +1,19 @@
-package sakura.kooi.virtualgraphictablets;
+package sakura.kooi.virtualgraphictablets.network;
 
 import android.util.Log;
-
-import sakura.kooi.VirtualGraphicTablets.protocol.Vgt;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import sakura.kooi.VirtualGraphicTablets.protocol.Vgt;
+
 public class PacketWriter extends Thread {
     private Socket socket;
     private DataOutputStream dos;
 
-    protected LinkedBlockingQueue<Vgt.PacketContainer> sendQueue = new LinkedBlockingQueue<>();
+    public LinkedBlockingQueue<Vgt.PacketContainer> sendQueue = new LinkedBlockingQueue<>();
 
     public PacketWriter(Socket socket, DataOutputStream dos) {
         this.socket = socket;
@@ -38,7 +38,8 @@ public class PacketWriter extends Thread {
                 Log.e("VGT-PacketWriter", "An error occurred while writing packet", e);
                 try {
                     socket.close();
-                } catch (IOException ignored) { }
+                } catch (IOException ignored) {
+                }
                 break;
             }
         }

@@ -5,8 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import sakura.kooi.VirtualGraphicTablets.protocol.Vgt;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,4 +52,5 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
         });
     }
+
 }

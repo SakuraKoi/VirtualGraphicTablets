@@ -1,4 +1,4 @@
-package sakura.kooi.virtualgraphictablets;
+package sakura.kooi.virtualgraphictablets.network;
 
 import android.util.Log;
 
@@ -11,6 +11,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 
 import sakura.kooi.VirtualGraphicTablets.protocol.Vgt;
+import sakura.kooi.virtualgraphictablets.TabletActivity;
 
 public class ConnectionThread extends Thread {
     private TabletActivity parent;

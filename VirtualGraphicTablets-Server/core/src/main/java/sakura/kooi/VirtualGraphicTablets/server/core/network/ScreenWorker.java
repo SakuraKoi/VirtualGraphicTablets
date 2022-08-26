@@ -4,6 +4,7 @@ import com.google.protobuf.ByteString;
 import lombok.CustomLog;
 import sakura.kooi.VirtualGraphicTablets.protocol.Vgt;
 import sakura.kooi.VirtualGraphicTablets.server.core.VTabletServer;
+import sakura.kooi.VirtualGraphicTablets.server.core.utils.GZipUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -59,7 +60,8 @@ public class ScreenWorker extends Thread {
                 continue;
             }
 
-            byte[] imageData = baos.toByteArray();
+            byte[] imageData = GZipUtils.compress(baos.toByteArray());
+
             Vgt.S03PacketScreen packetScreen = Vgt.S03PacketScreen.newBuilder()
                     .setWidth(width)
                     .setHeight(height)
