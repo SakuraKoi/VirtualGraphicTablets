@@ -27,6 +27,34 @@
                 android:padding="8dp"
                 app:srcCompat="@drawable/ic_erase" />
         </com.andexert.library.RippleView>
+        <com.andexert.library.RippleView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            rv_centered="true">
+
+            <ImageView
+                android:id="@+id/btnUndo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@android:color/transparent"
+                android:padding="8dp"
+                app:srcCompat="@drawable/ic_undo" />
+        </com.andexert.library.RippleView>
+        <com.andexert.library.RippleView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            rv_centered="true">
+
+            <ImageView
+                android:id="@+id/btnRedo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@android:color/transparent"
+                android:padding="8dp"
+                app:srcCompat="@drawable/ic_redo" />
+        </com.andexert.library.RippleView>
     </LinearLayout>
 
     <LinearLayout

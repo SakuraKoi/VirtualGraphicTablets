@@ -73,6 +73,27 @@ public class TabletActivity extends AppCompatActivity {
             connectionThread.packetWriter.sendQueue.add(container);
         });
 
+        findViewById(R.id.btnUndo).setOnClickListener( e -> {
+            Vgt.C08PacketTriggerCustomHotkey resp = Vgt.C08PacketTriggerCustomHotkey.newBuilder()
+                    .setCustomHotkeyIndex(1)
+                    .build();
+            Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder()
+                    .setPacketId(8)
+                    .setPayload(resp.toByteString())
+                    .build();
+            connectionThread.packetWriter.sendQueue.add(container);
+        });
+        findViewById(R.id.btnRedo).setOnClickListener( e -> {
+            Vgt.C08PacketTriggerCustomHotkey resp = Vgt.C08PacketTriggerCustomHotkey.newBuilder()
+                    .setCustomHotkeyIndex(2)
+                    .build();
+            Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder()
+                    .setPacketId(8)
+                    .setPayload(resp.toByteString())
+                    .build();
+            connectionThread.packetWriter.sendQueue.add(container);
+        });
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             server = extras.getString("server", savedInstanceState == null ? null : savedInstanceState.getString("server"));
