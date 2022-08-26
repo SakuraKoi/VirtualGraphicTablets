@@ -102,9 +102,11 @@ public class GraphicServer extends Thread {
                             }
                             case 7: {
                                 packet = Vgt.C07PacketSetEraseMode.parseFrom(container.getPayload().toByteArray());
+                                break;
                             }
                             case 8: {
                                 packet = Vgt.C08PacketTriggerCustomHotkey.parseFrom(container.getPayload().toByteArray());
+                                break;
                             }
                             default: {
                                 log.e("Unknown packet {} received from client", container.getPacketId());
