@@ -4,6 +4,7 @@ import com.google.protobuf.ByteString;
 import lombok.CustomLog;
 import sakura.kooi.VirtualGraphicTablets.protocol.Vgt;
 import sakura.kooi.VirtualGraphicTablets.server.core.VTabletServer;
+import sakura.kooi.VirtualGraphicTablets.server.core.utils.JnaUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -24,13 +25,6 @@ public class ScreenWorker extends Thread {
 
     @Override
     public void run() {
-        Robot r;
-        try {
-            r = new Robot();
-        } catch (AWTException e) {
-            log.e("Create screen capture failed", e);
-            return;
-        }
         log.i("Screen stream started...");
         while (!isInterrupted()) {
             int posX = (int) parent.numCanvaPosX.getValue();
@@ -38,7 +32,7 @@ public class ScreenWorker extends Thread {
             int width = (int) parent.numCanvaWidth.getValue();
             int height = (int) parent.numCanvaHeight.getValue();
 
-            sendPacked(r, posX, posY, width, height);
+            sendPacket(posX, posY, width, height);
 
             try {
                 Thread.sleep(1000 / (int) parent.numFps.getValue());
@@ -50,9 +44,9 @@ public class ScreenWorker extends Thread {
         log.i("Screen stream end");
     }
 
-    private void sendPacked(Robot r, int posX, int posY, int width, int height) {
+    private void sendPacket(int posX, int posY, int width, int height) {
         Rectangle capture = new Rectangle(posX, posY, width, height);
-        BufferedImage originalImage = r.createScreenCapture(capture);
+        BufferedImage originalImage = JnaUtils.bitbltRegion(capture);
 
         parent.canvas.setIcon(new ImageIcon(
                 scaleToFit(originalImage,
@@ -63,15 +57,8 @@ public class ScreenWorker extends Thread {
 
         Image sendToClient = scaleToFit(originalImage, parent.tabletWidth, parent.tabletHeight, Image.SCALE_FAST);
         BufferedImage transcodedImage = toBufferedImage(sendToClient);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try {
-            ImageIO.write(transcodedImage, "jpg", baos);
-        } catch (IOException e) {
-            log.w("Encode screen image failed, skip 1 frame", e);
-            return;
-        }
-
-        byte[] imageData = baos.toByteArray();
+        byte[] imageData = encodeImage(transcodedImage);
+        if (imageData == null) return;
 
         Vgt.S03PacketScreen packetScreen = Vgt.S03PacketScreen.newBuilder()
                 .setWidth(width)
@@ -85,6 +72,18 @@ public class ScreenWorker extends Thread {
         packetWriter.sendQueue.add(container);
         TrafficCounter.getCounterFrame().incrementAndGet();
         return;
+    }
+
+    private byte[] encodeImage(BufferedImage transcodedImage) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            ImageIO.write(transcodedImage, "jpg", baos);
+        } catch (IOException e) {
+            log.w("Encode screen image failed, skip 1 frame", e);
+            return null;
+        }
+
+        return baos.toByteArray();
     }
 
     public static BufferedImage toBufferedImage(Image img) {

@@ -501,8 +501,6 @@ public class VTabletServer extends JFrame {
     public int tabletWidth;
     public int tabletHeight;
 
-    private boolean eraserEnabled = false;
-
     private UpstreamWorker upstreamWorker;
     private GraphicServer graphicServer;
     private TrafficCounter trafficCounter;
@@ -634,8 +632,7 @@ public class VTabletServer extends JFrame {
             }
         } else if (pkt instanceof Vgt.C07PacketSetEraseMode) {
             Vgt.C07PacketSetEraseMode packet = (Vgt.C07PacketSetEraseMode) pkt;
-            eraserEnabled = packet.getIsErase();
-            log.i("Eraser mode {}", eraserEnabled ? "Enabled" : "Disabled");
+            // TODO not works, use hotkey to switch between pen and eraser
         } else if (pkt instanceof Vgt.C08PacketTriggerCustomHotkey) {
             // TODO unimplemented
         }
@@ -646,9 +643,6 @@ public class VTabletServer extends JFrame {
         int value = VTPenStatusMask.IN_RANGE.getValue();
         if (pressed) {
             value |= VTPenStatusMask.TIPSWITCH.getValue();
-        }
-        if (pressed & eraserEnabled) {
-            value |= VTPenStatusMask.ERASER.getValue();
         }
 
         float percentX = (realX / (float) screenMaxWidth) * 10000.0f;
