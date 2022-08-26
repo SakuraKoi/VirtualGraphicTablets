@@ -36,6 +36,7 @@ public class PacketWriter extends Thread {
             try {
                 dos.writeInt(data.length);
                 dos.write(data);
+                dos.flush();
                 TrafficCounter.getCounterTrafficDown().addAndGet(data.length);
             } catch (IOException e) {
                 if (!e.getMessage().contains("Socket closed")) {

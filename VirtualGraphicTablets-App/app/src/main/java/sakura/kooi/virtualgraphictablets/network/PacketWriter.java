@@ -34,6 +34,7 @@ public class PacketWriter extends Thread {
             try {
                 dos.writeInt(data.length);
                 dos.write(data);
+                dos.flush();
             } catch (IOException e) {
                 Log.e("VGT-PacketWriter", "An error occurred while writing packet", e);
                 try {
