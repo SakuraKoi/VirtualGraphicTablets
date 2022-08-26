@@ -82,6 +82,7 @@ public class GraphicServer extends Thread {
                         TrafficCounter.getCounterTrafficUp().addAndGet(size);
                         Vgt.PacketContainer container = Vgt.PacketContainer.parseFrom(data);
                         Object packet;
+                        // TODO use a packet registry
                         switch (container.getPacketId()) {
                             case 1: {
                                 packet = Vgt.C01PacketHandshake.parseFrom(container.getPayload().toByteArray());
@@ -98,6 +99,12 @@ public class GraphicServer extends Thread {
                             case 6: {
                                 packet = Vgt.C06PacketExit.parseFrom(container.getPayload().toByteArray());
                                 break;
+                            }
+                            case 7: {
+                                packet = Vgt.C07PacketSetEraseMode.parseFrom(container.getPayload().toByteArray());
+                            }
+                            case 8: {
+                                packet = Vgt.C08PacketTriggerCustomHotkey.parseFrom(container.getPayload().toByteArray());
                             }
                             default: {
                                 log.e("Unknown packet {} received from client", container.getPacketId());

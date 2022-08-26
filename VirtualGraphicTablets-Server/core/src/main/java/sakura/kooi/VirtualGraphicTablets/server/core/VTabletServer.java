@@ -590,8 +590,7 @@ public class VTabletServer extends JFrame {
             log.s("Client handshake with canvas size {}x{}", tabletWidth, tabletHeight);
 
             Vgt.S02PacketServerInfo resp = Vgt.S02PacketServerInfo.newBuilder()
-                    .setScreenHeight(1000)
-                    .setScreenWidth(100)
+                    .setDummy(114514)
                     .build();
             Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder()
                     .setPacketId(2)
@@ -607,11 +606,6 @@ public class VTabletServer extends JFrame {
                         (int) numCanvaPosY.getValue() + packet.getPosY(),
                         0f, false));
             }
-        } else if (pkt instanceof Vgt.C06PacketExit && false) { // FIXME: hover is not needed with graphic?
-            Vgt.C06PacketExit packet = (Vgt.C06PacketExit) pkt;
-            if (upstreamWorker != null) {
-                upstreamWorker.getMQueue().add(new VTPenEvent((byte) VTPenStatusMask.HOVER_EXIT.getValue(), (short) 0, (short) 0, (short) 0));
-            }
         } else if (pkt instanceof Vgt.C05PacketTouch) {
             Vgt.C05PacketTouch packet = (Vgt.C05PacketTouch) pkt;
             if (upstreamWorker != null) {
@@ -619,6 +613,15 @@ public class VTabletServer extends JFrame {
                         (int) numCanvaPosY.getValue() + packet.getPosY(),
                         packet.getPressure(), true));
             }
+        } else if (pkt instanceof Vgt.C06PacketExit && false) { // FIXME: hover is not needed with graphic?
+            Vgt.C06PacketExit packet = (Vgt.C06PacketExit) pkt;
+            if (upstreamWorker != null) {
+                upstreamWorker.getMQueue().add(new VTPenEvent((byte) VTPenStatusMask.HOVER_EXIT.getValue(), (short) 0, (short) 0, (short) 0));
+            }
+        } else if (pkt instanceof Vgt.C07PacketSetEraseMode) {
+            // TODO unimplemented
+        } else if (pkt instanceof Vgt.C08PacketTriggerCustomHotkey) {
+            // TODO unimplemented
         }
     }
 

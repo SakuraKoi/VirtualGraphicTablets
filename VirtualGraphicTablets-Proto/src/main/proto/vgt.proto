@@ -15,9 +15,7 @@ message C01PacketHandshake {
 
 // 握手
 message S02PacketServerInfo {
-  // 电脑屏幕信息
-  int32 screen_width = 1;
-  int32 screen_height = 2;
+  int32 dummy = 1;
 }
 
 // 图传
@@ -44,7 +42,15 @@ message C05PacketTouch {
 
 // 离开
 message C06PacketExit {
-  int32 pos_x = 1;
-  int32 pos_y = 2;
-  float pressure = 3;
+  int32 dummy = 1;
+}
+
+// 切换擦除模式
+message C07PacketSetEraseMode {
+  bool is_erase = 1;
+}
+
+// 自定义功能快捷键
+message C08PacketTriggerCustomHotkey {
+  int32 custom_hotkey_index = 1;
 }
