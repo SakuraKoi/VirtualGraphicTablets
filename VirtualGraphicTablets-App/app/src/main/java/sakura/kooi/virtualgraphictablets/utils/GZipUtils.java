@@ -1,7 +1,5 @@
 package sakura.kooi.virtualgraphictablets.utils;
 
-import lombok.SneakyThrows;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -21,12 +19,20 @@ public class GZipUtils {
         }
     }
 
-    @SneakyThrows
-    public static byte[] decompress(byte[] data) {
+    public static byte[] decompress(byte[] dataIn) {
         try {
-            ByteArrayInputStream bais = new ByteArrayInputStream(data);
+            ByteArrayInputStream bais = new ByteArrayInputStream(dataIn);
             GZIPInputStream gzipInputStream = new GZIPInputStream(bais);
-            return gzipInputStream.readAllBytes();
+
+            int nRead;
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            byte[] data = new byte[16384];
+
+            while ((nRead = gzipInputStream.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, nRead);
+            }
+
+            return buffer.toByteArray();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
