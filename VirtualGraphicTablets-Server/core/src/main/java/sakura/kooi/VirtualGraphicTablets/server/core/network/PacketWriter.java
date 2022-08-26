@@ -1,4 +1,4 @@
-package sakura.kooi.VirtualGraphicTablets.server.core.networking;
+package sakura.kooi.VirtualGraphicTablets.server.core.network;
 
 import lombok.CustomLog;
 import lombok.Getter;
@@ -36,6 +36,7 @@ public class PacketWriter extends Thread {
             try {
                 dos.writeInt(data.length);
                 dos.write(data);
+                TrafficCounter.getCounterTrafficDown().addAndGet(data.length);
             } catch (IOException e) {
                 if (!e.getMessage().contains("Socket closed")) {
                     log.e("An error occurred while writing packet", e);

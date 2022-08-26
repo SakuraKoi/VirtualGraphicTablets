@@ -1,4 +1,4 @@
-package sakura.kooi.VirtualGraphicTablets.server.core.networking;
+package sakura.kooi.VirtualGraphicTablets.server.core.network;
 
 import lombok.CustomLog;
 import sakura.kooi.VirtualGraphicTablets.protocol.Vgt;
@@ -79,6 +79,7 @@ public class GraphicServer extends Thread {
                     while (!isInterrupted()) {
                         int size = dis.readInt();
                         byte[] data = dis.readNBytes(size);
+                        TrafficCounter.getCounterTrafficUp().addAndGet(size);
                         Vgt.PacketContainer container = Vgt.PacketContainer.parseFrom(data);
                         Object packet;
                         switch (container.getPacketId()) {

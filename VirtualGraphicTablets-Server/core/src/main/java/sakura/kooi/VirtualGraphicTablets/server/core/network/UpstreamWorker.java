@@ -1,4 +1,4 @@
-package sakura.kooi.VirtualGraphicTablets.server.core.networking;
+package sakura.kooi.VirtualGraphicTablets.server.core.network;
 
 import com.sunnysidesoft.VirtualTablet.core.VTService.*;
 import lombok.Cleanup;

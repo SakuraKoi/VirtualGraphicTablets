@@ -12,8 +12,9 @@ import com.sunnysidesoft.VirtualTablet.core.VTService.VTPenStatusMask;
 import lombok.CustomLog;
 import sakura.kooi.VirtualGraphicTablets.protocol.Vgt;
 import sakura.kooi.VirtualGraphicTablets.server.bootstrap.logger.Logger;
-import sakura.kooi.VirtualGraphicTablets.server.core.networking.GraphicServer;
-import sakura.kooi.VirtualGraphicTablets.server.core.networking.UpstreamWorker;
+import sakura.kooi.VirtualGraphicTablets.server.core.network.GraphicServer;
+import sakura.kooi.VirtualGraphicTablets.server.core.network.TrafficCounter;
+import sakura.kooi.VirtualGraphicTablets.server.core.network.UpstreamWorker;
 import sakura.kooi.lib.swing.view.ColoredTextPane;
 
 import javax.swing.*;
@@ -22,6 +23,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
@@ -64,6 +67,18 @@ public class VTabletServer extends JFrame {
         lblServerListenPort = new JLabel();
         var label8 = new JLabel();
         lblServerConnectStatus = new JLabel();
+        var label2 = new JLabel();
+        var panel6 = new JPanel();
+        lblCurrentFrame = new JLabel();
+        var label17 = new JLabel();
+        var label12 = new JLabel();
+        var panel7 = new JPanel();
+        lblTrafficUp = new JLabel();
+        var label18 = new JLabel();
+        var label9 = new JLabel();
+        var panel8 = new JPanel();
+        lblTrafficDown = new JLabel();
+        var label19 = new JLabel();
 
         //======== this ========
         setTitle("VirtualGraphicTablet Server"); //NON-NLS
@@ -304,7 +319,7 @@ public class VTabletServer extends JFrame {
                 panel3.setBorder(new CompoundBorder(
                     new TitledBorder("Server"), //NON-NLS
                     new EmptyBorder(5, 5, 5, 5)));
-                panel3.setLayout(new GridLayoutManager(3, 2, new Insets(0, 0, 0, 0), -1, -1));
+                panel3.setLayout(new GridLayoutManager(6, 2, new Insets(0, 0, 0, 0), -1, -1));
 
                 //---- label4 ----
                 label4.setText("\u8fd0\u884c\u72b6\u6001"); //NON-NLS
@@ -353,6 +368,84 @@ public class VTabletServer extends JFrame {
                     GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW | GridConstraints.SIZEPOLICY_WANT_GROW,
                     GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                     null, null, null));
+
+                //---- label2 ----
+                label2.setText("\u5f53\u524d\u5e27\u7387"); //NON-NLS
+                panel3.add(label2, new GridConstraints(3, 0, 1, 1,
+                    GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                    GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                    GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                    null, null, null));
+
+                //======== panel6 ========
+                {
+                    panel6.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+
+                    //---- lblCurrentFrame ----
+                    lblCurrentFrame.setText("0"); //NON-NLS
+                    panel6.add(lblCurrentFrame);
+
+                    //---- label17 ----
+                    label17.setText(" FPS"); //NON-NLS
+                    panel6.add(label17);
+                }
+                panel3.add(panel6, new GridConstraints(3, 1, 1, 1,
+                    GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                    GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                    GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                    null, null, null));
+
+                //---- label12 ----
+                label12.setText("\u4e0a\u884c\u6d41\u91cf"); //NON-NLS
+                panel3.add(label12, new GridConstraints(4, 0, 1, 1,
+                    GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                    GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                    GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                    null, null, null));
+
+                //======== panel7 ========
+                {
+                    panel7.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+
+                    //---- lblTrafficUp ----
+                    lblTrafficUp.setText("0"); //NON-NLS
+                    panel7.add(lblTrafficUp);
+
+                    //---- label18 ----
+                    label18.setText(" KB/s"); //NON-NLS
+                    panel7.add(label18);
+                }
+                panel3.add(panel7, new GridConstraints(4, 1, 1, 1,
+                    GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                    GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                    GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                    null, null, null));
+
+                //---- label9 ----
+                label9.setText("\u4e0b\u884c\u6d41\u91cf"); //NON-NLS
+                panel3.add(label9, new GridConstraints(5, 0, 1, 1,
+                    GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                    GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                    GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                    null, null, null));
+
+                //======== panel8 ========
+                {
+                    panel8.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+
+                    //---- lblTrafficDown ----
+                    lblTrafficDown.setText("0"); //NON-NLS
+                    panel8.add(lblTrafficDown);
+
+                    //---- label19 ----
+                    label19.setText(" KB/s"); //NON-NLS
+                    panel8.add(label19);
+                }
+                panel3.add(panel8, new GridConstraints(5, 1, 1, 1,
+                    GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                    GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                    GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                    null, null, null));
             }
             panel1.add(panel3, new GridConstraints(2, 0, 1, 1,
                 GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
@@ -385,6 +478,9 @@ public class VTabletServer extends JFrame {
     private JLabel lblServerRunningStatus;
     private JLabel lblServerListenPort;
     private JLabel lblServerConnectStatus;
+    public JLabel lblCurrentFrame;
+    public JLabel lblTrafficUp;
+    public JLabel lblTrafficDown;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 
     private int screenMaxWidth;
@@ -395,6 +491,7 @@ public class VTabletServer extends JFrame {
 
     private UpstreamWorker upstreamWorker;
     private GraphicServer graphicServer;
+    private TrafficCounter trafficCounter;
 
     public VTabletServer() {
         initComponents();
@@ -453,6 +550,16 @@ public class VTabletServer extends JFrame {
             graphicServer = null;
             btnStopServer.setEnabled(false);
             btnStartServer.setEnabled(true);
+        });
+
+        trafficCounter = new TrafficCounter(this);
+        trafficCounter.start();
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                trafficCounter.interrupt();
+            }
         });
     }
 

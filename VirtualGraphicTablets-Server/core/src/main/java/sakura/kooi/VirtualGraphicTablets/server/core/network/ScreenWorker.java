@@ -1,4 +1,4 @@
-package sakura.kooi.VirtualGraphicTablets.server.core.networking;
+package sakura.kooi.VirtualGraphicTablets.server.core.network;
 
 import com.google.protobuf.ByteString;
 import lombok.CustomLog;
@@ -70,6 +70,7 @@ public class ScreenWorker extends Thread {
                     .setPayload(packetScreen.toByteString()).build();
 
             packetWriter.sendQueue.add(container);
+            TrafficCounter.getCounterFrame().incrementAndGet();
             try {
                 Thread.sleep(1000 / (int) parent.numFps.getValue());
             } catch (InterruptedException e) {
