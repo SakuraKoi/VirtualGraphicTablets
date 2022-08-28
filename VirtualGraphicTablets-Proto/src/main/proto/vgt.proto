@@ -45,12 +45,19 @@ message C06PacketExit {
   int32 dummy = 1;
 }
 
-// 切换擦除模式
-message C07PacketSetEraseMode {
-  bool is_erase = 1;
+// 功能快捷键
+message C07PacketTriggerHotkey {
+  HotkeyType key = 1;
 }
 
-// 自定义功能快捷键
-message C08PacketTriggerCustomHotkey {
-  int32 custom_hotkey_index = 1;
+enum HotkeyType {
+  TOOL_BRUSH = 0;
+  TOOL_ERASER = 1;
+  TOOL_SLICE = 2;
+  TOOL_HAND = 3;
+
+  ACTION_UNDO = 4;
+  ACTION_REDO = 5;
+  ACTION_ZOOM_IN = 6;
+  ACTION_ZOOM_OUT = 7;
 }

@@ -34,6 +34,10 @@ import sakura.kooi.virtualgraphictablets.utils.TriConsumer;
 public class TabletActivity extends AppCompatActivity {
     private String server;
     private int port;
+    private ImageView btnBrush;
+    private ImageView btnEraser;
+    private ImageView btnSlice;
+    private ImageView btnHand;
 
     private ConnectionThread connectionThread;
 
@@ -46,7 +50,8 @@ public class TabletActivity extends AppCompatActivity {
     private int canvasHeight;
 
     private float convertRatio;
-    private boolean eraserEnabled = false;
+
+    private Vgt.HotkeyType currentBrush = Vgt.HotkeyType.TOOL_BRUSH;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,40 +63,35 @@ public class TabletActivity extends AppCompatActivity {
 
         canvas = findViewById(R.id.canvas);
         canvasContainer = findViewById(R.id.canvasContainer);
-        ImageView btnEraser = findViewById(R.id.btnEraser);
+        btnBrush = findViewById(R.id.btnBrush);
+        btnEraser = findViewById(R.id.btnEraser);
+        btnSlice = findViewById(R.id.btnSlice);
+        btnHand = findViewById(R.id.btnHand);
 
+        btnBrush.setOnClickListener(e -> {
+            sendTriggerHotkey(currentBrush = Vgt.HotkeyType.TOOL_BRUSH);
+        });
         btnEraser.setOnClickListener(e -> {
-            eraserEnabled = !eraserEnabled;
-            btnEraser.setBackgroundColor(eraserEnabled ? Color.rgb(0x66, 0x99, 0x00) : Color.TRANSPARENT);
-            Vgt.C07PacketSetEraseMode resp = Vgt.C07PacketSetEraseMode.newBuilder()
-                    .setIsErase(eraserEnabled)
-                    .build();
-            Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder()
-                    .setPacketId(7)
-                    .setPayload(resp.toByteString())
-                    .build();
-            connectionThread.packetWriter.sendQueue.add(container);
+            sendTriggerHotkey(currentBrush = Vgt.HotkeyType.TOOL_ERASER);
+        });
+        btnSlice.setOnClickListener(e -> {
+            sendTriggerHotkey(currentBrush = Vgt.HotkeyType.TOOL_SLICE);
+        });
+        btnHand.setOnClickListener(e -> {
+            sendTriggerHotkey(currentBrush = Vgt.HotkeyType.TOOL_HAND);
         });
 
         findViewById(R.id.btnUndo).setOnClickListener( e -> {
-            Vgt.C08PacketTriggerCustomHotkey resp = Vgt.C08PacketTriggerCustomHotkey.newBuilder()
-                    .setCustomHotkeyIndex(1)
-                    .build();
-            Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder()
-                    .setPacketId(8)
-                    .setPayload(resp.toByteString())
-                    .build();
-            connectionThread.packetWriter.sendQueue.add(container);
+            sendTriggerHotkey(Vgt.HotkeyType.ACTION_UNDO);
         });
         findViewById(R.id.btnRedo).setOnClickListener( e -> {
-            Vgt.C08PacketTriggerCustomHotkey resp = Vgt.C08PacketTriggerCustomHotkey.newBuilder()
-                    .setCustomHotkeyIndex(2)
-                    .build();
-            Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder()
-                    .setPacketId(8)
-                    .setPayload(resp.toByteString())
-                    .build();
-            connectionThread.packetWriter.sendQueue.add(container);
+            sendTriggerHotkey(Vgt.HotkeyType.ACTION_REDO);
+        });
+        findViewById(R.id.btnZoomIn).setOnClickListener( e -> {
+            sendTriggerHotkey(Vgt.HotkeyType.ACTION_ZOOM_IN);
+        });
+        findViewById(R.id.btnZoomOut).setOnClickListener( e -> {
+            sendTriggerHotkey(Vgt.HotkeyType.ACTION_ZOOM_OUT);
         });
 
         Bundle extras = getIntent().getExtras();
@@ -104,6 +104,22 @@ public class TabletActivity extends AppCompatActivity {
         }
 
         initializeTablet();
+    }
+
+    private void sendTriggerHotkey(Vgt.HotkeyType hotkey) {
+        btnBrush.setBackgroundColor(currentBrush == Vgt.HotkeyType.TOOL_BRUSH ? Color.rgb(0x66, 0x99, 0x00) : Color.rgb(0x36, 0x36, 0x36));
+        btnEraser.setBackgroundColor(currentBrush == Vgt.HotkeyType.TOOL_ERASER ? Color.rgb(0x66, 0x99, 0x00) : Color.rgb(0x36, 0x36, 0x36));
+        btnSlice.setBackgroundColor(currentBrush == Vgt.HotkeyType.TOOL_SLICE ? Color.rgb(0x66, 0x99, 0x00) : Color.rgb(0x36, 0x36, 0x36));
+        btnHand.setBackgroundColor(currentBrush == Vgt.HotkeyType.TOOL_HAND ? Color.rgb(0x66, 0x99, 0x00) : Color.rgb(0x36, 0x36, 0x36));
+
+        Vgt.C07PacketTriggerHotkey resp = Vgt.C07PacketTriggerHotkey.newBuilder()
+                .setKey(hotkey)
+                .build();
+        Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder()
+                .setPacketId(7)
+                .setPayload(resp.toByteString())
+                .build();
+        connectionThread.packetWriter.sendQueue.add(container);
     }
 
     @Override

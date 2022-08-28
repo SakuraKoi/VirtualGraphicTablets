@@ -643,17 +643,22 @@ public class VTabletServer extends JFrame {
             if (upstreamWorker != null) {
                 upstreamWorker.getMQueue().add(new VTPenEvent((byte) VTPenStatusMask.HOVER_EXIT.getValue(), (short) 0, (short) 0, (short) 0));
             }
-        } else if (pkt instanceof Vgt.C07PacketSetEraseMode) {
-            Vgt.C07PacketSetEraseMode packet = (Vgt.C07PacketSetEraseMode) pkt;
-            if (packet.getIsErase()) {
-                RobotUtils.keyPress(KeyEvent.VK_E);
-            } else {
-                RobotUtils.keyPress(KeyEvent.VK_B);
-            }
-        } else if (pkt instanceof Vgt.C08PacketTriggerCustomHotkey) {
-            Vgt.C08PacketTriggerCustomHotkey packet = (Vgt.C08PacketTriggerCustomHotkey) pkt;
-            switch(packet.getCustomHotkeyIndex()) {
-                case 1: { // undo
+        } else if (pkt instanceof Vgt.C07PacketTriggerHotkey) {
+            Vgt.C07PacketTriggerHotkey packet = (Vgt.C07PacketTriggerHotkey) pkt;
+            switch (packet.getKey()) {
+                case TOOL_BRUSH:
+                    RobotUtils.keyPress(KeyEvent.VK_B);
+                    break;
+                case TOOL_ERASER:
+                    RobotUtils.keyPress(KeyEvent.VK_E);
+                    break;
+                case TOOL_SLICE:
+                    RobotUtils.keyPress(KeyEvent.VK_I);
+                    break;
+                case TOOL_HAND:
+                    RobotUtils.keyPress(KeyEvent.VK_H);
+                    break;
+                case ACTION_UNDO:
                     RobotUtils.action(robot -> {
                         robot.keyPress(KeyEvent.VK_ALT);
                         robot.keyPress(KeyEvent.VK_CONTROL);
@@ -663,8 +668,7 @@ public class VTabletServer extends JFrame {
                         robot.keyRelease(KeyEvent.VK_ALT);
                     });
                     break;
-                }
-                case 2: { // redo
+                case ACTION_REDO:
                     RobotUtils.action(robot -> {
                         robot.keyPress(KeyEvent.VK_SHIFT);
                         robot.keyPress(KeyEvent.VK_CONTROL);
@@ -674,11 +678,27 @@ public class VTabletServer extends JFrame {
                         robot.keyRelease(KeyEvent.VK_SHIFT);
                     });
                     break;
-                }
-                default: {
-                    log.w("Unknown custom hotkey {} triggered", packet.getCustomHotkeyIndex());
-                }
+                case ACTION_ZOOM_IN:
+                    RobotUtils.action(robot -> {
+                        robot.keyPress(KeyEvent.VK_CONTROL);
+                        robot.keyPress(KeyEvent.VK_PLUS);
+                        robot.keyRelease(KeyEvent.VK_PLUS);
+                        robot.keyRelease(KeyEvent.VK_CONTROL);
+                    });
+                    break;
+                case ACTION_ZOOM_OUT:
+                    RobotUtils.action(robot -> {
+                        robot.keyPress(KeyEvent.VK_CONTROL);
+                        robot.keyPress(KeyEvent.VK_MINUS);
+                        robot.keyRelease(KeyEvent.VK_MINUS);
+                        robot.keyRelease(KeyEvent.VK_CONTROL);
+                    });
+                    break;
+                case UNRECOGNIZED:
+                    log.w("Unknown custom hotkey triggered");
+                    break;
             }
+
         }
     }
 

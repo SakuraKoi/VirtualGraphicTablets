@@ -14,47 +14,161 @@
         android:orientation="vertical">
 
         <com.andexert.library.RippleView
+            rv_centered="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            rv_centered="true">
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/btnBrush"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
+                android:background="#363636"
+                android:padding="8dp"
+                app:srcCompat="@drawable/ic_brush" />
+        </com.andexert.library.RippleView>
+
+        <com.andexert.library.RippleView
+            rv_centered="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/btnEraser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@android:color/transparent"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
+                android:background="#363636"
                 android:padding="8dp"
                 app:srcCompat="@drawable/ic_erase" />
         </com.andexert.library.RippleView>
+
         <com.andexert.library.RippleView
+            rv_centered="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            rv_centered="true">
+            android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/btnUndo"
+                android:id="@+id/btnSlice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@android:color/transparent"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
+                android:background="#363636"
                 android:padding="8dp"
-                app:srcCompat="@drawable/ic_undo" />
+                app:srcCompat="@drawable/ic_slice" />
         </com.andexert.library.RippleView>
+
         <com.andexert.library.RippleView
+            rv_centered="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            rv_centered="true">
+            android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/btnRedo"
+                android:id="@+id/btnHand"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@android:color/transparent"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
+                android:background="#363636"
                 android:padding="8dp"
-                app:srcCompat="@drawable/ic_redo" />
+                app:srcCompat="@drawable/ic_hand" />
         </com.andexert.library.RippleView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:orientation="vertical">
+
+            <com.andexert.library.RippleView
+                rv_centered="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/btnUndo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@android:color/transparent"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/ic_undo" />
+            </com.andexert.library.RippleView>
+
+            <com.andexert.library.RippleView
+                rv_centered="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/btnRedo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@android:color/transparent"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/ic_redo" />
+            </com.andexert.library.RippleView>
+
+            <com.andexert.library.RippleView
+                rv_centered="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/btnZoomIn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@android:color/transparent"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/ic_zoom_in" />
+            </com.andexert.library.RippleView>
+
+            <com.andexert.library.RippleView
+                rv_centered="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/btnZoomOut"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@android:color/transparent"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/ic_zoom_out" />
+            </com.andexert.library.RippleView>
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -64,7 +178,9 @@
         android:background="#212121"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="4dp">
+        android:paddingTop="4dp"
+        android:paddingEnd="4dp"
+        android:paddingBottom="4dp">
 
         <LinearLayout
             android:id="@+id/canvasContainer"
