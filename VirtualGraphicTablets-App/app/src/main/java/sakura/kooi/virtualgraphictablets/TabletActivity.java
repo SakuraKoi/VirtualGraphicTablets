@@ -188,8 +188,6 @@ public class TabletActivity extends AppCompatActivity {
         } else if (pkt instanceof Vgt.S03PacketScreen) {
             Vgt.S03PacketScreen packet = (Vgt.S03PacketScreen) pkt;
 
-            // TODO async decoding
-            // TODO clear all current decode task if a full frame received
             byte[] imageData = packet.getScreenImage().toByteArray();
             long timing = System.currentTimeMillis();
             Bitmap image = imageDiffDecoder.update(imageData);

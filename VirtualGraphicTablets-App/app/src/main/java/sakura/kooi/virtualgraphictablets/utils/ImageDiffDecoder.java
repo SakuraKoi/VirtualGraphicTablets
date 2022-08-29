@@ -27,25 +27,22 @@ public class ImageDiffDecoder {
     }
 
     public Bitmap update(byte[] data) {
+        // TODO async decoding
+
         ByteBuf buffer = Unpooled.wrappedBuffer(data);
-        //int[] colors = new int[width*height];
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 int r = buffer.readByte() & 0xFF;
                 int g = buffer.readByte() & 0xFF;
                 int b = buffer.readByte() & 0xFF;
                 if (r == 0xff && g == 0xff && b == 0xff) {
                     continue;
-                //    colors[(y * width) + x] = 0xFF000000;
-                //} else {
-               //     colors[(y * width) + x] = (r << 16)| (g << 8)| b;
                 }
 
-               this.paint.setColor(Color.rgb(r, g, b));
+                this.paint.setColor(Color.rgb(r, g, b));
                 canvas.drawPoint(x, y, this.paint);
             }
         }
-       // canvas.drawBitmap(colors, 0, width,0, 0, width, height, true, null);
         return frame;
     }
 }

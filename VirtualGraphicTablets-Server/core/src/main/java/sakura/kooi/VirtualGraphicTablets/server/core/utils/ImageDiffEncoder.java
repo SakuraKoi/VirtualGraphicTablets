@@ -37,8 +37,8 @@ public class ImageDiffEncoder {
             throw new IllegalArgumentException("too large frame width");
 
         buffer.resetWriterIndex();
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 if (x < frameWidth && y < frameHeight) {
                     int rgbCurrent = currentFrame.getRGB(x, y);
                     if (lastFrame.getRGB(x, y) == rgbCurrent && !forceFullFrame) {
