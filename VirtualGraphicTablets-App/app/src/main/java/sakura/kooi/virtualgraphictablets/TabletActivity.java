@@ -56,11 +56,7 @@ public class TabletActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_tablet);
-        if (this.getSupportActionBar() != null)
-            this.getSupportActionBar().hide();
-
         canvas = findViewById(R.id.canvas);
         canvas.setShowFps(true);
         canvasContainer = findViewById(R.id.canvasContainer);
