@@ -37,7 +37,7 @@ public class ScreenWorker extends Thread {
             sendPacket(posX, posY, width, height);
 
             try {
-                Thread.sleep(1000 / (int) parent.numFps.getValue());
+                Thread.sleep(Math.max(parent.clientDecodeTime, 1000 / (int) parent.numFps.getValue()));
             } catch (InterruptedException e) {
                 break;
             }

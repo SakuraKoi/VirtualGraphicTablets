@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.AttributeSet;
 import android.view.View;
 
 public class CanvasView extends View {
@@ -17,6 +18,25 @@ public class CanvasView extends View {
 
     public CanvasView(Context context) {
         super(context);
+        init();
+    }
+
+    public CanvasView(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
+        init();
+    }
+
+    public CanvasView(Context context, AttributeSet attributeSet, int a, int b) {
+        super(context, attributeSet, a, b);
+        init();
+    }
+
+    public CanvasView(Context context, AttributeSet attributeSet, int a) {
+        super(context, attributeSet, a);
+        init();
+    }
+
+    private void init() {
         this.paintContent = new Paint();
         this.paintContent.setAntiAlias(true);
         paintFps = new Paint();

@@ -91,23 +91,27 @@ public class GraphicServer extends Thread {
                         // TODO use a packet registry
                         switch (container.getPacketId()) {
                             case 1: {
-                                packet = Vgt.C01PacketHandshake.parseFrom(container.getPayload().toByteArray());
+                                packet = Vgt.C01PacketHandshake.parseFrom(container.getPayload());
                                 break;
                             }
                             case 4: {
-                                packet = Vgt.C04PacketHover.parseFrom(container.getPayload().toByteArray());
+                                packet = Vgt.C04PacketHover.parseFrom(container.getPayload());
                                 break;
                             }
                             case 5: {
-                                packet = Vgt.C05PacketTouch.parseFrom(container.getPayload().toByteArray());
+                                packet = Vgt.C05PacketTouch.parseFrom(container.getPayload());
                                 break;
                             }
                             case 6: {
-                                packet = Vgt.C06PacketExit.parseFrom(container.getPayload().toByteArray());
+                                packet = Vgt.C06PacketExit.parseFrom(container.getPayload());
                                 break;
                             }
                             case 7: {
-                                packet = Vgt.C07PacketTriggerHotkey.parseFrom(container.getPayload().toByteArray());
+                                packet = Vgt.C07PacketTriggerHotkey.parseFrom(container.getPayload());
+                                break;
+                            }
+                            case 8: {
+                                packet = Vgt.C08PacketDecodePerformanceReport.parseFrom(container.getPayload());
                                 break;
                             }
                             default: {

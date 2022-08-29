@@ -503,6 +503,8 @@ public class VTabletServer extends JFrame {
     public int tabletWidth;
     public int tabletHeight;
 
+    public long clientDecodeTime = 0;
+
     private UpstreamWorker upstreamWorker;
     private GraphicServer graphicServer;
     private TrafficCounter trafficCounter;
@@ -698,7 +700,9 @@ public class VTabletServer extends JFrame {
                     log.w("Unknown custom hotkey triggered");
                     break;
             }
-
+        } else if (pkt instanceof Vgt.C08PacketDecodePerformanceReport) {
+            Vgt.C08PacketDecodePerformanceReport packet = (Vgt.C08PacketDecodePerformanceReport) pkt;
+            clientDecodeTime = packet.getDecodeTook();
         }
     }
 

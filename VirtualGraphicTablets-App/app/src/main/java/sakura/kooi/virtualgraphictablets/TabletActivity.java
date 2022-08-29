@@ -197,7 +197,14 @@ public class TabletActivity extends AppCompatActivity {
             long timing = System.currentTimeMillis();
             Bitmap image = imageDiffDecoder.update(imageData);
             long decodeTook = System.currentTimeMillis() - timing;
-            // TODO send performance report to server, auto adjust fps
+            Vgt.C08PacketDecodePerformanceReport resp = Vgt.C08PacketDecodePerformanceReport.newBuilder()
+                    .setDecodeTook(decodeTook)
+                    .build();
+            Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder()
+                    .setPacketId(8)
+                    .setPayload(resp.toByteString())
+                    .build();
+            connectionThread.packetWriter.sendQueue.add(container);
             canvasWidth = packet.getWidth();
             canvasHeight = packet.getHeight();
             convertRatio = canvasWidth / (float) packet.getImageWidth();
