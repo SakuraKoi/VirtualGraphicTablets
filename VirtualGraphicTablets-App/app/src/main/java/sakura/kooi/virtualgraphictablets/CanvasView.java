@@ -2,7 +2,6 @@ package sakura.kooi.virtualgraphictablets;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BlendMode;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -51,7 +50,7 @@ public class CanvasView extends View {
         paintPointer.setStyle(Paint.Style.STROKE);
         paintPointer.setStrokeWidth(2.5f);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            paintPointer.setBlendMode(BlendMode.DIFFERENCE);
+           // paintPointer.setBlendMode(BlendMode.DIFFERENCE);// FIXME pointer not works, possible here
         }
     }
 
@@ -62,7 +61,7 @@ public class CanvasView extends View {
             canvas.drawBitmap(this.content, 0.0f, 0.0f, paintContent);
         if (showFps)
             canvas.drawText(fps + " FPS", 16, 16, paintFps);
-        if (this.pointerX != -1 && this.pointerY != -1) {
+        if (this.pointerX != -1 && this.pointerY != -1) { // FIXME pointer not works
             canvas.drawLine(pointerX, pointerY - 10, pointerX, pointerY + 10, paintPointer);
             canvas.drawLine(pointerX - 10, pointerY, pointerX + 10, pointerY, paintPointer);
         }
