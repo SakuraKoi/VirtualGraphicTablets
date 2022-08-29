@@ -62,6 +62,7 @@ public class TabletActivity extends AppCompatActivity {
             this.getSupportActionBar().hide();
 
         canvas = findViewById(R.id.canvas);
+        canvas.setShowFps(true);
         canvasContainer = findViewById(R.id.canvasContainer);
         btnBrush = findViewById(R.id.btnBrush);
         btnEraser = findViewById(R.id.btnEraser);
@@ -209,7 +210,10 @@ public class TabletActivity extends AppCompatActivity {
             canvasHeight = packet.getHeight();
             convertRatio = canvasWidth / (float) packet.getImageWidth();
 
-            runOnUiThread(() -> canvas.setContent(image));
+            runOnUiThread(() ->  {
+                canvas.setFps((int) (1000.0f / decodeTook));
+                canvas.setContent(image);
+            });
         }
     }
 
@@ -245,6 +249,7 @@ public class TabletActivity extends AppCompatActivity {
             switch (motionEvent.getAction()) {
                 case ACTION_DOWN:
                 case ACTION_MOVE:
+                    canvas.setCursor(motionEvent.getX(0), motionEvent.getY(0));
                     handleMotionEvent(motionEvent, (x, y, pressure) -> {
                         Vgt.C05PacketTouch pkt = Vgt.C05PacketTouch.newBuilder().setPosX(x).setPosY(y).setPressure(pressure).build();
                         Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder().setPacketId(5).setPayload(pkt.toByteString()).build();
@@ -253,6 +258,7 @@ public class TabletActivity extends AppCompatActivity {
                     break;
                 case ACTION_UP:
                 case ACTION_OUTSIDE:
+                    canvas.setCursor(-1, -1);
                     Vgt.C06PacketExit pkt = Vgt.C06PacketExit.newBuilder().build();
                     Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder().setPacketId(6).setPayload(pkt.toByteString()).build();
                     connectionThread.packetWriter.sendQueue.add(container);
