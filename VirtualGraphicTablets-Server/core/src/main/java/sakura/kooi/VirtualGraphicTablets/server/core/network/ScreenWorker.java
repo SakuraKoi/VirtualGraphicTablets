@@ -4,19 +4,18 @@ import com.google.protobuf.ByteString;
 import lombok.CustomLog;
 import sakura.kooi.VirtualGraphicTablets.protocol.Vgt;
 import sakura.kooi.VirtualGraphicTablets.server.core.VTabletServer;
+import sakura.kooi.VirtualGraphicTablets.server.core.utils.ImageDiffEncoder;
 import sakura.kooi.VirtualGraphicTablets.server.core.utils.JnaUtils;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 @CustomLog
 public class ScreenWorker extends Thread {
     private VTabletServer parent;
     private PacketWriter packetWriter;
+    private ImageDiffEncoder imageDiffEncoder;
 
     public ScreenWorker(VTabletServer parent, PacketWriter packetWriter) {
         this.parent = parent;
@@ -25,7 +24,8 @@ public class ScreenWorker extends Thread {
 
     @Override
     public void run() {
-        ImageIO.setUseCache(false);
+        //ImageIO.setUseCache(false);
+        imageDiffEncoder = new ImageDiffEncoder(parent.tabletWidth, parent.tabletHeight);
         log.i("Screen stream started...");
         while (!isInterrupted()) {
             int posX = (int) parent.numCanvaPosX.getValue();
@@ -72,19 +72,10 @@ public class ScreenWorker extends Thread {
 
         packetWriter.sendQueue.add(container);
         TrafficCounter.getCounterFrame().incrementAndGet();
-        return;
     }
 
     private byte[] encodeImage(BufferedImage transcodedImage) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try {
-            ImageIO.write(transcodedImage, "jpg", baos);
-        } catch (IOException e) {
-            log.w("Encode screen image failed, skip 1 frame", e);
-            return null;
-        }
-
-        return baos.toByteArray();
+        return imageDiffEncoder.encode(transcodedImage);
     }
 
     public static BufferedImage toBufferedImage(Image img) {
