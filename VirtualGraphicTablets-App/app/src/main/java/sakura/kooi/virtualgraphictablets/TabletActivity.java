@@ -180,6 +180,8 @@ public class TabletActivity extends AppCompatActivity {
         });
     }
 
+    private int fps = 0;
+    private long lastFpsTime = 0L;
     public void onPacketReceived(Object pkt) {
         if (pkt instanceof Vgt.S02PacketServerInfo) {
             runOnUiThread(() -> {
@@ -205,13 +207,18 @@ public class TabletActivity extends AppCompatActivity {
             convertRatio = canvasWidth / (float) packet.getImageWidth();
 
             runOnUiThread(() ->  {
-                canvas.setFps((int) (1000.0f / decodeTook));
                 canvas.setContent(image);
+                canvas.setFps(++fps);
+                if (System.currentTimeMillis() > lastFpsTime) {
+                    lastFpsTime = System.currentTimeMillis() + 1000;
+                    fps = 0;
+                }
             });
         }
     }
 
     public void onDisconnected(boolean error) {
+        imageDiffDecoder.stop();
         if (error)
             return;
         runOnUiThread(() -> {

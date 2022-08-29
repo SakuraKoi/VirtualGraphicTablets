@@ -5,6 +5,15 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import androidx.core.util.Consumer;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.Future;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
@@ -15,6 +24,10 @@ public class ImageDiffDecoder {
 
     private int width, height;
 
+    private int WORKER_COUNT = 32;
+    private ArrayList<ImageDiffWorker> workers = new ArrayList<>();
+    private ExecutorService threadPool = new ForkJoinPool();
+
     public ImageDiffDecoder(int tabletWidth, int tabletHeight) {
         this.width = tabletWidth;
         this.height = tabletHeight;
@@ -24,25 +37,36 @@ public class ImageDiffDecoder {
         this.paint.setAntiAlias(false);
         this.paint.setAlpha(0);
         this.paint.setStyle(Paint.Style.FILL);
+
+        int linePerWorker = tabletHeight / WORKER_COUNT;
+        if (linePerWorker * WORKER_COUNT < tabletHeight)
+            WORKER_COUNT++;
+
+        for (int i = 0 ; i < WORKER_COUNT; i++) {
+            workers.add(new ImageDiffWorker(tabletWidth, tabletHeight, i, linePerWorker));
+        }
     }
 
     public Bitmap update(byte[] data) {
-        // TODO async decoding
+        ArrayList<Future<Consumer<Canvas>>> pendingDecodes = new ArrayList<>(WORKER_COUNT);
+        for (ImageDiffWorker worker : workers) {
+            pendingDecodes.add(threadPool.submit(() -> worker.call(data)));
+        }
 
-        ByteBuf buffer = Unpooled.wrappedBuffer(data);
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int r = buffer.readByte() & 0xFF;
-                int g = buffer.readByte() & 0xFF;
-                int b = buffer.readByte() & 0xFF;
-                if (r == 0xff && g == 0xff && b == 0xff) {
-                    continue;
-                }
-
-                this.paint.setColor(Color.rgb(r, g, b));
-                canvas.drawPoint(x, y, this.paint);
+        for (Future<Consumer<Canvas>> pendingDecode : pendingDecodes) {
+            try { // FIXME only first worker's result written
+                pendingDecode.get().accept(canvas);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return frame;
             }
         }
         return frame;
+    }
+
+    public void stop() {
+        threadPool.shutdownNow();
     }
 }
