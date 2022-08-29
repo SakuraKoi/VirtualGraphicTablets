@@ -5,11 +5,14 @@ import io.netty.buffer.ByteBufAllocator;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ImageDiffEncoder {
     private BufferedImage lastFrame;
 
     private int width, height;
+
+    private AtomicInteger frameCounter;
 
     public ImageDiffEncoder(int tabletWidth, int tabletHeight) {
         this.width = tabletWidth;
@@ -34,12 +37,14 @@ public class ImageDiffEncoder {
         if (frameWidth > width)
             throw new IllegalArgumentException("too large frame width");
 
+        boolean currentBiFrame = frameCounter.getAndUpdate(count -> count > 300 ? 0 : count + 1) > 300;
+
         ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer(width * height * 3);
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 if (x < frameWidth && y < frameHeight) {
                     int rgbCurrent = currentFrame.getRGB(x, y);
-                    if (lastFrame.getRGB(x, y) == rgbCurrent) {
+                    if (lastFrame.getRGB(x, y) == rgbCurrent && !currentBiFrame) {
                         writeRgb(buffer, 0xff, 0xff, 0xff);
                     } else {
                         int r = (rgbCurrent >> 16) & 0xFF;
