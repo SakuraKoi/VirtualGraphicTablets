@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -46,12 +45,9 @@ public class CanvasView extends View {
         paintFps.setColor(Color.GREEN);
         paintFps.setTextSize(12);
         paintPointer = new Paint();
-        paintPointer.setColor(Color.BLACK);
+        paintPointer.setColor(Color.argb(0x88, 0x00, 0x00, 0x00));
         paintPointer.setStyle(Paint.Style.STROKE);
-        paintPointer.setStrokeWidth(2.5f);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-           // paintPointer.setBlendMode(BlendMode.DIFFERENCE);// FIXME pointer not works, possible here
-        }
+        paintPointer.setStrokeWidth(1f);
     }
 
     @Override
@@ -61,7 +57,7 @@ public class CanvasView extends View {
             canvas.drawBitmap(this.content, 0.0f, 0.0f, paintContent);
         if (showFps)
             canvas.drawText(fps + " FPS", 16, 16, paintFps);
-        if (this.pointerX != -1 && this.pointerY != -1) { // FIXME pointer not works
+        if (this.pointerX != -1 && this.pointerY != -1) {
             canvas.drawLine(pointerX, pointerY - 10, pointerX, pointerY + 10, paintPointer);
             canvas.drawLine(pointerX - 10, pointerY, pointerX + 10, pointerY, paintPointer);
         }
