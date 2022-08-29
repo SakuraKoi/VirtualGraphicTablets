@@ -1,6 +1,8 @@
 package sakura.kooi.VirtualGraphicTablets.server.core.network;
 
 import lombok.CustomLog;
+import org.xerial.snappy.SnappyInputStream;
+import org.xerial.snappy.SnappyOutputStream;
 import sakura.kooi.VirtualGraphicTablets.protocol.Vgt;
 import sakura.kooi.VirtualGraphicTablets.server.core.VTabletServer;
 
@@ -71,8 +73,8 @@ public class GraphicServer extends Thread {
             log.i("Client {} connected", clientAddr.getHostAddress());
             try {
                 try {
-                    dis = new DataInputStream(client.getInputStream());
-                    dos = new DataOutputStream(client.getOutputStream());
+                    dis = new DataInputStream(new SnappyInputStream(client.getInputStream()));
+                    dos = new DataOutputStream(new SnappyOutputStream(client.getOutputStream()));
                     packetWriter = new PacketWriter(client, dos);
                     packetWriter.start();
                     screenWorker = new ScreenWorker(parent, packetWriter);

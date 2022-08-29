@@ -2,6 +2,9 @@ package sakura.kooi.virtualgraphictablets.network;
 
 import android.util.Log;
 
+import org.xerial.snappy.SnappyInputStream;
+import org.xerial.snappy.SnappyOutputStream;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
@@ -47,8 +50,8 @@ public class ConnectionThread extends Thread {
 
         boolean error = false;
         try {
-            dis = new DataInputStream(client.getInputStream());
-            dos = new DataOutputStream(client.getOutputStream());
+            dis = new DataInputStream(new SnappyInputStream(client.getInputStream()));
+            dos = new DataOutputStream(new SnappyOutputStream(client.getOutputStream()));
             packetWriter = new PacketWriter(client, dos);
             packetWriter.start();
             parent.onClientConnected();
