@@ -40,6 +40,7 @@ public class ConnectionThread extends Thread {
         } catch (InterruptedException e) {
             return;
         }
+        Log.i("VGT-Connection", "Creating socket...");
         client = new Socket();
         try {
             client.connect(new InetSocketAddress(InetAddress.getByName(server), port), 5000);
@@ -47,14 +48,17 @@ public class ConnectionThread extends Thread {
             parent.onNetworkError(e);
             return;
         }
-
+        Log.i("VGT-Connection", "Connected");
         boolean error = false;
         try {
-            dis = new DataInputStream(new SnappyInputStream(client.getInputStream()));
             dos = new DataOutputStream(new SnappyOutputStream(client.getOutputStream()));
             packetWriter = new PacketWriter(client, dos);
             packetWriter.start();
+
+            Log.i("VGT-Connection", "Handshake start");
             parent.onClientConnected();
+            dis = new DataInputStream(new SnappyInputStream(client.getInputStream()));
+            Log.i("VGT-Connection", "Packet reader start");
             while (!isInterrupted()) {
                 int size = dis.readInt();
                 byte[] data = new byte[size];

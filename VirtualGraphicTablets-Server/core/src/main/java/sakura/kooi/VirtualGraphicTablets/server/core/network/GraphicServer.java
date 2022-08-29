@@ -73,11 +73,11 @@ public class GraphicServer extends Thread {
             log.i("Client {} connected", clientAddr.getHostAddress());
             try {
                 try {
-                    dis = new DataInputStream(new SnappyInputStream(client.getInputStream()));
                     dos = new DataOutputStream(new SnappyOutputStream(client.getOutputStream()));
                     packetWriter = new PacketWriter(client, dos);
                     packetWriter.start();
                     screenWorker = new ScreenWorker(parent, packetWriter);
+                    dis = new DataInputStream(new SnappyInputStream(client.getInputStream()));
                     while (!isInterrupted()) {
                         int size = dis.readInt();
                         byte[] data = dis.readNBytes(size);
