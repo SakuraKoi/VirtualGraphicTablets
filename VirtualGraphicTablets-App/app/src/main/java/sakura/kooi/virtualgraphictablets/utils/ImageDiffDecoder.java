@@ -54,7 +54,7 @@ public class ImageDiffDecoder {
         }
 
         for (Future<Consumer<Canvas>> pendingDecode : pendingDecodes) {
-            try { // FIXME only first worker's result written
+            try {
                 pendingDecode.get().accept(canvas);
             } catch (ExecutionException e) {
                 e.printStackTrace();

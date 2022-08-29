@@ -14,9 +14,8 @@ import io.netty.buffer.Unpooled;
 
 public class ImageDiffWorker {
     private int width;
+    private int selfHeight;
     private int startlinePosition;
-    private int endLinePosition;
-    private int linePerWorker;
 
     private Bitmap frame;
     private Canvas canvas;
@@ -24,16 +23,14 @@ public class ImageDiffWorker {
 
     public ImageDiffWorker(int tabletWidth, int tabletHeight, int index, int linePerWorker) {
         this.width = tabletWidth;
-        this.linePerWorker = linePerWorker;
         startlinePosition = index * linePerWorker;
-        endLinePosition = startlinePosition + linePerWorker;
-        int selfLine = linePerWorker;
+        int endLinePosition = startlinePosition + linePerWorker;
+        selfHeight = linePerWorker;
         if (tabletHeight < endLinePosition) {
-            endLinePosition = tabletHeight;
-            selfLine = tabletHeight - startlinePosition;
+            selfHeight = tabletHeight - startlinePosition;
         }
 
-        frame = Bitmap.createBitmap(tabletWidth, selfLine, Bitmap.Config.ARGB_8888);
+        frame = Bitmap.createBitmap(tabletWidth, selfHeight, Bitmap.Config.ARGB_8888);
         canvas = new Canvas(frame);
         this.paint = new Paint();
         this.paint.setAntiAlias(false);
@@ -44,7 +41,7 @@ public class ImageDiffWorker {
     public Consumer<Canvas> call(byte[] data) {
         ByteBuf buffer = Unpooled.wrappedBuffer(data);
         buffer.skipBytes(startlinePosition * width * 3);
-        for (int y = startlinePosition; y < endLinePosition; y++) {
+        for (int y = 0; y < selfHeight; y++) {
             for (int x = 0; x < width; x++) {
                 int r = buffer.readByte() & 0xFF;
                 int g = buffer.readByte() & 0xFF;
