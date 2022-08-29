@@ -9,17 +9,14 @@ import static android.view.MotionEvent.TOOL_TYPE_STYLUS;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,6 +26,7 @@ import java.io.StringWriter;
 
 import sakura.kooi.VirtualGraphicTablets.protocol.Vgt;
 import sakura.kooi.virtualgraphictablets.network.ConnectionThread;
+import sakura.kooi.virtualgraphictablets.utils.ImageDiffDecoder;
 import sakura.kooi.virtualgraphictablets.utils.TriConsumer;
 
 public class TabletActivity extends AppCompatActivity {
@@ -52,6 +50,8 @@ public class TabletActivity extends AppCompatActivity {
     private float convertRatio;
 
     private Vgt.HotkeyType currentBrush = Vgt.HotkeyType.TOOL_BRUSH;
+
+    private ImageDiffDecoder imageDiffDecoder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,16 +81,16 @@ public class TabletActivity extends AppCompatActivity {
             sendTriggerHotkey(currentBrush = Vgt.HotkeyType.TOOL_HAND);
         });
 
-        findViewById(R.id.btnUndo).setOnClickListener( e -> {
+        findViewById(R.id.btnUndo).setOnClickListener(e -> {
             sendTriggerHotkey(Vgt.HotkeyType.ACTION_UNDO);
         });
-        findViewById(R.id.btnRedo).setOnClickListener( e -> {
+        findViewById(R.id.btnRedo).setOnClickListener(e -> {
             sendTriggerHotkey(Vgt.HotkeyType.ACTION_REDO);
         });
-        findViewById(R.id.btnZoomIn).setOnClickListener( e -> {
+        findViewById(R.id.btnZoomIn).setOnClickListener(e -> {
             sendTriggerHotkey(Vgt.HotkeyType.ACTION_ZOOM_IN);
         });
-        findViewById(R.id.btnZoomOut).setOnClickListener( e -> {
+        findViewById(R.id.btnZoomOut).setOnClickListener(e -> {
             sendTriggerHotkey(Vgt.HotkeyType.ACTION_ZOOM_OUT);
         });
 
@@ -170,6 +170,7 @@ public class TabletActivity extends AppCompatActivity {
     public void onClientConnected() {
         canvas.post(() -> {
             waitingDialog.setMessage("Handshaking...");
+            imageDiffDecoder = new ImageDiffDecoder(canvasContainer.getWidth(), canvasContainer.getHeight());
             Vgt.C01PacketHandshake resp = Vgt.C01PacketHandshake.newBuilder()
                     .setScreenWidth(canvasContainer.getWidth())
                     .setScreenHeight(canvasContainer.getHeight())
@@ -191,18 +192,20 @@ public class TabletActivity extends AppCompatActivity {
             Vgt.S03PacketScreen packet = (Vgt.S03PacketScreen) pkt;
 
             byte[] imageData = packet.getScreenImage().toByteArray();
-            @Nullable Bitmap image = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
-            if (image != null) {
-                canvasWidth = packet.getWidth();
-                canvasHeight = packet.getHeight();
-                convertRatio = canvasWidth / (float) image.getWidth();
 
-                runOnUiThread(() -> {
-                    canvas.setImageBitmap(image);
-                });
-            } else {
-                Toast.makeText(this, "Null image received", Toast.LENGTH_SHORT).show();
-            }
+            //@Nullable Bitmap image = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+            //if (image != null) {
+            Bitmap image = imageDiffDecoder.update(imageData);
+            canvasWidth = packet.getWidth();
+            canvasHeight = packet.getHeight();
+            convertRatio = canvasWidth / (float) image.getWidth(); // FIXME width not here
+
+            runOnUiThread(() -> {
+                canvas.setImageBitmap(image);
+            });
+            // } else {
+            //    Toast.makeText(this, "Null image received", Toast.LENGTH_SHORT).show();
+            //}
         }
     }
 
@@ -210,7 +213,7 @@ public class TabletActivity extends AppCompatActivity {
         if (error)
             return;
         runOnUiThread(() -> {
-            if(!isFinishing() && !isDestroyed()) {
+            if (!isFinishing() && !isDestroyed()) {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(this);
                 dialog.setMessage("Server disconnected");
                 dialog.show();
