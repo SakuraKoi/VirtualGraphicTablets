@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 
 public class ImageDiffEncoder {
     private BufferedImage lastFrame;
+    private ByteBuf buffer;
 
     private int width, height;
 
@@ -15,6 +16,7 @@ public class ImageDiffEncoder {
         this.width = tabletWidth;
         this.height = tabletHeight;
         lastFrame = new BufferedImage(tabletWidth, tabletHeight, BufferedImage.TYPE_INT_ARGB);
+        buffer = ByteBufAllocator.DEFAULT.heapBuffer(width * height * 3);
     }
 
     public byte[] encode(BufferedImage currentFrame, boolean forceFullFrame) {
@@ -34,7 +36,7 @@ public class ImageDiffEncoder {
         if (frameWidth > width)
             throw new IllegalArgumentException("too large frame width");
 
-        ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer(width * height * 3);
+        buffer.resetWriterIndex();
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 if (x < frameWidth && y < frameHeight) {

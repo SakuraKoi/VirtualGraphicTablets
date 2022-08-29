@@ -2,9 +2,6 @@ package sakura.kooi.virtualgraphictablets.network;
 
 import android.util.Log;
 
-import org.xerial.snappy.SnappyInputStream;
-import org.xerial.snappy.SnappyOutputStream;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
@@ -12,6 +9,10 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.zip.Deflater;
+import java.util.zip.DeflaterOutputStream;
+import java.util.zip.Inflater;
+import java.util.zip.InflaterInputStream;
 
 import sakura.kooi.VirtualGraphicTablets.protocol.Vgt;
 import sakura.kooi.virtualgraphictablets.TabletActivity;
@@ -51,13 +52,17 @@ public class ConnectionThread extends Thread {
         Log.i("VGT-Connection", "Connected");
         boolean error = false;
         try {
-            dos = new DataOutputStream(new SnappyOutputStream(client.getOutputStream()));
+            Inflater inflater = new Inflater();
+            Deflater deflater = new Deflater();
+            deflater.setLevel(1);
+            dis = new DataInputStream(new InflaterInputStream(client.getInputStream(), inflater, 65536));
+            dos = new DataOutputStream(new DeflaterOutputStream(client.getOutputStream(), deflater, 2048, true));
+
             packetWriter = new PacketWriter(client, dos);
             packetWriter.start();
 
             Log.i("VGT-Connection", "Handshake start");
             parent.onClientConnected();
-            dis = new DataInputStream(new SnappyInputStream(client.getInputStream()));
             Log.i("VGT-Connection", "Packet reader start");
             while (!isInterrupted()) {
                 int size = dis.readInt();

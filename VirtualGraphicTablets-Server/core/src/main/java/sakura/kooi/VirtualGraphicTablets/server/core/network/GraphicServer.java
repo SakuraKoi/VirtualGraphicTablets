@@ -1,8 +1,6 @@
 package sakura.kooi.VirtualGraphicTablets.server.core.network;
 
 import lombok.CustomLog;
-import org.xerial.snappy.SnappyInputStream;
-import org.xerial.snappy.SnappyOutputStream;
 import sakura.kooi.VirtualGraphicTablets.protocol.Vgt;
 import sakura.kooi.VirtualGraphicTablets.server.core.VTabletServer;
 
@@ -14,6 +12,10 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.zip.Deflater;
+import java.util.zip.DeflaterOutputStream;
+import java.util.zip.Inflater;
+import java.util.zip.InflaterInputStream;
 
 @CustomLog
 public class GraphicServer extends Thread {
@@ -73,11 +75,14 @@ public class GraphicServer extends Thread {
             log.i("Client {} connected", clientAddr.getHostAddress());
             try {
                 try {
-                    dos = new DataOutputStream(new SnappyOutputStream(client.getOutputStream()));
+                    Inflater inflater = new Inflater();
+                    Deflater deflater = new Deflater();
+                    deflater.setLevel(1);
+                    dis = new DataInputStream(new InflaterInputStream(client.getInputStream(), inflater, 2048));
+                    dos = new DataOutputStream(new DeflaterOutputStream(client.getOutputStream(), deflater, 65536, true));
                     packetWriter = new PacketWriter(client, dos);
                     packetWriter.start();
                     screenWorker = new ScreenWorker(parent, packetWriter);
-                    dis = new DataInputStream(new SnappyInputStream(client.getInputStream()));
                     while (!isInterrupted()) {
                         int size = dis.readInt();
                         byte[] data = dis.readNBytes(size);
