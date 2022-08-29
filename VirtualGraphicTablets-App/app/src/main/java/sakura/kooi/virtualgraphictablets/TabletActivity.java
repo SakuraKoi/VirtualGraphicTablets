@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.ByteBuffer;
 
 import sakura.kooi.VirtualGraphicTablets.protocol.Vgt;
 import sakura.kooi.virtualgraphictablets.network.ConnectionThread;
@@ -193,19 +194,12 @@ public class TabletActivity extends AppCompatActivity {
 
             byte[] imageData = packet.getScreenImage().toByteArray();
 
-            //@Nullable Bitmap image = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
-            //if (image != null) {
             Bitmap image = imageDiffDecoder.update(imageData);
             canvasWidth = packet.getWidth();
             canvasHeight = packet.getHeight();
-            convertRatio = canvasWidth / (float) image.getWidth(); // FIXME width not here
+            convertRatio = canvasWidth / (float) packet.getImageWidth();
 
-            runOnUiThread(() -> {
-                canvas.setImageBitmap(image);
-            });
-            // } else {
-            //    Toast.makeText(this, "Null image received", Toast.LENGTH_SHORT).show();
-            //}
+            runOnUiThread(() -> canvas.setImageBitmap(image));
         }
     }
 

@@ -28,7 +28,7 @@ android {
 }
 
 dependencies {
-    implementation 'sakura.kooi:virtualgraphictablets-proto:1.3'
+    implementation 'sakura.kooi:virtualgraphictablets-proto:1.4'
     implementation 'org.xerial.snappy:snappy-java:1.1.8.4'
     implementation 'io.netty:netty-buffer:4.1.80.Final'
 

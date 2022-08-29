@@ -6,7 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.Unpooled;
 
 public class ImageDiffDecoder {
     private Bitmap frame;
@@ -25,7 +25,7 @@ public class ImageDiffDecoder {
     }
 
     public Bitmap update(byte[] data) {
-        ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer(data.length);
+        ByteBuf buffer = Unpooled.wrappedBuffer(data);
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 int r = buffer.readByte() & 0xFF;
