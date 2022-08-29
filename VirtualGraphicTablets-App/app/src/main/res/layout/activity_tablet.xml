@@ -189,13 +189,10 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <ImageView
+            <sakura.kooi.virtualgraphictablets.CanvasView
                 android:id="@+id/canvas"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:cropToPadding="false"
-                android:scaleType="matrix"
-                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
     </LinearLayout>

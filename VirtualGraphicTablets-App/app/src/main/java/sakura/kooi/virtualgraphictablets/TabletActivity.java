@@ -23,7 +23,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.nio.ByteBuffer;
 
 import sakura.kooi.VirtualGraphicTablets.protocol.Vgt;
 import sakura.kooi.virtualgraphictablets.network.ConnectionThread;
@@ -43,7 +42,7 @@ public class TabletActivity extends AppCompatActivity {
     @SuppressWarnings("deprecation")
     private ProgressDialog waitingDialog;
 
-    private ImageView canvas;
+    private CanvasView canvas;
     private LinearLayout canvasContainer;
     private int canvasWidth;
     private int canvasHeight;
@@ -192,14 +191,18 @@ public class TabletActivity extends AppCompatActivity {
         } else if (pkt instanceof Vgt.S03PacketScreen) {
             Vgt.S03PacketScreen packet = (Vgt.S03PacketScreen) pkt;
 
+            // TODO async decoding
+            // TODO clear all current decode task if a full frame received
             byte[] imageData = packet.getScreenImage().toByteArray();
-
+            long timing = System.currentTimeMillis();
             Bitmap image = imageDiffDecoder.update(imageData);
+            long decodeTook = System.currentTimeMillis() - timing;
+            // TODO send performance report to server, auto adjust fps
             canvasWidth = packet.getWidth();
             canvasHeight = packet.getHeight();
             convertRatio = canvasWidth / (float) packet.getImageWidth();
 
-            runOnUiThread(() -> canvas.setImageBitmap(image));
+            runOnUiThread(() -> canvas.setContent(image));
         }
     }
 

@@ -3,11 +3,9 @@ package sakura.kooi.VirtualGraphicTablets.server.core.network;
 import lombok.CustomLog;
 import sakura.kooi.VirtualGraphicTablets.protocol.Vgt;
 import sakura.kooi.VirtualGraphicTablets.server.core.VTabletServer;
+import sakura.kooi.VirtualGraphicTablets.server.core.utils.CounterOutputStream;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.EOFException;
-import java.io.IOException;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -78,15 +76,16 @@ public class GraphicServer extends Thread {
                     Inflater inflater = new Inflater();
                     Deflater deflater = new Deflater();
                     deflater.setLevel(1);
-                    dis = new DataInputStream(new InflaterInputStream(client.getInputStream(), inflater, 2048));
-                    dos = new DataOutputStream(new DeflaterOutputStream(client.getOutputStream(), deflater, 65536, true));
+                    dis = new DataInputStream(new InflaterInputStream(
+                                    new BufferedInputStream(client.getInputStream()), inflater, 2048));
+                    dos = new DataOutputStream(new DeflaterOutputStream(new CounterOutputStream(
+                            new BufferedOutputStream(client.getOutputStream())), deflater, 65536, true));
                     packetWriter = new PacketWriter(client, dos);
                     packetWriter.start();
                     screenWorker = new ScreenWorker(parent, packetWriter);
                     while (!isInterrupted()) {
                         int size = dis.readInt();
                         byte[] data = dis.readNBytes(size);
-                        TrafficCounter.getCounterTrafficUp().addAndGet(size);
                         Vgt.PacketContainer container = Vgt.PacketContainer.parseFrom(data);
                         Object packet;
                         // TODO use a packet registry
