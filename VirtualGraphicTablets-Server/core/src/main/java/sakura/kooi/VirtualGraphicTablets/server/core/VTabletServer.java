@@ -683,8 +683,8 @@ public class VTabletServer extends JFrame {
                 case ACTION_ZOOM_IN:
                     RobotUtils.action(robot -> {
                         robot.keyPress(KeyEvent.VK_CONTROL);
-                        robot.keyPress(KeyEvent.VK_PLUS);
-                        robot.keyRelease(KeyEvent.VK_PLUS);
+                        robot.keyPress(KeyEvent.VK_EQUALS);
+                        robot.keyRelease(KeyEvent.VK_EQUALS);
                         robot.keyRelease(KeyEvent.VK_CONTROL);
                     });
                     break;
