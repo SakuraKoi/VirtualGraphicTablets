@@ -65,3 +65,7 @@ enum HotkeyType {
   ACTION_ZOOM_IN = 6;
   ACTION_ZOOM_OUT = 7;
 }
+
+message C08PacketDecodePerformanceReport {
+  int64 decode_took = 1;
+}
