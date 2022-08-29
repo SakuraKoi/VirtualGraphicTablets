@@ -10,6 +10,7 @@ import sakura.kooi.VirtualGraphicTablets.server.core.utils.JnaUtils;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @CustomLog
 public class ScreenWorker extends Thread {
@@ -45,6 +46,8 @@ public class ScreenWorker extends Thread {
         log.i("Screen stream end");
     }
 
+    private AtomicInteger frameCounter = new AtomicInteger();
+
     private void sendPacket(int posX, int posY, int width, int height) {
         Rectangle capture = new Rectangle(-posX, -posY, width, height);
         BufferedImage originalImage = JnaUtils.bitbltRegion(capture);
@@ -57,13 +60,16 @@ public class ScreenWorker extends Thread {
         ));
 
         Image sendToClient = scaleToFit(originalImage, parent.tabletWidth, parent.tabletHeight, Image.SCALE_FAST);
-        BufferedImage transcodedImage = toBufferedImage(sendToClient);
-        byte[] imageData = encodeImage(transcodedImage);
+        BufferedImage transcodeImage = toBufferedImage(sendToClient);
+        boolean forceFullFrame = frameCounter.getAndUpdate(count -> count > 300 ? 0 : count + 1) > 300;
+        byte[] imageData = imageDiffEncoder.encode(transcodeImage, forceFullFrame);
         if (imageData == null) return;
 
         Vgt.S03PacketScreen packetScreen = Vgt.S03PacketScreen.newBuilder()
                 .setWidth(width)
                 .setHeight(height)
+                .setImageWidth(transcodeImage.getWidth())
+                .setIsFullFrame(forceFullFrame)
                 .setScreenImage(ByteString.copyFrom(imageData))
                 .build();
         Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder()
@@ -72,10 +78,6 @@ public class ScreenWorker extends Thread {
 
         packetWriter.sendQueue.add(container);
         TrafficCounter.getCounterFrame().incrementAndGet();
-    }
-
-    private byte[] encodeImage(BufferedImage transcodedImage) {
-        return imageDiffEncoder.encode(transcodedImage);
     }
 
     public static BufferedImage toBufferedImage(Image img) {

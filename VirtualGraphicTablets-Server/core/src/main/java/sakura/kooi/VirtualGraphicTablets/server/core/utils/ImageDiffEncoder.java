@@ -5,14 +5,11 @@ import io.netty.buffer.ByteBufAllocator;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ImageDiffEncoder {
     private BufferedImage lastFrame;
 
     private int width, height;
-
-    private AtomicInteger frameCounter;
 
     public ImageDiffEncoder(int tabletWidth, int tabletHeight) {
         this.width = tabletWidth;
@@ -20,8 +17,8 @@ public class ImageDiffEncoder {
         lastFrame = new BufferedImage(tabletWidth, tabletHeight, BufferedImage.TYPE_INT_ARGB);
     }
 
-    public byte[] encode(BufferedImage currentFrame) {
-        byte[] result = encodeDiff(lastFrame, currentFrame);
+    public byte[] encode(BufferedImage currentFrame, boolean forceFullFrame) {
+        byte[] result = encodeDiff(lastFrame, currentFrame, forceFullFrame);
         Graphics2D composite = lastFrame.createGraphics();
         composite.clearRect(0, 0, width, height);
         composite.drawImage(currentFrame, 0, 0, null);
@@ -29,7 +26,7 @@ public class ImageDiffEncoder {
         return result;
     }
 
-    private byte[] encodeDiff(BufferedImage lastFrame, BufferedImage currentFrame) {
+    private byte[] encodeDiff(BufferedImage lastFrame, BufferedImage currentFrame, boolean forceFullFrame) {
         int frameHeight = currentFrame.getHeight();
         int frameWidth = currentFrame.getWidth();
         if (frameHeight > height)
@@ -37,14 +34,12 @@ public class ImageDiffEncoder {
         if (frameWidth > width)
             throw new IllegalArgumentException("too large frame width");
 
-        boolean currentBiFrame = frameCounter.getAndUpdate(count -> count > 300 ? 0 : count + 1) > 300;
-
         ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer(width * height * 3);
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 if (x < frameWidth && y < frameHeight) {
                     int rgbCurrent = currentFrame.getRGB(x, y);
-                    if (lastFrame.getRGB(x, y) == rgbCurrent && !currentBiFrame) {
+                    if (lastFrame.getRGB(x, y) == rgbCurrent && !forceFullFrame) {
                         writeRgb(buffer, 0xff, 0xff, 0xff);
                     } else {
                         int r = (rgbCurrent >> 16) & 0xFF;

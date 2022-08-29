@@ -20,11 +20,15 @@ message S02PacketServerInfo {
 
 // 图传
 message S03PacketScreen {
-  // 绘制区尺寸
-  int32 width = 3;
-  int32 height = 4;
+  // 屏幕绘制区尺寸
+  int32 width = 1;
+  int32 height = 2;
+  // 图传尺寸
+  int32 image_width = 3;
+  // 是否完整帧
+  bool is_full_frame = 4;
   // 图传数据
-  bytes screen_image = 1;
+  bytes screen_image = 5;
 }
 
 // 悬浮
