@@ -126,7 +126,7 @@ public class GraphicServer extends Thread {
                     }
                 } catch (IOException e) {
                     if (e instanceof EOFException) {
-                    } else if (!e.getMessage().contains("Socket closed")) {
+                    } else if (!e.getMessage().contains("Socket closed") && !e.getMessage().contains("Connection reset")) {
                         log.e("Invalid packet received from client", e);
                     }
                 }
