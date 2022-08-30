@@ -80,7 +80,7 @@ public class GraphicServer extends Thread {
                                     new BufferedInputStream(client.getInputStream()), inflater, 2048));
                     dos = new DataOutputStream(new DeflaterOutputStream(new CounterOutputStream(
                             new BufferedOutputStream(client.getOutputStream())), deflater, 65536, true));
-                    packetWriter = new PacketWriter(client, dos);
+                    packetWriter = new PacketWriter(parent, client, dos);
                     packetWriter.start();
                     screenWorker = new ScreenWorker(parent, packetWriter);
                     while (!isInterrupted()) {

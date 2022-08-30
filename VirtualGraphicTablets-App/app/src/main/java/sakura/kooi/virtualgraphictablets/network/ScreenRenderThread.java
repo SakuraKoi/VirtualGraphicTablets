@@ -47,10 +47,12 @@ public class ScreenRenderThread extends Thread {
                 fps = 0;
             }
 
+            int renderQueueSize = renderQueue.size();
             long decodeTook = System.currentTimeMillis() - timing;
             Vgt.C08PacketDecodePerformanceReport resp = Vgt.C08PacketDecodePerformanceReport.newBuilder()
-                    .setDecodeTook(decodeTook * (renderQueue.size()+1))
+                    .setDecodeTook(decodeTook * (renderQueueSize+1))
                     .setTimestamp(packet.getTimestamp())
+                    .setRenderQueueSize(renderQueueSize)
                     .build();
             Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder()
                     .setPacketId(8)

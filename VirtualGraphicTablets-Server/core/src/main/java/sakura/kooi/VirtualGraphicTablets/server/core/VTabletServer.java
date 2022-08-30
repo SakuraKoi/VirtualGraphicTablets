@@ -94,6 +94,10 @@ public class VTabletServer extends JFrame {
         var label27 = new JLabel();
         lblDisplayDelay = new JLabel();
         var label28 = new JLabel();
+        var label29 = new JLabel();
+        var label30 = new JLabel();
+        lblRenderQueue = new JLabel();
+        var label31 = new JLabel();
         var hSpacer1 = new Spacer();
 
         //======== this ========
@@ -481,7 +485,7 @@ public class VTabletServer extends JFrame {
                 panel9.add(label26);
 
                 //---- label27 ----
-                label27.setText("\u6e32\u67d3\u5ef6\u8fdf"); //NON-NLS
+                label27.setText("\u663e\u793a\u5ef6\u8fdf"); //NON-NLS
                 panel9.add(label27);
 
                 //---- lblDisplayDelay ----
@@ -491,6 +495,22 @@ public class VTabletServer extends JFrame {
                 //---- label28 ----
                 label28.setText("ms"); //NON-NLS
                 panel9.add(label28);
+
+                //---- label29 ----
+                label29.setText(" | "); //NON-NLS
+                panel9.add(label29);
+
+                //---- label30 ----
+                label30.setText("\u6e32\u67d3\u961f\u5217"); //NON-NLS
+                panel9.add(label30);
+
+                //---- lblRenderQueue ----
+                lblRenderQueue.setText("0"); //NON-NLS
+                panel9.add(lblRenderQueue);
+
+                //---- label31 ----
+                label31.setText("f"); //NON-NLS
+                panel9.add(label31);
             }
             panel1.add(panel9, new GridConstraints(3, 0, 1, 2,
                 GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
@@ -535,6 +555,7 @@ public class VTabletServer extends JFrame {
     public JLabel lblEncodingDelay;
     private JLabel lblDecodingDelay;
     private JLabel lblDisplayDelay;
+    private JLabel lblRenderQueue;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 
     private int screenMaxWidth;
@@ -743,9 +764,10 @@ public class VTabletServer extends JFrame {
         } else if (pkt instanceof Vgt.C08PacketDecodePerformanceReport) {
             Vgt.C08PacketDecodePerformanceReport packet = (Vgt.C08PacketDecodePerformanceReport) pkt;
             long renderDelay = System.currentTimeMillis() - packet.getTimestamp();
-            clientDecodeTime = renderDelay;
-            lblDecodingDelay.setText(String.valueOf(packet.getDecodeTook()));
+            clientDecodeTime = packet.getDecodeTook();
+            lblDecodingDelay.setText(String.valueOf(clientDecodeTime));
             lblDisplayDelay.setText(String.valueOf(renderDelay));
+            lblRenderQueue.setText(String.valueOf(packet.getRenderQueueSize()));
         }
     }
 

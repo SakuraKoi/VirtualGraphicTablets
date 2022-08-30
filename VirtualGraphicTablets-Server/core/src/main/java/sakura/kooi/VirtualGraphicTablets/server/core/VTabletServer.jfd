@@ -509,7 +509,7 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label27"
-						"text": "渲染延迟"
+						"text": "显示延迟"
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": true
 						}
@@ -521,6 +521,31 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label28"
 						"text": "ms"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label29"
+						"text": " | "
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label30"
+						"text": "渲染队列"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "lblRenderQueue"
+						"text": "0"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label31"
+						"text": "f"
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": true
 						}

@@ -40,7 +40,16 @@ public class ScreenWorker extends Thread {
             parent.lblEncodingDelay.setText(String.valueOf(took));
 
             try {
-                Thread.sleep(Math.max(parent.clientDecodeTime - took, 1000 / (int) parent.numFps.getValue()));
+                long waitBefore = System.currentTimeMillis();
+                synchronized (packetWriter.sendQueue) {
+                    while (!packetWriter.sendQueue.isEmpty())
+                        packetWriter.sendQueue.wait();
+                }
+                long waitTook = System.currentTimeMillis() - waitBefore;
+
+                long wait = Math.max(parent.clientDecodeTime - took, 1000 / (int) parent.numFps.getValue());
+                wait = Math.max(wait - waitTook, 0);
+                Thread.sleep(wait);
             } catch (InterruptedException e) {
                 break;
             }
