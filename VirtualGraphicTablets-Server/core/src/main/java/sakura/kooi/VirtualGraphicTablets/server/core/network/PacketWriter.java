@@ -37,7 +37,7 @@ public class PacketWriter extends Thread {
             }
             synchronized (sendQueue) {
                 if (sendQueue.isEmpty())
-                    sendQueue.notifyAllr6*963.();
+                    sendQueue.notifyAll();
             }
 
             byte[] data = packet.toByteArray();
