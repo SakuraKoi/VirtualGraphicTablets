@@ -1,30 +1,23 @@
 package sakura.kooi.virtualgraphictablets.utils;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 
 import androidx.core.util.Consumer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
-
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ImageDiffDecoder {
     private Bitmap frame;
-    private Canvas canvas;
-    private Paint paint;
+    private AtomicReference<int[]> pixels;
 
     private int width, height;
 
-    private int WORKER_COUNT = 32;
+    private int WORKER_COUNT = Runtime.getRuntime().availableProcessors();
     private ArrayList<ImageDiffWorker> workers = new ArrayList<>();
     private ExecutorService threadPool = new ForkJoinPool();
 
@@ -32,11 +25,9 @@ public class ImageDiffDecoder {
         this.width = tabletWidth;
         this.height = tabletHeight;
         frame = Bitmap.createBitmap(tabletWidth, tabletHeight, Bitmap.Config.ARGB_8888);
-        canvas = new Canvas(frame);
-        this.paint = new Paint();
-        this.paint.setAntiAlias(false);
-        this.paint.setAlpha(0);
-        this.paint.setStyle(Paint.Style.FILL);
+        int[] pixels = new int[width*height];
+        frame.getPixels(pixels, 0, width, 0, 0, width, height);
+        this.pixels = new AtomicReference<>(pixels);
 
         int linePerWorker = tabletHeight / WORKER_COUNT;
         if (linePerWorker * WORKER_COUNT < tabletHeight)
@@ -48,14 +39,14 @@ public class ImageDiffDecoder {
     }
 
     public Bitmap update(byte[] data) {
-        ArrayList<Future<Consumer<Canvas>>> pendingDecodes = new ArrayList<>(WORKER_COUNT);
+        ArrayList<Future<Consumer<AtomicReference<int[]>>>> pendingDecodes = new ArrayList<>(WORKER_COUNT);
         for (ImageDiffWorker worker : workers) {
             pendingDecodes.add(threadPool.submit(() -> worker.call(data)));
         }
 
-        for (Future<Consumer<Canvas>> pendingDecode : pendingDecodes) {
+        for (Future<Consumer<AtomicReference<int[]>>> pendingDecode : pendingDecodes) {
             try {
-                pendingDecode.get().accept(canvas);
+                pendingDecode.get().accept(pixels);
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
@@ -63,6 +54,8 @@ public class ImageDiffDecoder {
                 return frame;
             }
         }
+        frame.setPixels(pixels.get(), 0, width, 0, 0, width, height);
+
         return frame;
     }
 
