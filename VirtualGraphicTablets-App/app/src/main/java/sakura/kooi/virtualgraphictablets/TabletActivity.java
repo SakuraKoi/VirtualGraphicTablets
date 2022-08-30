@@ -8,7 +8,6 @@ import static android.view.MotionEvent.TOOL_TYPE_STYLUS;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -26,6 +25,7 @@ import java.io.StringWriter;
 
 import sakura.kooi.VirtualGraphicTablets.protocol.Vgt;
 import sakura.kooi.virtualgraphictablets.network.ConnectionThread;
+import sakura.kooi.virtualgraphictablets.network.ScreenRenderThread;
 import sakura.kooi.virtualgraphictablets.utils.ImageDiffDecoder;
 import sakura.kooi.virtualgraphictablets.utils.TriConsumer;
 
@@ -37,21 +37,20 @@ public class TabletActivity extends AppCompatActivity {
     private ImageView btnSlice;
     private ImageView btnHand;
 
-    private ConnectionThread connectionThread;
+    public ConnectionThread connectionThread;
+    private ScreenRenderThread screenRenderThread;
 
     @SuppressWarnings("deprecation")
     private ProgressDialog waitingDialog;
 
-    private CanvasView canvas;
+    public CanvasView canvas;
     private LinearLayout canvasContainer;
-    private int canvasWidth;
-    private int canvasHeight;
 
-    private float convertRatio;
+    public float convertRatio;
 
     private Vgt.HotkeyType currentBrush = Vgt.HotkeyType.TOOL_BRUSH;
 
-    private ImageDiffDecoder imageDiffDecoder;
+    public ImageDiffDecoder imageDiffDecoder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,11 +176,11 @@ public class TabletActivity extends AppCompatActivity {
                     .setPayload(resp.toByteString())
                     .build();
             connectionThread.packetWriter.sendQueue.add(container);
+
+            screenRenderThread = new ScreenRenderThread(this);
+            screenRenderThread.start();
         });
     }
-
-    private int fps = 0;
-    private long lastFpsTime = 0L;
 
     public void onPacketReceived(Object pkt) {
         if (pkt instanceof Vgt.S02PacketServerInfo) {
@@ -190,34 +189,15 @@ public class TabletActivity extends AppCompatActivity {
             });
         } else if (pkt instanceof Vgt.S03PacketScreen) {
             Vgt.S03PacketScreen packet = (Vgt.S03PacketScreen) pkt;
-
-            byte[] imageData = packet.getScreenImage().toByteArray();
-            long timing = System.currentTimeMillis();
-            Bitmap image = imageDiffDecoder.update(imageData);
-            canvasWidth = packet.getWidth();
-            canvasHeight = packet.getHeight();
-            convertRatio = canvasWidth / (float) packet.getImageWidth();
-
-            canvas.setContent(image);
-            canvas.setFps(++fps);
-            if (System.currentTimeMillis() > lastFpsTime) {
-                lastFpsTime = System.currentTimeMillis() + 1000;
-                fps = 0;
+            if (packet.getIsFullFrame()) {
+                screenRenderThread.renderQueue.clear();
             }
-
-            long decodeTook = System.currentTimeMillis() - timing;
-            Vgt.C08PacketDecodePerformanceReport resp = Vgt.C08PacketDecodePerformanceReport.newBuilder()
-                    .setDecodeTook(decodeTook)
-                    .build();
-            Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder()
-                    .setPacketId(8)
-                    .setPayload(resp.toByteString())
-                    .build();
-            connectionThread.packetWriter.sendQueue.add(container);
+            screenRenderThread.renderQueue.add(packet);
         }
     }
 
     public void onDisconnected(boolean error) {
+        screenRenderThread.interrupt();
         imageDiffDecoder.stop();
         if (error)
             return;
