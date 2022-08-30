@@ -399,7 +399,11 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "lblCurrentFrame"
-						"text": "0"
+						"text": "60"
+						"minimumSize": new java.awt.Dimension( 20, 17 )
+						"preferredSize": new java.awt.Dimension( 20, 17 )
+						"horizontalTextPosition": 0
+						"horizontalAlignment": 0
 						auxiliary() {
 							"JavaCodeGenerator.variableModifiers": 1
 						}
@@ -427,7 +431,10 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "lblTrafficUp"
-						"text": "0"
+						"text": "1000.00"
+						"horizontalAlignment": 0
+						"minimumSize": new java.awt.Dimension( 46, 17 )
+						"preferredSize": new java.awt.Dimension( 46, 17 )
 						auxiliary() {
 							"JavaCodeGenerator.variableModifiers": 1
 						}
@@ -455,7 +462,10 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "lblTrafficDown"
-						"text": "0"
+						"text": "1000.00"
+						"horizontalAlignment": 0
+						"minimumSize": new java.awt.Dimension( 46, 17 )
+						"preferredSize": new java.awt.Dimension( 46, 17 )
 						auxiliary() {
 							"JavaCodeGenerator.variableModifiers": 1
 						}
@@ -483,7 +493,10 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "lblEncodingDelay"
-						"text": "0"
+						"text": "1000"
+						"horizontalAlignment": 0
+						"minimumSize": new java.awt.Dimension( 30, 17 )
+						"preferredSize": new java.awt.Dimension( 30, 17 )
 						auxiliary() {
 							"JavaCodeGenerator.variableModifiers": 1
 						}
@@ -511,7 +524,10 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "lblDecodingDelay"
-						"text": "0"
+						"text": "1000"
+						"horizontalAlignment": 0
+						"minimumSize": new java.awt.Dimension( 30, 17 )
+						"preferredSize": new java.awt.Dimension( 30, 17 )
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label25"
@@ -536,7 +552,10 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "lblDisplayDelay"
-						"text": "0"
+						"text": "10000"
+						"horizontalAlignment": 0
+						"minimumSize": new java.awt.Dimension( 36, 17 )
+						"preferredSize": new java.awt.Dimension( 36, 17 )
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label28"
@@ -561,7 +580,10 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "lblRenderQueue"
-						"text": "0"
+						"text": "100"
+						"horizontalAlignment": 0
+						"minimumSize": new java.awt.Dimension( 22, 17 )
+						"preferredSize": new java.awt.Dimension( 22, 17 )
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label31"

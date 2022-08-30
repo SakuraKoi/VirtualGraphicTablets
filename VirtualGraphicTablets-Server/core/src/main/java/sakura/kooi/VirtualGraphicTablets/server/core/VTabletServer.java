@@ -427,7 +427,11 @@ public class VTabletServer extends JFrame {
                 panel9.add(label2);
 
                 //---- lblCurrentFrame ----
-                lblCurrentFrame.setText("0");
+                lblCurrentFrame.setText("60");
+                lblCurrentFrame.setMinimumSize(new Dimension(20, 17));
+                lblCurrentFrame.setPreferredSize(new Dimension(20, 17));
+                lblCurrentFrame.setHorizontalTextPosition(SwingConstants.CENTER);
+                lblCurrentFrame.setHorizontalAlignment(SwingConstants.CENTER);
                 panel9.add(lblCurrentFrame);
 
                 //---- label17 ----
@@ -443,7 +447,10 @@ public class VTabletServer extends JFrame {
                 panel9.add(label12);
 
                 //---- lblTrafficUp ----
-                lblTrafficUp.setText("0");
+                lblTrafficUp.setText("1000.00");
+                lblTrafficUp.setHorizontalAlignment(SwingConstants.CENTER);
+                lblTrafficUp.setMinimumSize(new Dimension(46, 17));
+                lblTrafficUp.setPreferredSize(new Dimension(46, 17));
                 panel9.add(lblTrafficUp);
 
                 //---- label18 ----
@@ -459,7 +466,10 @@ public class VTabletServer extends JFrame {
                 panel9.add(label9);
 
                 //---- lblTrafficDown ----
-                lblTrafficDown.setText("0");
+                lblTrafficDown.setText("1000.00");
+                lblTrafficDown.setHorizontalAlignment(SwingConstants.CENTER);
+                lblTrafficDown.setMinimumSize(new Dimension(46, 17));
+                lblTrafficDown.setPreferredSize(new Dimension(46, 17));
                 panel9.add(lblTrafficDown);
 
                 //---- label19 ----
@@ -475,7 +485,10 @@ public class VTabletServer extends JFrame {
                 panel9.add(label21);
 
                 //---- lblEncodingDelay ----
-                lblEncodingDelay.setText("0");
+                lblEncodingDelay.setText("1000");
+                lblEncodingDelay.setHorizontalAlignment(SwingConstants.CENTER);
+                lblEncodingDelay.setMinimumSize(new Dimension(30, 17));
+                lblEncodingDelay.setPreferredSize(new Dimension(30, 17));
                 panel9.add(lblEncodingDelay);
 
                 //---- label22 ----
@@ -491,7 +504,10 @@ public class VTabletServer extends JFrame {
                 panel9.add(label24);
 
                 //---- lblDecodingDelay ----
-                lblDecodingDelay.setText("0");
+                lblDecodingDelay.setText("1000");
+                lblDecodingDelay.setHorizontalAlignment(SwingConstants.CENTER);
+                lblDecodingDelay.setMinimumSize(new Dimension(30, 17));
+                lblDecodingDelay.setPreferredSize(new Dimension(30, 17));
                 panel9.add(lblDecodingDelay);
 
                 //---- label25 ----
@@ -507,7 +523,10 @@ public class VTabletServer extends JFrame {
                 panel9.add(label27);
 
                 //---- lblDisplayDelay ----
-                lblDisplayDelay.setText("0");
+                lblDisplayDelay.setText("10000");
+                lblDisplayDelay.setHorizontalAlignment(SwingConstants.CENTER);
+                lblDisplayDelay.setMinimumSize(new Dimension(36, 17));
+                lblDisplayDelay.setPreferredSize(new Dimension(36, 17));
                 panel9.add(lblDisplayDelay);
 
                 //---- label28 ----
@@ -523,7 +542,10 @@ public class VTabletServer extends JFrame {
                 panel9.add(label30);
 
                 //---- lblRenderQueue ----
-                lblRenderQueue.setText("0");
+                lblRenderQueue.setText("100");
+                lblRenderQueue.setHorizontalAlignment(SwingConstants.CENTER);
+                lblRenderQueue.setMinimumSize(new Dimension(22, 17));
+                lblRenderQueue.setPreferredSize(new Dimension(22, 17));
                 panel9.add(lblRenderQueue);
 
                 //---- label31 ----

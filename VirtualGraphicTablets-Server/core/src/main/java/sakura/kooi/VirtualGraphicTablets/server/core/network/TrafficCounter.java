@@ -23,6 +23,7 @@ public class TrafficCounter extends Thread {
     public void run() {
         DecimalFormat numberFormat = new DecimalFormat();
         numberFormat.setMaximumFractionDigits(2);
+        numberFormat.setGroupingUsed(false);
         while (!isInterrupted()) {
             parent.lblCurrentFrame.setText(String.valueOf(counterFrame.getAndSet(0)));
             parent.lblTrafficUp.setText(numberFormat.format(counterTrafficUp.getAndSet(0) / 1024.0f));
