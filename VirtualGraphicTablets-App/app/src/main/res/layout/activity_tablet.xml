@@ -189,7 +189,7 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <sakura.kooi.virtualgraphictablets.CanvasView
+            <sakura.kooi.virtualgraphictablets.ui.CanvasView
                 android:id="@+id/canvas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

@@ -38,9 +38,10 @@ public class ScreenRenderThread extends Thread {
             Bitmap image = parent.imageDiffDecoder.update(imageData);
             canvasWidth = packet.getWidth();
             canvasHeight = packet.getHeight();
-            parent.convertRatio = canvasWidth / (float) packet.getImageWidth();
+            float scaleFactor = packet.getResizeFactor() / 100.0f;
+            parent.convertRatio = canvasWidth / (float) packet.getImageWidth() / scaleFactor;
 
-            parent.canvas.setContent(image);
+            parent.canvas.setContent(image, scaleFactor);
             parent.canvas.setFps(++fps);
             if (System.currentTimeMillis() > lastFpsTime) {
                 lastFpsTime = System.currentTimeMillis() + 1000;

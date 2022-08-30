@@ -1,10 +1,11 @@
-package sakura.kooi.virtualgraphictablets;
+package sakura.kooi.virtualgraphictablets.ui;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -16,6 +17,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
     private int fps;
     private boolean showFps;
     private int pointerX = -1, pointerY = -1;
+
+    private float scaleFactor = 1.0f;
 
     private Paint paintContent;
     private Paint paintFps;
@@ -64,7 +67,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
     public void drawContent(Canvas canvas) {
         if (this.content != null)
-            canvas.drawBitmap(this.content, 0.0f, 0.0f, paintContent);
+            canvas.drawBitmap(this.content, null,
+                    new RectF(0, 0, this.content.getWidth() / scaleFactor, this.content.getHeight() / scaleFactor), paintContent);
         if (showFps)
             canvas.drawText(fps + " FPS", 16, 16, paintFps);
         if (this.pointerX != -1 && this.pointerY != -1) {
@@ -73,8 +77,9 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-    public void setContent(Bitmap content) {
+    public void setContent(Bitmap content, float scaleFactor) {
         this.content = content;
+        this.scaleFactor = scaleFactor;
         Canvas canvas = holder.lockCanvas();
         if (canvas == null)
             return;

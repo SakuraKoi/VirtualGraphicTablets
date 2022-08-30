@@ -25,6 +25,9 @@ message S03PacketScreen {
   int32 height = 2;
   // 图传尺寸
   int32 image_width = 3;
+  int32 image_height = 7;
+  int32 resize_factor = 8;
+
   // 是否完整帧
   bool is_full_frame = 4;
   // 图传数据

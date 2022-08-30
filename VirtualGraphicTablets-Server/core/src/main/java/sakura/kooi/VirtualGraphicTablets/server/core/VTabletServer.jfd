@@ -19,7 +19,7 @@ new FormModel {
 				}
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.intellij.uiDesigner.core.GridLayoutManager ) {
 					"$columnCount": 1
-					"$rowCount": 9
+					"$rowCount": 11
 					"hGap": 4
 					"vGap": 4
 				} ) {
@@ -188,13 +188,33 @@ new FormModel {
 						"row": 7
 						"fill": 3
 					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label32"
+						"text": "Resize Factor"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
+						"row": 8
+						"fill": 3
+					} )
+					add( new FormComponent( "javax.swing.JSpinner" ) {
+						name: "numResizeFactor"
+						"model": new javax.swing.SpinnerNumberModel( 100, 1, 100, 1 )
+						auxiliary() {
+							"JavaCodeGenerator.variableModifiers": 1
+						}
+					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
+						"row": 9
+						"fill": 3
+					} )
 					add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
 						name: "vSpacer2"
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": true
 						}
 					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
-						"row": 8
+						"row": 10
 					} )
 				}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 					"fill": 3
@@ -569,7 +589,7 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 955, 765 )
+			"size": new java.awt.Dimension( 1005, 725 )
 		} )
 	}
 }

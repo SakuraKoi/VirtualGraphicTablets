@@ -71,7 +71,8 @@ public class ScreenWorker extends Thread {
                         Image.SCALE_FAST)
         ));
 
-        Image sendToClient = scaleToFit(originalImage, parent.tabletWidth, parent.tabletHeight, Image.SCALE_FAST);
+        int resizeFactor = (int) parent.numResizeFactor.getValue();
+        Image sendToClient = scaleToFit(originalImage, parent.tabletWidth * resizeFactor / 100 , parent.tabletHeight * resizeFactor / 100, Image.SCALE_SMOOTH);
         BufferedImage transcodeImage = toBufferedImage(sendToClient);
         boolean forceFullFrame = frameCounter.getAndUpdate(count -> count > 300 ? 0 : count + 1) > 300;
         byte[] imageData = imageDiffEncoder.encode(transcodeImage, forceFullFrame);
@@ -81,6 +82,8 @@ public class ScreenWorker extends Thread {
                 .setWidth(width)
                 .setHeight(height)
                 .setImageWidth(transcodeImage.getWidth())
+                .setImageHeight(transcodeImage.getHeight())
+                .setResizeFactor(resizeFactor)
                 .setIsFullFrame(forceFullFrame)
                 .setScreenImage(ByteString.copyFrom(imageData))
                 .setTimestamp(System.currentTimeMillis())

@@ -26,6 +26,7 @@ import java.io.StringWriter;
 import sakura.kooi.VirtualGraphicTablets.protocol.Vgt;
 import sakura.kooi.virtualgraphictablets.network.ConnectionThread;
 import sakura.kooi.virtualgraphictablets.network.ScreenRenderThread;
+import sakura.kooi.virtualgraphictablets.ui.CanvasView;
 import sakura.kooi.virtualgraphictablets.utils.ImageDiffDecoder;
 import sakura.kooi.virtualgraphictablets.utils.TriConsumer;
 
