@@ -74,6 +74,7 @@ public class ScreenWorker extends Thread {
                 .setImageWidth(transcodeImage.getWidth())
                 .setIsFullFrame(forceFullFrame)
                 .setScreenImage(ByteString.copyFrom(imageData))
+                .setTimestamp(System.currentTimeMillis())
                 .build();
         Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder()
                 .setPacketId(3)

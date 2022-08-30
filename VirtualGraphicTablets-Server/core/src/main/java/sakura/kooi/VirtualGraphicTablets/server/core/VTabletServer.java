@@ -90,6 +90,10 @@ public class VTabletServer extends JFrame {
         var label24 = new JLabel();
         lblDecodingDelay = new JLabel();
         var label25 = new JLabel();
+        var label26 = new JLabel();
+        var label27 = new JLabel();
+        lblDisplayDelay = new JLabel();
+        var label28 = new JLabel();
         var hSpacer1 = new Spacer();
 
         //======== this ========
@@ -471,6 +475,22 @@ public class VTabletServer extends JFrame {
                 //---- label25 ----
                 label25.setText("ms"); //NON-NLS
                 panel9.add(label25);
+
+                //---- label26 ----
+                label26.setText(" | "); //NON-NLS
+                panel9.add(label26);
+
+                //---- label27 ----
+                label27.setText("\u6e32\u67d3\u5ef6\u8fdf"); //NON-NLS
+                panel9.add(label27);
+
+                //---- lblDisplayDelay ----
+                lblDisplayDelay.setText("0"); //NON-NLS
+                panel9.add(lblDisplayDelay);
+
+                //---- label28 ----
+                label28.setText("ms"); //NON-NLS
+                panel9.add(label28);
             }
             panel1.add(panel9, new GridConstraints(3, 0, 1, 2,
                 GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
@@ -514,6 +534,7 @@ public class VTabletServer extends JFrame {
     public JLabel lblTrafficDown;
     public JLabel lblEncodingDelay;
     private JLabel lblDecodingDelay;
+    private JLabel lblDisplayDelay;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 
     private int screenMaxWidth;
@@ -721,8 +742,10 @@ public class VTabletServer extends JFrame {
             }
         } else if (pkt instanceof Vgt.C08PacketDecodePerformanceReport) {
             Vgt.C08PacketDecodePerformanceReport packet = (Vgt.C08PacketDecodePerformanceReport) pkt;
-            clientDecodeTime = packet.getDecodeTook();
-            lblDecodingDelay.setText(String.valueOf(clientDecodeTime));
+            long renderDelay = System.currentTimeMillis() - packet.getTimestamp();
+            clientDecodeTime = renderDelay;
+            lblDecodingDelay.setText(String.valueOf(packet.getDecodeTook()));
+            lblDisplayDelay.setText(String.valueOf(renderDelay));
         }
     }
 

@@ -33,8 +33,8 @@ public class ScreenRenderThread extends Thread {
                 break;
             }
 
-            byte[] imageData = packet.getScreenImage().toByteArray();
             long timing = System.currentTimeMillis();
+            byte[] imageData = packet.getScreenImage().toByteArray();
             Bitmap image = parent.imageDiffDecoder.update(imageData);
             canvasWidth = packet.getWidth();
             canvasHeight = packet.getHeight();
@@ -50,6 +50,7 @@ public class ScreenRenderThread extends Thread {
             long decodeTook = System.currentTimeMillis() - timing;
             Vgt.C08PacketDecodePerformanceReport resp = Vgt.C08PacketDecodePerformanceReport.newBuilder()
                     .setDecodeTook(decodeTook * (renderQueue.size()+1))
+                    .setTimestamp(packet.getTimestamp())
                     .build();
             Vgt.PacketContainer container = Vgt.PacketContainer.newBuilder()
                     .setPacketId(8)

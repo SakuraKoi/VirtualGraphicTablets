@@ -29,6 +29,8 @@ message S03PacketScreen {
   bool is_full_frame = 4;
   // 图传数据
   bytes screen_image = 5;
+
+  int64 timestamp = 6;
 }
 
 // 悬浮
@@ -68,4 +70,6 @@ enum HotkeyType {
 
 message C08PacketDecodePerformanceReport {
   int64 decode_took = 1;
+  int64 timestamp = 2;
+  int32 render_queue_size = 3;
 }

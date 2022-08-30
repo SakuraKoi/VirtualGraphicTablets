@@ -2,6 +2,8 @@ package sakura.kooi.virtualgraphictablets.network;
 
 import android.util.Log;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
@@ -55,8 +57,8 @@ public class ConnectionThread extends Thread {
             Inflater inflater = new Inflater();
             Deflater deflater = new Deflater();
             deflater.setLevel(1);
-            dis = new DataInputStream(new InflaterInputStream(client.getInputStream(), inflater, 65536));
-            dos = new DataOutputStream(new DeflaterOutputStream(client.getOutputStream(), deflater, 2048, true));
+            dis = new DataInputStream(new InflaterInputStream(new BufferedInputStream(client.getInputStream()), inflater, 65536));
+            dos = new DataOutputStream(new DeflaterOutputStream(new BufferedOutputStream(client.getOutputStream()), deflater, 2048, true));
 
             packetWriter = new PacketWriter(client, dos);
             packetWriter.start();
