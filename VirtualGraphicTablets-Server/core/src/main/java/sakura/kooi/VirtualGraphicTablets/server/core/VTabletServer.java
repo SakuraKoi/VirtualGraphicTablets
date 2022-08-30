@@ -591,8 +591,8 @@ public class VTabletServer extends JFrame {
 
     public VTabletServer() {
         initComponents();
-        setPreferredSize(new Dimension(875, 580));
-        setMinimumSize(new Dimension(720, 470));
+        setPreferredSize(new Dimension(946, 603));
+        setMinimumSize(new Dimension(820, 590));
         numCanvaPosX.setEditor(new JSpinner.NumberEditor(numCanvaPosX, "#"));
         numCanvaPosY.setEditor(new JSpinner.NumberEditor(numCanvaPosY, "#"));
         numCanvaWidth.setEditor(new JSpinner.NumberEditor(numCanvaWidth, "#"));
