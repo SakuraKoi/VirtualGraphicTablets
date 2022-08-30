@@ -39,7 +39,7 @@ public class ScreenRenderThread extends Thread {
             canvasWidth = packet.getWidth();
             canvasHeight = packet.getHeight();
             float scaleFactor = packet.getResizeFactor() / 100.0f;
-            parent.convertRatio = canvasWidth / (float) packet.getImageWidth() / scaleFactor;
+            parent.convertRatio = (float)canvasWidth / packet.getImageWidth() * scaleFactor;
 
             parent.canvas.setContent(image, scaleFactor);
             parent.canvas.setFps(++fps);
