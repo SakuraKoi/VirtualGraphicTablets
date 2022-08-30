@@ -3,8 +3,6 @@ package sakura.kooi.virtualgraphictablets.utils;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 
-import androidx.core.util.Consumer;
-
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.netty.buffer.ByteBuf;
@@ -31,7 +29,7 @@ public class ImageDiffWorker {
         frame.getPixels(pixels, 0, width, 0, 0, width, height);
     }
 
-    public Consumer<AtomicReference<int[]>> call(byte[] data) {
+    public void call(byte[] data, AtomicReference<int[]> master) {
         ByteBuf buffer = Unpooled.wrappedBuffer(data);
         buffer.skipBytes(startlinePosition * width * 3);
         for (int y = 0; y < height; y++) {
@@ -42,13 +40,9 @@ public class ImageDiffWorker {
                 if (r == 0xff && g == 0xff && b == 0xff) {
                     continue;
                 }
-                pixels[y * width + x] = Color.rgb(r, g, b);
+                this.pixels[y * width + x] = Color.rgb(r, g, b);
             }
         }
-        return (master -> {
-            System.arraycopy(pixels, 0, master.get(), startlinePosition * width, pixels.length);
-        }
-            //    master.setPixels(pixels, 0, width, 0, startlinePosition, width, height)
-        );
+        System.arraycopy(this.pixels, 0, master.get(), startlinePosition * width, this.pixels.length);
     }
 }

@@ -2,8 +2,6 @@ package sakura.kooi.virtualgraphictablets.utils;
 
 import android.graphics.Bitmap;
 
-import androidx.core.util.Consumer;
-
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -39,14 +37,14 @@ public class ImageDiffDecoder {
     }
 
     public Bitmap update(byte[] data) {
-        ArrayList<Future<Consumer<AtomicReference<int[]>>>> pendingDecodes = new ArrayList<>(WORKER_COUNT);
+        ArrayList<Future<?>> pendingDecodes = new ArrayList<>(WORKER_COUNT);
         for (ImageDiffWorker worker : workers) {
-            pendingDecodes.add(threadPool.submit(() -> worker.call(data)));
+            pendingDecodes.add(threadPool.submit(() -> worker.call(data, pixels)));
         }
 
-        for (Future<Consumer<AtomicReference<int[]>>> pendingDecode : pendingDecodes) {
+        for (Future<?> pendingDecode : pendingDecodes) {
             try {
-                pendingDecode.get().accept(pixels);
+                pendingDecode.get();
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
