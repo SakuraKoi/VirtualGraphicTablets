@@ -5,9 +5,6 @@ import android.graphics.Color;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-
 public class ImageDiffWorker {
     private int width;
     private int height;
@@ -30,13 +27,17 @@ public class ImageDiffWorker {
     }
 
     public void call(byte[] data, AtomicReference<int[]> master) {
-        ByteBuf buffer = Unpooled.wrappedBuffer(data);
-        buffer.skipBytes(startlinePosition * width * 3);
+       // ByteBuf buffer = Unpooled.wrappedBuffer(data);
+       // buffer.skipBytes(startlinePosition * width * 3);
+        int position = startlinePosition * width * 3;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                int r = buffer.readByte() & 0xFF;
-                int g = buffer.readByte() & 0xFF;
-                int b = buffer.readByte() & 0xFF;
+                int r = data[position++] & 0xFF;
+                int g = data[position++] & 0xFF;
+                int b = data[position++] & 0xFF;
+                //int r = buffer.readByte() & 0xFF;
+                //int g = buffer.readByte() & 0xFF;
+                //int b = buffer.readByte() & 0xFF;
                 if (r == 0xff && g == 0xff && b == 0xff) {
                     continue;
                 }
