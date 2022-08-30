@@ -34,10 +34,13 @@ public class ScreenWorker extends Thread {
             int width = (int) parent.numCanvaWidth.getValue();
             int height = (int) parent.numCanvaHeight.getValue();
 
+            long start = System.currentTimeMillis();
             sendPacket(posX, posY, width, height);
+            long took = System.currentTimeMillis() - start;
+            parent.lblEncodingDelay.setText(String.valueOf(took));
 
             try {
-                Thread.sleep(Math.max(parent.clientDecodeTime, 1000 / (int) parent.numFps.getValue()));
+                Thread.sleep(Math.max(parent.clientDecodeTime - took, 1000 / (int) parent.numFps.getValue()));
             } catch (InterruptedException e) {
                 break;
             }

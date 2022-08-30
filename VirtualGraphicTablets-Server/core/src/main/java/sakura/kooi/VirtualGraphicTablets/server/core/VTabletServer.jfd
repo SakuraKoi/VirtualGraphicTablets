@@ -8,7 +8,7 @@ new FormModel {
 			"title": "VirtualGraphicTablet Server"
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.intellij.uiDesigner.core.GridLayoutManager ) {
 				"$columnCount": 3
-				"$rowCount": 4
+				"$rowCount": 5
 				"hGap": 4
 				"vGap": 4
 			} ) {
@@ -221,7 +221,6 @@ new FormModel {
 				}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 					"column": 1
 					"fill": 3
-					"rowSpan": 2
 				} )
 				add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
 					name: "vSpacer1"
@@ -285,7 +284,7 @@ new FormModel {
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.intellij.uiDesigner.core.GridLayoutManager ) {
 					"$columnCount": 2
-					"$rowCount": 6
+					"$rowCount": 3
 					"hGap": 4
 					"vGap": 4
 				} ) {
@@ -349,120 +348,6 @@ new FormModel {
 						"fill": 3
 						"hSizePolicy": 7
 					} )
-					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "label2"
-						"text": "当前帧率"
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": true
-						}
-					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
-						"row": 3
-						"fill": 3
-					} )
-					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) {
-						"alignment": 0
-						"vgap": 0
-						"hgap": 0
-					} ) {
-						name: "panel6"
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": true
-						}
-						add( new FormComponent( "javax.swing.JLabel" ) {
-							name: "lblCurrentFrame"
-							"text": "0"
-							auxiliary() {
-								"JavaCodeGenerator.variableModifiers": 1
-							}
-						} )
-						add( new FormComponent( "javax.swing.JLabel" ) {
-							name: "label17"
-							"text": " FPS"
-							auxiliary() {
-								"JavaCodeGenerator.variableLocal": true
-							}
-						} )
-					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
-						"column": 1
-						"row": 3
-						"fill": 3
-					} )
-					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "label12"
-						"text": "上行流量"
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": true
-						}
-					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
-						"row": 4
-						"fill": 3
-					} )
-					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) {
-						"alignment": 0
-						"vgap": 0
-						"hgap": 0
-					} ) {
-						name: "panel7"
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": true
-						}
-						add( new FormComponent( "javax.swing.JLabel" ) {
-							name: "lblTrafficUp"
-							"text": "0"
-							auxiliary() {
-								"JavaCodeGenerator.variableModifiers": 1
-							}
-						} )
-						add( new FormComponent( "javax.swing.JLabel" ) {
-							name: "label18"
-							"text": " KB/s"
-							auxiliary() {
-								"JavaCodeGenerator.variableLocal": true
-							}
-						} )
-					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
-						"column": 1
-						"row": 4
-						"fill": 3
-					} )
-					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "label9"
-						"text": "下行流量"
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": true
-						}
-					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
-						"row": 5
-						"fill": 3
-					} )
-					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) {
-						"alignment": 0
-						"vgap": 0
-						"hgap": 0
-					} ) {
-						name: "panel8"
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": true
-						}
-						add( new FormComponent( "javax.swing.JLabel" ) {
-							name: "lblTrafficDown"
-							"text": "0"
-							auxiliary() {
-								"JavaCodeGenerator.variableModifiers": 1
-							}
-						} )
-						add( new FormComponent( "javax.swing.JLabel" ) {
-							name: "label19"
-							"text": " KB/s"
-							auxiliary() {
-								"JavaCodeGenerator.variableLocal": true
-							}
-						} )
-					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
-						"column": 1
-						"row": 5
-						"fill": 3
-					} )
 				}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 					"fill": 3
 					"row": 2
@@ -475,9 +360,150 @@ new FormModel {
 						name: "txtLogs"
 					} )
 				}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
-					"row": 2
+					"row": 1
 					"fill": 3
 					"column": 1
+					"rowSpan": 2
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) {
+					"alignment": 2
+					"vgap": 2
+				} ) {
+					name: "panel9"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label2"
+						"text": "当前帧率"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "lblCurrentFrame"
+						"text": "0"
+						auxiliary() {
+							"JavaCodeGenerator.variableModifiers": 1
+						}
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label17"
+						"text": " FPS"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label7"
+						"text": " | "
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label12"
+						"text": "上行流量"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "lblTrafficUp"
+						"text": "0"
+						auxiliary() {
+							"JavaCodeGenerator.variableModifiers": 1
+						}
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label18"
+						"text": " KB/s"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label10"
+						"text": " | "
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label9"
+						"text": "下行流量"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "lblTrafficDown"
+						"text": "0"
+						auxiliary() {
+							"JavaCodeGenerator.variableModifiers": 1
+						}
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label19"
+						"text": " KB/s"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label20"
+						"text": " | "
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label21"
+						"text": "编码延迟"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "lblEncodingDelay"
+						"text": "0"
+						auxiliary() {
+							"JavaCodeGenerator.variableModifiers": 1
+						}
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label22"
+						"text": "ms"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label23"
+						"text": " | "
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label24"
+						"text": "解码延迟"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "lblDecodingDelay"
+						"text": "0"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label25"
+						"text": "ms"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					} )
+				}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
+					"row": 3
+					"colSpan": 2
+					"fill": 3
 				} )
 				add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
 					name: "hSpacer1"
@@ -486,14 +512,14 @@ new FormModel {
 					}
 				}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 					"column": 1
-					"row": 3
+					"row": 4
 				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "Center"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 905, 690 )
+			"size": new java.awt.Dimension( 955, 765 )
 		} )
 	}
 }
