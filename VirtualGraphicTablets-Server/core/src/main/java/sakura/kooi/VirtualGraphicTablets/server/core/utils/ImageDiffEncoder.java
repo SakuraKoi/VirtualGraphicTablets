@@ -31,6 +31,9 @@ public class ImageDiffEncoder {
                 int r, g, b;
                 if (x < frameWidth && y < frameHeight) {
                     int rgbCurrent = currentFrame[y * frameWidth + x] & 0xFFFFFF;
+                    if (rgbCurrent == 0xFFFFFF) {
+                        rgbCurrent = 0xFEFEFE;
+                    }
 
                     int start = (y * width + x) * 3;
                     int rgbLast = ((buffer[start] & 0xFF) << 16) |
@@ -43,10 +46,6 @@ public class ImageDiffEncoder {
                         r = (rgbCurrent >> 16) & 0xFF;
                         g = (rgbCurrent >> 8) & 0xFF;
                         b = (rgbCurrent) & 0xFF;
-
-                        if (r == 0xff && g == 0xff && b == 0xff) {
-                            r = g = b = 0xfe;
-                        }
 
                         buffer[start] = (byte) r;
                         buffer[start + 1] = (byte) g;
