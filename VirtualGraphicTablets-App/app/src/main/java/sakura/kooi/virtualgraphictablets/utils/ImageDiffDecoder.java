@@ -39,6 +39,8 @@ public class ImageDiffDecoder {
     public Bitmap update(byte[] data) {
         ArrayList<Future<?>> pendingDecodes = new ArrayList<>(WORKER_COUNT);
         for (ImageDiffWorker worker : workers) {
+            if (threadPool.isShutdown())
+                return frame;
             pendingDecodes.add(threadPool.submit(() -> worker.call(data, pixels)));
         }
 
