@@ -182,6 +182,7 @@ public class TabletActivity extends AppCompatActivity {
 
     private int fps = 0;
     private long lastFpsTime = 0L;
+
     public void onPacketReceived(Object pkt) {
         if (pkt instanceof Vgt.S02PacketServerInfo) {
             runOnUiThread(() -> {
@@ -193,6 +194,17 @@ public class TabletActivity extends AppCompatActivity {
             byte[] imageData = packet.getScreenImage().toByteArray();
             long timing = System.currentTimeMillis();
             Bitmap image = imageDiffDecoder.update(imageData);
+            canvasWidth = packet.getWidth();
+            canvasHeight = packet.getHeight();
+            convertRatio = canvasWidth / (float) packet.getImageWidth();
+
+            canvas.setContent(image);
+            canvas.setFps(++fps);
+            if (System.currentTimeMillis() > lastFpsTime) {
+                lastFpsTime = System.currentTimeMillis() + 1000;
+                fps = 0;
+            }
+
             long decodeTook = System.currentTimeMillis() - timing;
             Vgt.C08PacketDecodePerformanceReport resp = Vgt.C08PacketDecodePerformanceReport.newBuilder()
                     .setDecodeTook(decodeTook)
@@ -202,18 +214,6 @@ public class TabletActivity extends AppCompatActivity {
                     .setPayload(resp.toByteString())
                     .build();
             connectionThread.packetWriter.sendQueue.add(container);
-            canvasWidth = packet.getWidth();
-            canvasHeight = packet.getHeight();
-            convertRatio = canvasWidth / (float) packet.getImageWidth();
-
-            runOnUiThread(() ->  {
-                canvas.setContent(image);
-                canvas.setFps(++fps);
-                if (System.currentTimeMillis() > lastFpsTime) {
-                    lastFpsTime = System.currentTimeMillis() + 1000;
-                    fps = 0;
-                }
-            });
         }
     }
 

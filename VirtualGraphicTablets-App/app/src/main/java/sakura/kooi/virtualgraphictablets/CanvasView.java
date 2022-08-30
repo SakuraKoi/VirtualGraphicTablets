@@ -6,9 +6,12 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.view.View;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 
-public class CanvasView extends View {
+import androidx.annotation.NonNull;
+
+public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
     private Bitmap content;
     private int fps;
     private boolean showFps;
@@ -39,6 +42,7 @@ public class CanvasView extends View {
     }
 
     private void init() {
+        this.getHolder().addCallback(this);
         this.paintContent = new Paint();
         this.paintContent.setAntiAlias(true);
         paintFps = new Paint();
@@ -50,9 +54,15 @@ public class CanvasView extends View {
         paintPointer.setStrokeWidth(1f);
     }
 
-    @Override
-    public void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+    public void setFps(int fps) {
+        this.fps = fps;
+    }
+
+    public void setShowFps(boolean showFps) {
+        this.showFps = showFps;
+    }
+
+    public void drawContent(Canvas canvas) {
         if (this.content != null)
             canvas.drawBitmap(this.content, 0.0f, 0.0f, paintContent);
         if (showFps)
@@ -65,20 +75,36 @@ public class CanvasView extends View {
 
     public void setContent(Bitmap content) {
         this.content = content;
-        this.invalidate();
+        Canvas canvas = holder.lockCanvas();
+        if (canvas == null)
+            return;
+        drawContent(canvas);
+        holder.unlockCanvasAndPost(canvas);
     }
-
-    public void setFps(int fps) {
-        this.fps = fps;
-    }
-
-    public void setShowFps(boolean showFps) {
-        this.showFps = showFps;
-    }
-
     public void setCursor(float x, float y) {
         this.pointerX = (int) x;
         this.pointerY = (int) y;
-        this.invalidate();
+        Canvas canvas = holder.lockCanvas();
+        if (canvas == null)
+            return;
+        drawContent(canvas);
+        holder.unlockCanvasAndPost(canvas);
+    }
+
+    private SurfaceHolder holder;
+
+    @Override
+    public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
+        this.holder = surfaceHolder;
+    }
+
+    @Override
+    public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
+
     }
 }
