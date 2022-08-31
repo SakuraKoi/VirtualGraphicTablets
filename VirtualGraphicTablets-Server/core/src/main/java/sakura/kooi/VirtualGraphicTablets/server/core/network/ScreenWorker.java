@@ -55,6 +55,7 @@ public class ScreenWorker extends Thread {
             }
         }
         parent.removePreview();
+        imageDiffEncoder.shutdownPool();
         log.i("Screen stream end");
     }
 
