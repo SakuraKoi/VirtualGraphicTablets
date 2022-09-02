@@ -58,14 +58,6 @@
             <artifactId>netty-buffer</artifactId>
             <version>4.1.80.Final</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.sunnysidesoft</groupId>
-            <artifactId>virtualtablet-lite</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/libs/classes-enjarify.jar</systemPath>
-        </dependency>
     </dependencies>
     <build>
         <finalName>vgt-core</finalName>

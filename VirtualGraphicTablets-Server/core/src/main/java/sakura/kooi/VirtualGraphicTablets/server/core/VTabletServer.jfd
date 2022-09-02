@@ -253,12 +253,12 @@ new FormModel {
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.intellij.uiDesigner.core.GridLayoutManager ) {
 					"$columnCount": 2
-					"$rowCount": 2
+					"$rowCount": 1
 					"hGap": 4
 					"vGap": 4
 				} ) {
 					name: "panel2"
-					"border": new javax.swing.border.CompoundBorder( new javax.swing.border.TitledBorder( "Upstream" ), #EmptyBorder0 )
+					"border": new javax.swing.border.CompoundBorder( new javax.swing.border.TitledBorder( "Driver" ), #EmptyBorder0 )
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": true
 					}
@@ -276,25 +276,6 @@ new FormModel {
 						"text": "未连接"
 					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
 						"column": 1
-						"fill": 3
-						"hSizePolicy": 7
-					} )
-					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "label3"
-						"text": "服务端版本"
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": true
-						}
-					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
-						"row": 1
-						"fill": 3
-					} )
-					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "lblUpstreamVersion"
-						"text": "114514"
-					}, new FormLayoutConstraints( class com.intellij.uiDesigner.core.GridConstraints ) {
-						"column": 1
-						"row": 1
 						"fill": 3
 						"hSizePolicy": 7
 					} )
