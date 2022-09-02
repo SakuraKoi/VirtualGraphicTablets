@@ -7,6 +7,7 @@ package sakura.kooi.VirtualGraphicTablets.server.core;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import com.sun.jna.Platform;
 import lombok.CustomLog;
 import sakura.kooi.VirtualGraphicTablets.protocol.Vgt;
 import sakura.kooi.VirtualGraphicTablets.server.bootstrap.logger.Logger;
@@ -642,9 +643,15 @@ public class VTabletServer extends JFrame {
             }
         });
         btnConnectUpstream.addActionListener(e -> {
+            if (!Platform.isWindows()) {
+                log.e("Windows system is required");
+            }
+            if (Platform.is64Bit()) {
+                log.e("Virtual input driver only supports 32bit Java VM! You're using 64bit Java version");
+            }
             try {
                 hidWrapper.open();
-            } catch (Exception ex) {
+            } catch (Exception | UnsatisfiedLinkError ex) {
                 log.e("Open Virtual HID device failed", ex);
                 return;
             }
