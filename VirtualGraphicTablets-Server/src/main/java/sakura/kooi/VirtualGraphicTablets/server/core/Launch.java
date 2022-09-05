@@ -1,5 +1,6 @@
 package sakura.kooi.VirtualGraphicTablets.server.core;
 
+import org.fusesource.jansi.AnsiConsole;
 import sakura.kooi.lib.swing.ui.CustomFlatMaterialDarkLaf;
 
 import javax.swing.*;
@@ -10,6 +11,7 @@ public class Launch {
     }
 
     public static void start() {
+        AnsiConsole.systemInstall();
         CustomFlatMaterialDarkLaf.setup();
         VTabletServer window = new VTabletServer();
         window.pack();

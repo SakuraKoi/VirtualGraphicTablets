@@ -608,6 +608,8 @@ public class VTabletServer extends JFrame {
         numCanvaWidth.setModel(new SpinnerNumberModel(1, 1, size.getWidth(), 1));
         numCanvaHeight.setModel(new SpinnerNumberModel(1, 1, size.getHeight(), 1));
 
+        numCanvaPosX.setValue(0);
+        numCanvaPosY.setValue(0);
         numCanvaWidth.setValue((int) size.getWidth());
         numCanvaHeight.setValue((int) size.getHeight());
 
